@@ -2,6 +2,9 @@ package mars.venus;
 
 import mars.*;
 import javax.swing.*;
+
+import com.formdev.flatlaf.FlatLightLaf;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
@@ -166,7 +169,9 @@ public class VenusUI extends JFrame {
 		 * The components are created roughly in bottom-up order;
 		 * some are created in component constructors and thus are not visible here.
 		 */
-
+		
+		// Initialize look and feel
+		FlatLightLaf.install();
 		registersTab = new RegistersWindow();
 		coprocessor1Tab = new Coprocessor1Window();
 		coprocessor0Tab = new Coprocessor0Window();

@@ -204,7 +204,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                textLine = assemble.getLineOfOffset(textPosition);
                lineStart = assemble.getLineStartOffset(textLine);
                lineEnd = assemble.getLineEndOffset(textLine);
-               assemble.setSelectionColor(Color.YELLOW);
+               assemble.setSelectionColor(Color.ORANGE);
+               // Overwrite look and feel selected text color
+               assemble.setSelectedTextColor(Color.BLACK);
                assemble.select(lineStart,lineEnd);
                assemble.getCaret().setSelectionVisible(true);
                assemble.repaint();               
@@ -377,7 +379,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	  
    	  ////////////////////////////////////////////////////////////////////////////
    	  // Thread class for obtaining user input in the Run I/O window (MessagesPane)
-   	  // Written by Ricardo Fernández Pascual [rfernandez@ditec.um.es] December 2009.
+   	  // Written by Ricardo Fernï¿½ndez Pascual [rfernandez@ditec.um.es] December 2009.
        class Asker implements Runnable {
          ArrayBlockingQueue<String> resultQueue = new ArrayBlockingQueue<String>(1);
          int initialPos;
