@@ -112,8 +112,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          Toolkit tk = Toolkit.getDefaultToolkit();
          Class cs = this.getClass(); 
          try {
-            prevButton = new PrevButton(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath+"Previous22.png"))));//"Back16.gif"))));//"Down16.gif"))));
-            nextButton = new NextButton(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath+"Next22.png"))));//"Forward16.gif")))); //"Up16.gif"))));
+            prevButton = new PrevButton(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Colibre/png/24/prevrecord.png"))));
+            nextButton = new NextButton(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Colibre/png/24/nextrecord.png"))));
             //  This group of buttons was replaced by a combo box.  Keep the JButton objects for their action listeners.
             dataButton = new JButton();//".data");
             stakButton = new JButton();//"$sp");
