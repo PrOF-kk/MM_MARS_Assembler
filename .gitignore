@@ -1,5 +1,6 @@
 **/*.asm
 **/*.class
+*.jar
 
 ### Eclipse IDE ###
 .classpath
