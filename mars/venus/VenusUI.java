@@ -3,6 +3,7 @@ package mars.venus;
 import mars.*;
 import javax.swing.*;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.*;
 import java.awt.event.*;
@@ -86,7 +87,7 @@ public class VenusUI extends JFrame {
 
 	// components of the toolbar
 	private JButton Undo, Redo, Cut, Copy, Paste, FindReplace, SelectAll;
-	private JButton New, Open, Save, SaveAs, SaveAll, DumpMemory, Print;
+	private JButton New, Open, Save, SaveAs, DumpMemory, Print;
 	private JButton Run, Assemble, Reset, Step, Backstep, Stop, Pause;
 	private JButton Help;
 
@@ -643,6 +644,7 @@ public class VenusUI extends JFrame {
 				Run, Assemble, Step, Backstep, Reset, Stop, Pause, Help};
 		for (JButton b : btns) {
 			b.setText("");
+			b.putClientProperty(FlatClientProperties.SQUARE_SIZE, true);
 		}
 		
 		toolBar.add(New);
