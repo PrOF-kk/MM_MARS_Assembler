@@ -4,7 +4,6 @@ import mars.*;
 import javax.swing.*;
 
 import com.formdev.flatlaf.FlatLightLaf;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
@@ -616,50 +615,36 @@ public class VenusUI extends JFrame {
 		JToolBar toolBar = new JToolBar();
 
 		New = new JButton(fileNewAction);
-		New.setText("");
 		Open = new JButton(fileOpenAction);
-		Open.setText("");
 		Save = new JButton(fileSaveAction);
-		Save.setText("");
 		SaveAs = new JButton(fileSaveAsAction);
-		SaveAs.setText("");
 		DumpMemory = new JButton(fileDumpMemoryAction);
-		DumpMemory.setText("");
 		Print = new JButton(filePrintAction);
-		Print.setText("");
 
 		Undo = new JButton(editUndoAction);
-		Undo.setText("");
 		Redo = new JButton(editRedoAction);
-		Redo.setText("");
 		Cut = new JButton(editCutAction);
-		Cut.setText("");
 		Copy = new JButton(editCopyAction);
-		Copy.setText("");
 		Paste = new JButton(editPasteAction);
-		Paste.setText("");
 		FindReplace = new JButton(editFindReplaceAction);
-		FindReplace.setText("");
 		SelectAll = new JButton(editSelectAllAction);
-		SelectAll.setText("");
 
 		Run = new JButton(runGoAction);
-		Run.setText("");
 		Assemble = new JButton(runAssembleAction);
-		Assemble.setText("");
 		Step = new JButton(runStepAction);
-		Step.setText("");
 		Backstep = new JButton(runBackstepAction);
-		Backstep.setText("");
 		Reset = new JButton(runResetAction);
-		Reset.setText("");
 		Stop = new JButton(runStopAction);
-		Stop.setText("");
 		Pause = new JButton(runPauseAction);
-		Pause.setText("");
 		Help = new JButton(helpHelpAction);
-		Help.setText("");
-
+		
+		JButton[] btns = { New, Open, Save, SaveAs, DumpMemory, Print,
+				Undo, Redo, Cut, Copy, Paste, FindReplace, SelectAll,
+				Run, Assemble, Step, Backstep, Reset, Stop, Pause, Help};
+		for (JButton b : btns) {
+			b.setText("");
+		}
+		
 		toolBar.add(New);
 		toolBar.add(Open);
 		toolBar.add(Save);
