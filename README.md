@@ -3,18 +3,17 @@
 
 MARS has been jointly developed by [Pete Sanderson][4] (programming) and [Ken Vollmar][5] (details and paperwork).
 
-This is an independent version maintained by [Valerio Colella][9]
+This is an independent update maintained by [Valerio Colella][9]
 
 ## Download
 You can download the latest version [in the releases section][6].
 
 ## Documentation (included in the repo)
  - Go to the [documentation][7].
- - In order to run or compile MARS v4.XX, **MARS requires Java J2SE 1.5 (or later) SDK installed on your computer**.
+ - In order to run or compile MM MARS, **MARS requires Java SE 8 (or later) SDK installed on your computer**.
 
 ## MM (More Modern) version notes 
- - As the original source is updated, the documentation might get outdated. Please let me know.
- - For a smooth development experience, ensure you're using at least Java 8
+ - As the original source is updated, the documentation might get outdated. Please let me know, or open a pull request.
 
 ## How to run MARS
  - **Option A**: Desktop. Save the jar file on the desktop. Run MARS by double-clicking the icon.
