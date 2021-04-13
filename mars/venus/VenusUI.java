@@ -8,6 +8,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
+import java.util.ArrayList;
 
 /*
 Copyright (c) 2003-2013,  Pete Sanderson and Kenneth Vollmar
@@ -146,13 +147,18 @@ public class VenusUI extends JFrame {
 		Globals.initialize(true);
 
 		// image courtesy of NASA/JPL.
-		URL im = this.getClass().getResource(Globals.imagesPath + "RedMars320.png");
-		if (im == null) {
-			System.out.println("Internal Error: images folder or file not found");
-			System.exit(0);
+		String[] iconNames = { "RedMars320.png", "RedMars128.png", "RedMars32.png", "RedMars64.png", "RedMars16.png" };
+		ArrayList<Image> iconImages = new ArrayList<>();
+		for (String iconName : iconNames) {
+			URL im = this.getClass().getResource(Globals.imagesPath + iconName);
+			if (im == null) {
+				System.out.println("Internal Error: images folder or file not found");
+				System.exit(0);
+			}
+			iconImages.add(Toolkit.getDefaultToolkit().getImage(im));
 		}
-		Image mars = Toolkit.getDefaultToolkit().getImage(im);
-		this.setIconImage(mars);
+		this.setIconImages(iconImages);
+		
 		/*-
 		 * Everything in frame will be arranged on JPanel "center",
 		 * which is the only frame component.
