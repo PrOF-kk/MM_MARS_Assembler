@@ -80,8 +80,24 @@ public class EditTabbedPane extends JTabbedPane {
 				}
 			}
 		});
+		
+		setupTabTraversalKeys();
 	}
-
+	
+	/**
+	 * Handle Ctrl+Tab and Ctrl+Shift+Tab keystrokes to cycle active file
+	 * regardless of which component has focus
+	 * 
+	 * @author Valerio Colella
+	 */
+	private void setupTabTraversalKeys() {
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("ctrl TAB"), "navigateNext");
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("ctrl shift TAB"), "navigatePrevious");
+	}
+	
+	
 	/**
 	 * The current EditPane representing a file. Returns null if no files open.
 	 *
