@@ -96,7 +96,7 @@ public class Globals {
 	public static boolean runSpeedPanelExists = false;
 
 	private static String getCopyrightYears() {
-		return "2003-2014";
+		return "2003-2021";
 	}
 
 	private static String getCopyrightHolders() {
