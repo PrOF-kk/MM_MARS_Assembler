@@ -76,6 +76,11 @@ public class HelpHelpAction extends GuiAction {
 		final JDialog dialog = new JDialog(mainUI, "MARS " + Globals.version + " Help");
 		// assure the dialog goes away if user clicks the X
 		dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		// Close dialog on Esc
+		dialog.getRootPane().registerKeyboardAction(event -> {
+			dialog.setVisible(false);
+			dialog.dispose();
+		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 		// Add a "close" button to the non-modal help dialog.
 		/*
 		JButton closeButton = new JButton("Close");
