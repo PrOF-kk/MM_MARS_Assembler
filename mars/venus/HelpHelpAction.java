@@ -77,6 +77,7 @@ public class HelpHelpAction extends GuiAction {
 		// assure the dialog goes away if user clicks the X
 		dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		// Add a "close" button to the non-modal help dialog.
+		/*
 		JButton closeButton = new JButton("Close");
 		closeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -90,10 +91,11 @@ public class HelpHelpAction extends GuiAction {
 		closePanel.add(closeButton);
 		closePanel.add(Box.createHorizontalGlue());
 		closePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 5));
+		*/
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
 		contentPane.add(tabbedPane);
-		contentPane.add(Box.createRigidArea(new Dimension(0, 5)));
+		//contentPane.add(Box.createRigidArea(new Dimension(0, 5)));
 		//contentPane.add(closePanel);
 		contentPane.setOpaque(true);
 		dialog.setContentPane(contentPane);
