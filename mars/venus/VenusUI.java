@@ -278,7 +278,9 @@ public class VenusUI extends JFrame {
 					mainUI);
 			fileSaveAsAction = new FileSaveAsAction("Save as...",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "saveas.png"))),
-					"Save current file with different name", KeyEvent.VK_A, null, mainUI);
+					"Save current file with different name", KeyEvent.VK_A,
+					KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | Event.SHIFT_MASK),
+					mainUI);
 			fileSaveAllAction = new FileSaveAllAction("Save All", null, "Save all open files",
 					KeyEvent.VK_V, null, mainUI);
 			fileDumpMemoryAction = new FileDumpMemoryAction("Dump Memory...",
