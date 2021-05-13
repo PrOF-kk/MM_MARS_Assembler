@@ -193,7 +193,6 @@ public class VenusUI extends JFrame {
 		messagesPane = new MessagesPane();
 		messagesPane.setPreferredSize(messagesPanePreferredSize);
 		splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPane, messagesPane);
-		splitter.setOneTouchExpandable(true);
 		splitter.resetToPreferredSizes();
 		horizonSplitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, splitter, registersPane);
 		horizonSplitter.setOneTouchExpandable(true);
