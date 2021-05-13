@@ -63,6 +63,9 @@ public class EditFindReplaceAction extends GuiAction {
 		JCheckBox caseSensitiveCheckBox;
 		JRadioButton linearFromStart, circularFromCursor;
 		private JLabel resultsLabel;
+		
+		private final Color darkRed = Color.RED.darker();
+		private final Color darkGreen = Color.GREEN.darker();
 
 		public static final String FIND_TOOL_TIP_TEXT = "Find next occurrence of given text; wraps around at end";
 		public static final String REPLACE_TOOL_TIP_TEXT = "Replace current occurrence of text then find next";
@@ -138,7 +141,7 @@ public class EditFindReplaceAction extends GuiAction {
 			JPanel resultsPanel = new JPanel(new GridLayout(1, 1));
 			resultsPanel.setBorder(BorderFactory.createTitledBorder("Outcome"));
 			resultsLabel = new JLabel("");
-			resultsLabel.setForeground(Color.RED);
+			resultsLabel.setForeground(darkRed);
 			resultsLabel.setToolTipText(RESULTS_TOOL_TIP_TEXT);
 			resultsPanel.add(resultsLabel);
 			optionsPanel.add(resultsPanel);
@@ -196,14 +199,17 @@ public class EditFindReplaceAction extends GuiAction {
 					searchString = findInputField.getText();
 					int posn = editPane.doFindText(searchString, caseSensitiveCheckBox.isSelected());
 					if (posn == MARSTextEditingArea.TEXT_NOT_FOUND) {
+						resultsLabel.setForeground(darkRed);
 						resultsLabel.setText(findButton.getText() + ": " + RESULTS_TEXT_NOT_FOUND);
 					}
 					else {
+						resultsLabel.setForeground(darkGreen);
 						resultsLabel.setText(findButton.getText() + ": " + RESULTS_TEXT_FOUND);
 					}
 				}
 			}
 			else {
+				resultsLabel.setForeground(darkRed);
 				resultsLabel.setText(findButton.getText() + ": " + RESULTS_NO_TEXT_TO_FIND);
 			}
 		}
@@ -228,15 +234,19 @@ public class EditFindReplaceAction extends GuiAction {
 					switch (posn) {
 
 						case MARSTextEditingArea.TEXT_NOT_FOUND:
+							resultsLabel.setForeground(darkRed);
 							result += RESULTS_TEXT_NOT_FOUND;
 							break;
 						case MARSTextEditingArea.TEXT_FOUND:
+							resultsLabel.setForeground(darkGreen);
 							result += RESULTS_TEXT_FOUND;
 							break;
 						case MARSTextEditingArea.TEXT_REPLACED_NOT_FOUND_NEXT:
+							resultsLabel.setForeground(darkGreen);
 							result += RESULTS_TEXT_REPLACED_LAST;
 							break;
 						case MARSTextEditingArea.TEXT_REPLACED_FOUND_NEXT:
+							resultsLabel.setForeground(darkGreen);
 							result += RESULTS_TEXT_REPLACED;
 							break;
 					}
@@ -244,6 +254,7 @@ public class EditFindReplaceAction extends GuiAction {
 				}
 			}
 			else {
+				resultsLabel.setForeground(darkRed);
 				resultsLabel.setText(replaceButton.getText() + ": " + RESULTS_NO_TEXT_TO_FIND);
 			}
 
@@ -262,15 +273,18 @@ public class EditFindReplaceAction extends GuiAction {
 					int replaceCount = editPane.doReplaceAll(searchString, replaceInputField.getText(),
 							caseSensitiveCheckBox.isSelected());
 					if (replaceCount == 0) {
+						resultsLabel.setForeground(darkRed);
 						resultsLabel.setText(replaceAllButton.getText() + ": " + RESULTS_TEXT_NOT_FOUND);
 					}
 					else {
+						resultsLabel.setForeground(darkGreen);
 						resultsLabel.setText(replaceAllButton.getText() + ": " + RESULTS_TEXT_REPLACED_ALL + " "
 								+ replaceCount + " occurrence" + (replaceCount == 1 ? "" : "s"));
 					}
 				}
 			}
 			else {
+				resultsLabel.setForeground(darkRed);
 				resultsLabel.setText(replaceAllButton.getText() + ": " + RESULTS_NO_TEXT_TO_FIND);
 			}
 		}
