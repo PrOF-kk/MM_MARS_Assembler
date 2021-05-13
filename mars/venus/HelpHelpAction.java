@@ -259,7 +259,7 @@ public class HelpHelpAction extends GuiAction {
 		helpRemarksLabel.setOpaque(true);
 		helpRemarksLabel.setBackground(Color.decode("0x" + helpRemarksColor));
 		JScrollPane operandsScrollPane = new JScrollPane(helpRemarksLabel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		mipsHelpInfo.add(operandsScrollPane, BorderLayout.NORTH);
 		// Below the label is a tabbed pane with categories of MIPS help
 		JTabbedPane tabbedPane = new JTabbedPane();
