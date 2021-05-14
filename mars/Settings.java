@@ -1131,7 +1131,7 @@ public class Settings extends Observable {
 	 * generated after first letter typed, based on all matches; if 2, the popup
 	 * will be generated after second letter typed.
 	 * 
-	 * @param number of letters (should be 1 or 2).
+	 * @param length number of letters (should be 1 or 2).
 	 */
 	public void setEditorPopupPrefixLength(int length) {
 		setStringSetting(EDITOR_POPUP_PREFIX_LENGTH, "" + length);
@@ -1152,7 +1152,7 @@ public class Settings extends Observable {
 	 * Store a Font setting
 	 * 
 	 * @param fontSettingPosition Constant that identifies the item the font goes with
-	 * @font The font to set that item to
+	 * @param font                The font to set that item to
 	 */
 	public void setFontByPosition(int fontSettingPosition, Font font) {
 		if (fontSettingPosition >= 0 && fontSettingPosition < fontFamilySettingsValues.length) {

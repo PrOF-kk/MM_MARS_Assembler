@@ -362,7 +362,7 @@ public class SystemIO {
 	* @return file descriptor in the range 0 to SYSCALL_MAXFILES-1, or -1 if error
 	* @author Ken Vollmar
 	*/
-	public static int openFile(String filename, int flags) {
+	public static int openFile(String filename, int flag) {
 		// Internally, a "file descriptor" is an index into a table
 		// of the filename, flag, and the File???putStream associated with
 		// that file descriptor.
@@ -374,13 +374,13 @@ public class SystemIO {
 		int fdToUse;
 
 		// Check internal plausibility of opening this file
-		fdToUse = FileIOData.nowOpening(filename, flags);
+		fdToUse = FileIOData.nowOpening(filename, flag);
 		retValue = fdToUse; // return value is the fd
 		if (fdToUse < 0) {
 			return -1;
 		} // fileErrorString would have been set
 
-		if (flags == O_RDONLY) // Open for reading only
+		if (flag == O_RDONLY) // Open for reading only
 		{
 			try {
 				// Set up input stream from disk file
@@ -392,11 +392,11 @@ public class SystemIO {
 				retValue = -1;
 			}
 		}
-		else if ((flags & O_WRONLY) != 0) // Open for writing only
+		else if ((flag & O_WRONLY) != 0) // Open for writing only
 		{
 			// Set up output stream to disk file
 			try {
-				outputStream = new FileOutputStream(filename, ((flags & O_APPEND) != 0));
+				outputStream = new FileOutputStream(filename, ((flag & O_APPEND) != 0));
 				FileIOData.setStreamInUse(fdToUse, outputStream); // Save stream for later use
 			}
 			catch (FileNotFoundException e) {

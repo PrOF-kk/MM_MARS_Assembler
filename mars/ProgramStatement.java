@@ -592,7 +592,7 @@ public class ProgramStatement {
 	 * 0).
 	 * 
 	 * @param i Operand position in array (first operand is position 0).
-	 * @return Operand value at given operand array position. If < 0 or >=
+	 * @return Operand value at given operand array position. If &lt; 0 or &gt;=
 	 *         numOperands, it returns -1.
 	 **/
 	public int getOperand(int i) {

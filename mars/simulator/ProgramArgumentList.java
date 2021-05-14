@@ -77,10 +77,10 @@ public class ProgramArgumentList {
 	 *                      all remaining elements are assumed to contain an
 	 *                      argument.
 	 */
-	public ProgramArgumentList(String[] list, int startPosition) {
-		programArgumentList = new ArrayList<>(list.length - startPosition);
-		for (int i = startPosition; i < list.length; i++) {
-			programArgumentList.add(list[i]);
+	public ProgramArgumentList(String[] args, int startPosition) {
+		programArgumentList = new ArrayList<>(args.length - startPosition);
+		for (int i = startPosition; i < args.length; i++) {
+			programArgumentList.add(args[i]);
 		}
 	}
 
@@ -104,14 +104,14 @@ public class ProgramArgumentList {
 	 *                      all remaining elements are assumed to contain an
 	 *                      argument.
 	 */
-	public ProgramArgumentList(ArrayList<String> list, int startPosition) {
-		if (list == null || list.size() < startPosition) {
+	public ProgramArgumentList(ArrayList<String> args, int startPosition) {
+		if (args == null || args.size() < startPosition) {
 			programArgumentList = new ArrayList<>(0);
 		}
 		else {
-			programArgumentList = new ArrayList<>(list.size() - startPosition);
-			for (int i = startPosition; i < list.size(); i++) {
-				programArgumentList.add(list.get(i));
+			programArgumentList = new ArrayList<>(args.size() - startPosition);
+			for (int i = startPosition; i < args.size(); i++) {
+				programArgumentList.add(args.get(i));
 			}
 		}
 	}

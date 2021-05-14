@@ -418,7 +418,7 @@ public class MIPSprogram {
 	 * {@link MIPSprogram} to it
 	 * 
 	 * @return instantiated MacroPool
-	 * @author M.H.Sekhavat <sekhavat17@gmail.com>
+	 * @author M.H.Sekhavat {@literal <sekhavat17@gmail.com>}
 	 */
 	public MacroPool createMacroPool() {
 		macroPool = new MacroPool(this);

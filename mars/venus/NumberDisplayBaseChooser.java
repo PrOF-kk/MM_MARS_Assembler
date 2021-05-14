@@ -51,7 +51,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     * constructor. It assumes the text will be worded
     * so that a checked box means hexadecimal!
     * @param text Text to accompany the check box.
-    * @param defaultBase Currently either DECIMAL or HEXADECIMAL
+    * @param displayInHex Currently either DECIMAL or HEXADECIMAL
     */
        public NumberDisplayBaseChooser(String text, boolean displayInHex) {
          super(text, displayInHex);

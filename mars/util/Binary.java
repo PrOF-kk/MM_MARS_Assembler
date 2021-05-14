@@ -573,18 +573,19 @@ public class Binary {
 
 	// KENV 1/4/05
 	/**
-	* Parsing method to see if a string represents a hex number.
-	*  As per http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Integer.html#decode(java.lang.String),
-	*  a string represents a hex number if the string is in the forms:
-	*      Signopt 0x HexDigits
-	*      Signopt 0X HexDigits
-	*      Signopt # HexDigits   <---- Disallow this form since # is MIPS comment
-	*
-	*
-	* @param v String containing numeric digits (could be decimal, octal, or hex)
-	*
-	* @return Returns <code>true</code> if string represents a hex number, else returns <code>false</code>.
-	**/
+	 * <pre>
+	 * Parsing method to see if a string represents a hex number.
+	 *  As per http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Integer.html#decode(java.lang.String),
+	 *  a string represents a hex number if the string is in the forms:
+	 *      Signopt 0x HexDigits
+	 *      Signopt 0X HexDigits
+	 *      Signopt # HexDigits   <---- Disallow this form since # is MIPS comment
+	 *</pre>
+	 *
+	 * @param v String containing numeric digits (could be decimal, octal, or hex)
+	 *
+	 * @return Returns <code>true</code> if string represents a hex number, else returns <code>false</code>.
+	 */
 	public static boolean isHex(String v) {
 		try {
 			// don't care about return value, just whether it threw exception.

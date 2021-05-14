@@ -251,7 +251,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     * @param lineNum  line number from source code (used in error message)
     * @param theLine String containing source code
     * @param callerErrorList errors will go into this list instead of tokenizer's list.
-    * @param doEqvSubstitutse boolean param set true to perform .eqv substitutions, else false
+    * @param doEqvSubstitutes boolean param set true to perform .eqv substitutions, else false
     * @return the generated token list for that line
     * 
     **/		

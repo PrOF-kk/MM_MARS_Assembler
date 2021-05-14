@@ -115,7 +115,7 @@ public class TokenList implements Cloneable {
 	 * Removes Token object at specified list position. Uses ArrayList remove method.
 	 * 
 	 * @param  pos   Position in token list.  Subsequent Tokens are shifted one position left.
-	 * @throws IndexOutOfBoundsException if <code>pos</code> is < 0 or >= <code>size()</code>
+	 * @throws IndexOutOfBoundsException if <code>pos</code> is &lt; 0 or &gt= <code>size()</code>
 	 */    
     public void remove(int pos) {
         tokenList.remove(pos);
