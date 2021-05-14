@@ -33,7 +33,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /**
- * Service to display double whose bits are stored in $f12 & $f13 onto the console.
+ * Service to display double whose bits are stored in $f12 &amp; $f13 onto the console.
  * $f13 contains high order word of the double.
  */
 
@@ -47,7 +47,7 @@ public class SyscallPrintDouble extends AbstractSyscall {
 	}
 
 	/**
-	 * Performs syscall function to print double whose bits are stored in $f12 &
+	 * Performs syscall function to print double whose bits are stored in $f12 &amp;
 	 * $f13.
 	 */
 	public void simulate(ProgramStatement statement) throws ProcessingException {

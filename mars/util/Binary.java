@@ -579,8 +579,8 @@ public class Binary {
 	 *  a string represents a hex number if the string is in the forms:
 	 *      Signopt 0x HexDigits
 	 *      Signopt 0X HexDigits
-	 *      Signopt # HexDigits   <---- Disallow this form since # is MIPS comment
-	 *</pre>
+	 *      Signopt # HexDigits   &lt;---- Disallow this form since # is MIPS comment
+	 * </pre>
 	 *
 	 * @param v String containing numeric digits (could be decimal, octal, or hex)
 	 *

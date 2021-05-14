@@ -429,7 +429,7 @@ public class MIPSprogram {
 	 * Gets local macro pool {@link MacroPool} for this program
 	 * 
 	 * @return MacroPool
-	 * @author M.H.Sekhavat <sekhavat17@gmail.com>
+	 * @author M.H.Sekhavat {@literal <sekhavat17@gmail.com>}
 	 */
 	public MacroPool getLocalMacroPool() {
 		return macroPool;
@@ -439,7 +439,7 @@ public class MIPSprogram {
 	 * Sets local macro pool {@link MacroPool} for this program
 	 * 
 	 * @param macroPool reference to MacroPool
-	 * @author M.H.Sekhavat <sekhavat17@gmail.com>
+	 * @author M.H.Sekhavat {@literal <sekhavat17@gmail.com>}
 	 */
 	public void setLocalMacroPool(MacroPool macroPool) {
 		this.macroPool = macroPool;
