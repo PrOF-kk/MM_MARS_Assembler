@@ -2239,7 +2239,7 @@ public class JEditTextArea extends JComponent
       result = "<html>";
       for (int i=0; i<matches.size(); i++) {
          PopupHelpItem match = (PopupHelpItem)matches.get(i);
-         result += ((i==0)?"":"<br>") + "<tt>" + match.getExamplePaddedToLength(length).replaceAll(" ","&nbsp;") + "</tt>" + match.getDescription();
+         result += ((i==0)?"":"<br>") + "<code>" + match.getExamplePaddedToLength(length).replaceAll(" ","&nbsp;") + "</code>" + match.getDescription();
       }
       return result + "</html>";
    }
@@ -2357,7 +2357,7 @@ public class JEditTextArea extends JComponent
          int length = PopupHelpItem.maxExampleLength(helpItems) + 2; 
          for (int i=0; i<helpItems.size(); i++) {
             PopupHelpItem item = (PopupHelpItem) helpItems.get(i);
-            JMenuItem menuItem = new JMenuItem("<html><tt>"+item.getExamplePaddedToLength(length).replaceAll(" ","&nbsp;")+"</tt>"+item.getDescription()+"</html>");
+            JMenuItem menuItem = new JMenuItem("<html><code>"+item.getExamplePaddedToLength(length).replaceAll(" ","&nbsp;")+"</code>"+item.getDescription()+"</html>");
             if (item.getExact()) {
                // The instruction name is completed so the role of the popup changes
             	// to that of floating help to assist in operand specification. 

@@ -583,7 +583,7 @@ public class Binary {
 	*
 	* @param v String containing numeric digits (could be decimal, octal, or hex)
 	*
-	* @return Returns <tt>true</tt> if string represents a hex number, else returns <tt>false</tt>.
+	* @return Returns <code>true</code> if string represents a hex number, else returns <code>false</code>.
 	**/
 	public static boolean isHex(String v) {
 		try {
@@ -625,7 +625,7 @@ public class Binary {
 	*
 	* @param v String containing numeric digits (could be decimal, octal, or hex)
 	*
-	* @return Returns <tt>true</tt> if string represents an octal number, else returns <tt>false</tt>.
+	* @return Returns <code>true</code> if string represents an octal number, else returns <code>false</code>.
 	**/
 	public static boolean isOctal(String v) {
 		// Don't mistake "0" or a string that starts "0x" for an octal string
