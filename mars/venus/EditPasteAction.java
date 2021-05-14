@@ -40,7 +40,7 @@ public class EditPasteAction extends GuiAction {
 			Integer mnemonic, KeyStroke accel, VenusUI gui) {
 		super(name, icon, descrip, mnemonic, accel, gui);
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 		mainUI.getMainPane().getEditPane().pasteText();
 	}
