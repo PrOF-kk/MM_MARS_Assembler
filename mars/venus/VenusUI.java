@@ -257,16 +257,16 @@ public class VenusUI extends JFrame {
 			fileNewAction = new FileNewAction("New",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "newdoc.png"))),
 					"Create a new file for editing", KeyEvent.VK_N,
-					KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_N, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			fileOpenAction = new FileOpenAction("Open...",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "open.png"))),
 					"Open a file for editing", KeyEvent.VK_O,
-					KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_O, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			fileCloseAction = new FileCloseAction("Close", null,
 					"Close the current file", KeyEvent.VK_C,
-					KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_W, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			fileCloseAllAction = new FileCloseAllAction("Close All", null,
 					"Close all open files",
@@ -274,19 +274,19 @@ public class VenusUI extends JFrame {
 			fileSaveAction = new FileSaveAction("Save",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "save.png"))),
 					"Save the current file", KeyEvent.VK_S,
-					KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_S, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			fileSaveAsAction = new FileSaveAsAction("Save as...",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "saveas.png"))),
 					"Save current file with different name", KeyEvent.VK_A,
-					KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | Event.SHIFT_MASK),
+					KeyStroke.getKeyStroke(KeyEvent.VK_S, tk.getMenuShortcutKeyMask() | Event.SHIFT_MASK),
 					mainUI);
 			fileSaveAllAction = new FileSaveAllAction("Save All", null, "Save all open files",
 					KeyEvent.VK_V, null, mainUI);
 			fileDumpMemoryAction = new FileDumpMemoryAction("Dump Memory...",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "exportto.png"))),
 					"Dump machine code or data in an available format", KeyEvent.VK_D,
-					KeyStroke.getKeyStroke(KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_D, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			filePrintAction = new FilePrintAction("Print...",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "print.png"))),
@@ -295,36 +295,36 @@ public class VenusUI extends JFrame {
 			editUndoAction = new EditUndoAction("Undo",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "undo.png"))), "Undo last edit",
 					KeyEvent.VK_U,
-					KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_Z, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			editRedoAction = new EditRedoAction("Redo",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "redo.png"))), "Redo last edit",
 					KeyEvent.VK_R,
-					KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_Y, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			editCutAction = new EditCutAction("Cut",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "cut.png"))), "Cut",
 					KeyEvent.VK_C,
-					KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_X, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			editCopyAction = new EditCopyAction("Copy",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "copy.png"))), "Copy",
 					KeyEvent.VK_O,
-					KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_C, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			editPasteAction = new EditPasteAction("Paste",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "paste.png"))), "Paste",
 					KeyEvent.VK_P,
-					KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_V, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			editFindReplaceAction = new EditFindReplaceAction("Find/Replace",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "lc_research.png"))), "Find/Replace",
 					KeyEvent.VK_F,
-					KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_F, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			editSelectAllAction = new EditSelectAllAction("Select All", null,
 					"Select All", KeyEvent.VK_A,
-					KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_A, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			runAssembleAction = new RunAssembleAction("Assemble",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "lc_showdatanavigator.png"))),
@@ -356,12 +356,12 @@ public class VenusUI extends JFrame {
 					KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0), mainUI);
 			runClearBreakpointsAction = new RunClearBreakpointsAction("Clear all breakpoints", null,
 					"Clears all execution breakpoints set since the last assemble.", KeyEvent.VK_K,
-					KeyStroke.getKeyStroke(KeyEvent.VK_K, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_K, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			runToggleBreakpointsAction = new RunToggleBreakpointsAction("Toggle all breakpoints", null,
 					"Disable/enable all breakpoints without clearing (can also click Bkpt column header)",
 					KeyEvent.VK_T,
-					KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_T, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			settingsLabelAction = new SettingsLabelAction("Show Labels Window (symbol table)", null,
 					"Toggle visibility of Labels window (symbol table) in the Execute tab", null, null, mainUI);
