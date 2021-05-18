@@ -36,17 +36,15 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
 		this.sourceCode = this;
 
 		// Needed to support unlimited undo/redo capability
-		undoableEditListener = new UndoableEditListener() {
-			public void undoableEditHappened(UndoableEditEvent e) {
-				// Remember the edit and update the menus.
-				if (isCompoundEdit) {
-					compoundEdit.addEdit(e.getEdit());
-				}
-				else {
-					undoManager.addEdit(e.getEdit());
-					editPane.updateUndoState();
-					editPane.updateRedoState();
-				}
+		undoableEditListener = e -> {
+			// Remember the edit and update the menus.
+			if (isCompoundEdit) {
+				compoundEdit.addEdit(e.getEdit());
+			}
+			else {
+				undoManager.addEdit(e.getEdit());
+				editPane.updateUndoState();
+				editPane.updateRedoState();
 			}
 		};
 		this.getDocument().addUndoableEditListener(undoableEditListener);
@@ -152,7 +150,12 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
 
 	}
 
-	//TODO add javadoc
+	/**
+	 * For initializing the source code when opening an ASM file
+	 * 
+	 * @param s        String containing text
+	 * @param editable set true if code is editable else false
+	 */
 	public void setSourceCode(String s, boolean editable) {
 		this.setText(s);
 		this.setBackground((editable) ? Color.WHITE : Color.GRAY);
