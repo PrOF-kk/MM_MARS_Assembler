@@ -5,6 +5,8 @@ import mars.venus.editors.MARSTextEditingArea;
 import mars.venus.EditPane;
 import mars.*;
 import java.awt.*;
+import java.util.Iterator;
+
 import javax.swing.event.*;
 import javax.swing.undo.*;
 import javax.swing.*;
@@ -52,6 +54,8 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
 		this.setTokenMarker(new MIPSTokenMarker());
 
 		addCaretListener(this);
+		
+		getInputHandler().addKeyBinding("C+7", e -> toggleComment());
 	}
 
 	public void setFont(Font f) {
@@ -210,6 +214,113 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
 		}
 		unredoing = false;
 		this.setCaretVisible(true);
+	}
+	
+	/**
+	 * Toggle comment on current line or on each line in selection.<br>
+	 * Adds space after '#' only if needed, and removes it when removing comment
+	 * 
+	 * @author Valerio Colella
+	 * @version May 2021
+	 */
+	public void toggleComment() {
+		if (!editable)
+			return;
+		
+		int lineSkip = -1;
+		
+		// Handle corner case where the caret is on a new line
+		// but nothing on the line is visibly selected
+		if (getCaretPosition() == getLineStartOffset(getCaretLine()) && selectionStart != selectionEnd) {
+			lineSkip = getCaretLine();
+		}
+		
+		int selectionStartOffset = 0;
+		int selectionEndOffset = 0;
+		int prevSelectionStart = selectionStart;
+		int prevSelectionEnd = selectionEnd;
+		int prevSelectionStartLine = selectionStartLine;
+		int prevSelectionEndLine = selectionEndLine;
+		boolean prevBiasLeft = biasLeft;
+		
+		
+		for (int i = prevSelectionStartLine; i <= prevSelectionEndLine; i++) {
+			
+			if (i == lineSkip) {
+				continue;
+			}
+			
+			setCaretPosition(getLineStartOffset(i));
+			int result = toggleLineComment();
+			
+			if (i == prevSelectionStartLine) {
+				selectionStartOffset = result;
+			}
+			
+			selectionEndOffset += result;
+		}
+		
+		select(clampToLine(prevSelectionStart + selectionStartOffset, prevSelectionStartLine),
+			   clampToLine(prevSelectionEnd + selectionEndOffset, prevSelectionEndLine),
+			   prevBiasLeft);
+	}
+	
+	/**
+	 * Toggle comment in current line, without restoring text selection
+	 * or caret position
+	 * 
+	 * @author Valerio Colella
+	 * @version May 2021
+	 * @return The caret offset after toggling: [-2:2]
+	 */
+	private int toggleLineComment() {
+		if (!editable) {
+			return 0;
+		}
+		
+		// Ignore empty lines
+		if (getLineLength(getCaretLine()) == 0) {
+			return 0;
+		}
+		
+		// Toggle single line
+		if (selectionStartLine == selectionEndLine && selectionStartLine == getCaretLine()) {
+			
+			int caretOffset = 0;
+			
+			// Select first 2 chars of line
+			select(getLineStartOffset(getCaretLine()), getLineStartOffset(getCaretLine()) + 2);
+			String selection = getSelectedText();
+			
+			if (selection.startsWith("#")) {
+				if (selection.startsWith("# ")) {
+					replaceSelection("");
+					caretOffset = -2;
+				}
+				else {
+					//Reduce selection to 1st char
+					select(getLineStartOffset(getCaretLine()), getLineStartOffset(getCaretLine()) + 1);
+					replaceSelection("");
+					caretOffset = -1;
+				}
+			}
+			else {
+				if (selection.startsWith(" ")) {
+					replaceSelection("#" + getSelectedText());
+					caretOffset = 1;
+				}
+				else {
+					replaceSelection("# " + getSelectedText());
+					caretOffset = 2;
+				}
+			}
+			return caretOffset;
+		}
+		else {
+			throw new IllegalArgumentException(String.format(
+					"Invalid selection on comment toggle:%n selectionStart: %d%nselectionEnd: %d%ncaretLine: %d",
+					selectionStart, selectionEnd, getCaretLine()));
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////

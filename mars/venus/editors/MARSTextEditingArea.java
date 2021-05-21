@@ -124,4 +124,6 @@ public interface MARSTextEditingArea {
 	public void updateSyntaxStyles();
 
 	public Component getOuterComponent();
+	
+	public void toggleComment();
 }

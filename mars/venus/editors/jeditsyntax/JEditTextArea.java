@@ -1156,6 +1156,81 @@ public class JEditTextArea extends JComponent
 		magicCaret = -1;      
 		scrollToCaret();
 	}
+	
+	
+	/**
+	 * Selects from the start offset to the end offset.
+	 * The caret position will be start if newBias == true, and end otherwise
+	 * 
+	 * @param start The start offset
+	 * @param end The end offset
+	 * @version May 2021
+	 */
+	public void select(int start, int end, boolean newBias)
+	{
+		int newStart, newEnd;
+		
+		if(start <= end)
+		{
+			newStart = start;
+			newEnd = end;
+		}
+		else
+		{
+			newStart = end;
+			newEnd = start;
+		}
+
+		if(newStart < 0 || newEnd > getDocumentLength())
+		{
+			throw new IllegalArgumentException("Bounds out of range: "
+					+ newStart + "," + newEnd);
+		}
+
+		// If the new position is the same as the old, we don't
+		// do all this crap, however we still do the stuff at
+		// the end (clearing magic position, scrolling)
+		if(newStart != selectionStart || newEnd != selectionEnd || newBias != biasLeft)
+		{
+			int newStartLine = getLineOfOffset(newStart);
+			int newEndLine = getLineOfOffset(newEnd);
+
+			if(painter.isBracketHighlightEnabled())
+			{
+				if(bracketLine != -1)
+					painter.invalidateLine(bracketLine);
+				updateBracketHighlight(end);
+				if(bracketLine != -1)
+					painter.invalidateLine(bracketLine);
+			}
+
+			painter.invalidateLineRange(selectionStartLine,selectionEndLine);
+			painter.invalidateLineRange(newStartLine,newEndLine);
+
+			document.addUndoableEdit(new CaretUndo(selectionStart,selectionEnd));
+
+			selectionStart = newStart;
+			selectionEnd = newEnd;
+			selectionStartLine = newStartLine;
+			selectionEndLine = newEndLine;
+			biasLeft = newBias;
+
+			fireCaretEvent();
+		}
+
+		// When the user is typing, etc, we don't want the caret
+		// to blink
+		blink = true;
+		caretTimer.restart();
+
+		// Disable rectangle select if selection start = selection end
+		if(selectionStart == selectionEnd)
+			rectSelect = false;
+
+		// Clear the `magic' caret position used by up/down
+		magicCaret = -1;      
+		scrollToCaret();
+	}
 
 	/**
 	 * Returns the selected text, or null if no selection is active.
@@ -1547,6 +1622,30 @@ public class JEditTextArea extends JComponent
 				System.err.println("Clipboard does not contain a string");
 			}
 		}
+	}
+	
+	/**
+	 * Ensures given location is within document bounds
+	 * 
+	 * @author Valerio Colella
+	 * @version May 2021
+	 */
+	public int clampToDocument(int location) {
+		int len = getDocumentLength();
+		// if loc < 0 return 0, if loc > len return len, else return loc
+		return (location < 0 ? 0 : (location > len ? len : location));
+	}
+	
+	/**
+	 * Ensures given location is within line bounds
+	 * 
+	 * @author Valerio Colella
+	 * @version May 2021
+	 */
+	public int clampToLine(int location, int line) {
+		int lineStart = getLineStartOffset(line);
+		int lineEnd = getLineEndOffset(line);
+		return (location < lineStart ? lineStart : (location > lineEnd ? lineEnd : location));
 	}
 
 	/**

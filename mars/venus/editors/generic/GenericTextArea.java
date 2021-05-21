@@ -211,6 +211,13 @@ public class GenericTextArea extends JTextArea implements MARSTextEditingArea {
 		}
 		this.setCaretVisible(true);
 	}
+	
+	/**
+	 * TODO
+	 */
+	public void toggleComment() {
+		
+	}
 
 	//////////////////////////////////////////////////////////////////////////
 	// Methods to support Find/Replace feature
