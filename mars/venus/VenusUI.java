@@ -177,7 +177,7 @@ public class VenusUI extends JFrame {
 		 */
 		
 		// Initialize look and feel
-		FlatLightLaf.install();
+		FlatLightLaf.setup();
 		registersTab = new RegistersWindow();
 		coprocessor1Tab = new Coprocessor1Window();
 		coprocessor0Tab = new Coprocessor0Window();
