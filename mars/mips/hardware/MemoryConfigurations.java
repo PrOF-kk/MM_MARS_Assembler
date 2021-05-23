@@ -39,10 +39,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * @author Pete Sanderson
  * @version August 2009
  */
-
 public class MemoryConfigurations {
 
-	private static ArrayList configurations = null;
+	private static ArrayList<MemoryConfiguration> configurations = null;
 	private static MemoryConfiguration defaultConfiguration;
 	private static MemoryConfiguration currentConfiguration;
 
@@ -153,11 +152,11 @@ public class MemoryConfigurations {
 
 	public static void buildConfigurationCollection() {
 		if (configurations == null) {
-			configurations = new ArrayList();
+			configurations = new ArrayList<>();
 			configurations.add(new MemoryConfiguration("Default", "Default", configurationItemNames, defaultConfigurationItemValues));
 			configurations.add(new MemoryConfiguration("CompactDataAtZero", "Compact, Data at Address 0", configurationItemNames, dataBasedCompactConfigurationItemValues));
 			configurations.add(new MemoryConfiguration("CompactTextAtZero", "Compact, Text at Address 0", configurationItemNames, textBasedCompactConfigurationItemValues));
-			defaultConfiguration = (MemoryConfiguration) configurations.get(0);
+			defaultConfiguration = configurations.get(0);
 			currentConfiguration = defaultConfiguration;
 			// Get current config from settings
 			//String currentConfigurationIdentifier = Globals.getSettings().getMemoryConfiguration();
@@ -172,7 +171,7 @@ public class MemoryConfigurations {
 		}
 	}
 
-	public static Iterator getConfigurationsIterator() {
+	public static Iterator<MemoryConfiguration> getConfigurationsIterator() {
 		if (configurations == null) {
 			buildConfigurationCollection();
 		}
@@ -181,9 +180,9 @@ public class MemoryConfigurations {
 	}
 
 	public static MemoryConfiguration getConfigurationByName(String name) {
-		Iterator configurationsIterator = getConfigurationsIterator();
+		Iterator<MemoryConfiguration> configurationsIterator = getConfigurationsIterator();
 		while (configurationsIterator.hasNext()) {
-			MemoryConfiguration config = (MemoryConfiguration) configurationsIterator.next();
+			MemoryConfiguration config = configurationsIterator.next();
 			if (name.equals(config.getConfigurationIdentifier())) {
 				return config;
 			}
@@ -223,7 +222,7 @@ public class MemoryConfigurations {
 		}
 	}
 
-	//// Use these to intialize Memory static variables at launch
+	//// Use these to initialize Memory static variables at launch
 
 	public static int getDefaultTextBaseAddress() {
 		return defaultConfigurationItemValues[0];
