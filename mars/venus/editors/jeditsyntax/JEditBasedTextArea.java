@@ -229,10 +229,11 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
 		
 		int lineSkip = -1;
 		
-		// Handle corner case where the caret is on a new line
+		// Handle corner case where selection ends on a new line
 		// but nothing on the line is visibly selected
-		if (getCaretPosition() == getLineStartOffset(getCaretLine()) && selectionStart != selectionEnd) {
-			lineSkip = getCaretLine();
+		// selectionEnd is always the bottom-most line in selection
+		if (selectionEnd == getLineStartOffset(selectionEndLine) && selectionStart != selectionEnd) {
+			lineSkip = selectionEndLine;
 		}
 		
 		int selectionStartOffset = 0;
