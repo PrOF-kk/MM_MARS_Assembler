@@ -49,17 +49,20 @@ public class PropertiesFile {
 	 *  it is assumed to be ".properties" and is added here.
 	 *  @return Properties (Hashtable) of key-value pairs read from the file.
 	 */
-
 	public static Properties loadPropertiesFromFile(String file) {
 		Properties properties = new Properties();
 		try {
 			InputStream is = PropertiesFile.class.getResourceAsStream("/" + file + ".properties");
 			properties.load(is);
 		}
-		catch (IOException ioe) {
-		} // If it doesn't work, properties will be empty
-		catch (NullPointerException npe) {
+		catch (IOException | NullPointerException e) {
+			// If it doesn't work, properties will be empty
 		}
+
 		return properties;
+	}
+	
+	private PropertiesFile() {
+		// Hide implicit default constructor
 	}
 }
