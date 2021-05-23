@@ -105,11 +105,19 @@ public class EditFindReplaceAction extends GuiAction {
 
 		// Top part of the dialog, to contain the two input text fields.
 		private Component buildInputPanel() {
+			
 			findInputField = new JTextField(30);
-			if (searchString.length() > 0) {
+			// Prioritize selected text
+			String selection = mainUI.getMainPane().getEditPane().getTextArea().getSelectedText(); 
+			if (selection != null) {
+				findInputField.setText(selection);
+				findInputField.selectAll();
+			}
+			else if (searchString.length() > 0) {
 				findInputField.setText(searchString);
 				findInputField.selectAll();
 			}
+			
 			replaceInputField = new JTextField(30);
 			JPanel inputPanel = new JPanel();
 			JPanel labelsPanel = new JPanel(new GridLayout(2, 1, 5, 5));
