@@ -243,6 +243,8 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
 		int prevSelectionEndLine = selectionEndLine;
 		boolean prevBiasLeft = biasLeft;
 		
+		isCompoundEdit = true;
+		compoundEdit = new CompoundEdit();
 		
 		for (int i = prevSelectionStartLine; i <= prevSelectionEndLine; i++) {
 			
@@ -260,9 +262,16 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
 			selectionEndOffset += result;
 		}
 		
+		isCompoundEdit = false;
+		compoundEdit.end();
+		undoManager.addEdit(compoundEdit);
+		editPane.updateUndoState();
+		editPane.updateRedoState();
+		
 		select(clampToLine(prevSelectionStart + selectionStartOffset, prevSelectionStartLine),
 			   clampToLine(prevSelectionEnd + selectionEndOffset, prevSelectionEndLine),
 			   prevBiasLeft);
+		
 	}
 	
 	/**
@@ -299,7 +308,7 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
 				}
 				else {
 					//Reduce selection to 1st char
-					select(getLineStartOffset(getCaretLine()), getLineStartOffset(getCaretLine()) + 1);
+					setSelectionEnd(getLineStartOffset(getCaretLine()) + 1);
 					replaceSelection("");
 					caretOffset = -1;
 				}
