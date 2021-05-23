@@ -226,6 +226,13 @@ public class EditPane extends JPanel implements Observer {
 		lineNumberList.append("<br></html>");
 		return lineNumberList.toString();
 	}
+	
+	/**
+	 * Get the {@link MARSTextEditingArea} of the EditPane
+	 */
+	public MARSTextEditingArea getTextArea() {
+		return sourceCode;
+	}
 
 	/**
 	 * Calculate and return number of lines in source code text. Do this by counting
