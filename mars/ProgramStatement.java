@@ -114,7 +114,7 @@ public class ProgramStatement {
 			this.operands = null;
 			this.numOperands = 0;
 			this.instruction = (binaryStatement == 0) // this is a "nop" statement
-					? (Instruction) Globals.instructionSet.matchOperator("nop").get(0)
+					? Globals.instructionSet.matchOperator("nop").get(0)
 					: null;
 		}
 		else {
@@ -161,10 +161,10 @@ public class ProgramStatement {
 	public void buildBasicStatementFromBasicInstruction(ErrorList errors) {
 		Token token = strippedTokenList.get(0);
 		String basicStatementElement = token.getValue() + " ";
-		;
 		String basic = basicStatementElement;
 		basicStatementList.addString(basicStatementElement); // the operator
-		TokenTypes tokenType, nextTokenType;
+		TokenTypes tokenType;
+		TokenTypes nextTokenType;
 		String tokenValue;
 		int registerNumber;
 		this.numOperands = 0;
@@ -377,7 +377,6 @@ public class ProgramStatement {
 				this.insertBinaryCode(this.operands[i], Instruction.operandMask[i], errors);
 		}
 		this.binaryStatement = Binary.binaryStringToInt(this.machineStatement);
-		return;
 	} // buildMachineStatementFromBasicStatement(
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -620,7 +619,6 @@ public class ProgramStatement {
 		if (endPos < this.machineStatement.length() - 1)
 			state = state + this.machineStatement.substring(endPos + 1);
 		this.machineStatement = state;
-		return;
 	} // insertBinaryCode()
 
 	//////////////////////////////////////////////////////////////////////////////
@@ -732,7 +730,7 @@ public class ProgramStatement {
 
 			StringBuffer result = new StringBuffer();
 			for (int i = 0; i < list.size(); i++) {
-				ListElement e = (ListElement) list.get(i);
+				ListElement e = list.get(i);
 				switch (e.type) {
 					case 0:
 						result.append(e.sValue);
@@ -742,12 +740,12 @@ public class ProgramStatement {
 						break;
 					case 2:
 						if (valueBase == mars.venus.NumberDisplayBaseChooser.HEXADECIMAL) {
-							result.append(mars.util.Binary.intToHexString(e.iValue)); // 13-July-2011, was:
-																						// intToHalfHexString()
+							result.append(mars.util.Binary.intToHexString(e.iValue)); // 13-July-2011, was: intToHalfHexString()
 						}
 						else {
 							result.append(mars.venus.NumberDisplayBaseChooser.formatNumber(e.iValue, valueBase));
 						}
+						break;
 					default:
 						break;
 				}
