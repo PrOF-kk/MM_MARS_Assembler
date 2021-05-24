@@ -35,8 +35,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /**
  * Container for the execution-related windows.  Currently displayed as a tabbed pane.
  *   @author Sanderson and Team JSpim
- **/
-
+ */
 public class ExecutePane extends JDesktopPane {
 	private RegistersWindow registerValues;
 	private Coprocessor1Window coprocessor1Values;
@@ -57,7 +56,6 @@ public class ExecutePane extends JDesktopPane {
 	 * @param cop1Regs window containing Coprocessor 1 register set
 	 * @param cop0Regs window containing Coprocessor 0 register set
 	 */
-
 	public ExecutePane(VenusUI mainUI, RegistersWindow regs, Coprocessor1Window cop1Regs, Coprocessor0Window cop0Regs) {
 		this.mainUI = mainUI;
 		// Although these are displayed in Data Segment, they apply to all three internal
@@ -126,7 +124,6 @@ public class ExecutePane extends JDesktopPane {
 	 * to the right of the text segment and the latter is shrunk accordingly.
 	 * @param visibility set to true or false
 	 */
-
 	public void setLabelWindowVisibility(boolean visibility) {
 		if (!visibility && labelWindowVisible) {
 			labelWindowVisible = false;
@@ -149,7 +146,6 @@ public class ExecutePane extends JDesktopPane {
 	 * display, data segment display, label display and register display.
 	 * This will typically be done upon File->Close, Open, New.
 	 */
-
 	public void clearPane() {
 		this.getTextSegmentWindow().clearWindow();
 		this.getDataSegmentWindow().clearWindow();
