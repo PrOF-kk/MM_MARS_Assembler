@@ -58,7 +58,7 @@ public class BasicInstruction extends Instruction {
 	 * @param simCode     The inline definition of an object and class which
 	 *                    anonymously implements the SimulationCode interface.
 	 * @see SimulationCode
-	 **/
+	 */
 	/* codes for operand positions are:
 	 * f == First operand
 	 * s == Second operand
@@ -131,8 +131,7 @@ public class BasicInstruction extends Instruction {
 	 * 
 	 * @return the SimulationCode object for this instruction.
 	 * @see SimulationCode
-	 **/
-
+	 */
 	public SimulationCode getSimulationCode() {
 		return simulationCode;
 	}
