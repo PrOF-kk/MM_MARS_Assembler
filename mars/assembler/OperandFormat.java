@@ -58,11 +58,7 @@ public class OperandFormat {
 	 * MIPS specification, else returns <code>false</code>.
 	 */
 	static boolean tokenOperandMatch(TokenList candidateList, Instruction inst, ErrorList errors) {
-		if (!numOperandsCheck(candidateList, inst, errors))
-			return false;
-		if (!operandTypeCheck(candidateList, inst, errors))
-			return false;
-		return true;
+		return (numOperandsCheck(candidateList, inst, errors) && operandTypeCheck(candidateList, inst, errors));
 	}
 
 	/*
@@ -70,17 +66,17 @@ public class OperandFormat {
 	 * select first such Instruction that has an exact operand match. If none match,
 	 * return the first Instruction and let client deal with operand mismatches.
 	 */
-	static Instruction bestOperandMatch(TokenList tokenList, ArrayList instrMatches) {
+	static Instruction bestOperandMatch(TokenList tokenList, ArrayList<Instruction> instrMatches) {
 		if (instrMatches == null)
 			return null;
 		if (instrMatches.size() == 1)
-			return (Instruction) instrMatches.get(0);
+			return instrMatches.get(0);
 		for (int i = 0; i < instrMatches.size(); i++) {
-			Instruction potentialMatch = (Instruction) instrMatches.get(i);
+			Instruction potentialMatch = instrMatches.get(i);
 			if (tokenOperandMatch(tokenList, potentialMatch, new ErrorList()))
 				return potentialMatch;
 		}
-		return (Instruction) instrMatches.get(0);
+		return instrMatches.get(0);
 	}
 
 	// Simply check to see if numbers of operands are correct
@@ -106,8 +102,10 @@ public class OperandFormat {
 	// Generate error message if operand is not of correct type
 	// for this operation & operand position
 	private static boolean operandTypeCheck(TokenList cand, Instruction spec, ErrorList errors) {
-		Token candToken, specToken;
-		TokenTypes candType, specType;
+		Token candToken;
+		Token specToken;
+		TokenTypes candType;
+		TokenTypes specType;
 		for (int i = 1; i < spec.getTokenList().size(); i++) {
 			candToken = cand.get(i);
 			specToken = spec.getTokenList().get(i);
@@ -137,7 +135,7 @@ public class OperandFormat {
 					|| specType == TokenTypes.REGISTER_NUMBER)
 					&& candType == TokenTypes.REGISTER_NAME) {
 				
-				if (Globals.getSettings().getBareMachineEnabled()) {
+				if (Globals.getSettings().getBooleanSetting(Settings.BARE_MACHINE_ENABLED)) {
 					// On 10-Aug-2010, I noticed this cannot happen since the IDE provides no access
 					// to this setting, whose default value is false.
 					generateMessage(candToken, "Use register number instead of name.  See Settings.", errors);
@@ -205,7 +203,6 @@ public class OperandFormat {
 	private static void generateMessage(Token token, String mess, ErrorList errors) {
 		errors.add(new ErrorMessage(token.getSourceMIPSprogram(), token.getSourceLine(), token.getStartPos(),
 				"\"" + token.getValue() + "\": " + mess));
-		return;
 	}
 
 }
