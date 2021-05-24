@@ -2,7 +2,6 @@ package mars.venus;
 import mars.*;
 import mars.simulator.*;
 import mars.mips.hardware.*;
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -47,7 +46,8 @@ public class RunStepAction extends GuiAction {
 	}
 	/**
 	 * perform next simulated instruction step.
-	 */  
+	 */
+	@Override
 	public void actionPerformed(ActionEvent e){
 		name = this.getValue(Action.NAME).toString();
 		executePane = mainUI.getMainPane().getExecutePane();
@@ -119,7 +119,7 @@ public class RunStepAction extends GuiAction {
 	private void processProgramArgumentsIfAny() {
 		String programArguments = executePane.getTextSegmentWindow().getProgramArguments();
 		if (programArguments == null || programArguments.length() == 0 ||
-				!Globals.getSettings().getProgramArguments()) {
+				!Globals.getSettings().getBooleanSetting(Settings.PROGRAM_ARGUMENTS)) {
 			return;
 		}
 		new ProgramArgumentList(programArguments).storeProgramArguments();
