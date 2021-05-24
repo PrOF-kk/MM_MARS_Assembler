@@ -1,12 +1,11 @@
 package mars.venus;
 
-import mars.*;
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import mars.venus.HardcopyWriter.PrintCanceledException;
+
 import java.io.*;
-import java.awt.print.*;
-import java.util.*;
 
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -41,7 +40,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 public class FilePrintAction extends GuiAction {
 
-	public FilePrintAction(String name, Icon icon, String descrip, Integer mnemonic, KeyStroke accel, VenusUI gui) {
+	public FilePrintAction(String name, Icon icon, String descrip,
+			Integer mnemonic, KeyStroke accel, VenusUI gui) {
 		super(name, icon, descrip, mnemonic, accel, gui);
 	}
 
@@ -53,31 +53,36 @@ public class FilePrintAction extends GuiAction {
 	 *
 	 * @param e component triggering this call
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		EditPane editPane = mainUI.getMainPane().getEditPane();
 		if (editPane == null)
 			return;
+		
 		int fontsize = 10; // fixed at 10 point
 		double margins = .5; // all margins (left,right,top,bottom) fixed at .5"
+		
 		HardcopyWriter out;
 		try {
 			out = new HardcopyWriter(mainUI, editPane.getFilename(), fontsize, margins, margins, margins, margins);
 		}
-		catch (HardcopyWriter.PrintCanceledException pce) {
+		catch (PrintCanceledException pce) {
 			return;
 		}
+		
 		BufferedReader in = new BufferedReader(new StringReader(editPane.getSource()));
-		int lineNumberDigits = new Integer(editPane.getSourceLineCount()).toString().length();
+		int lineNumberDigits = String.valueOf(editPane.getSourceLineCount()).length();
 		String line;
 		String lineNumberString = "";
 		int lineNumber = 0;
-		int numchars;
+		
 		try {
 			line = in.readLine();
 			while (line != null) {
 				if (editPane.showingLineNumbers()) {
 					lineNumber++;
-					lineNumberString = new Integer(lineNumber).toString() + ": ";
+					lineNumberString = String.valueOf(lineNumber) + ": ";
 					while (lineNumberString.length() < lineNumberDigits) {
 						lineNumberString = lineNumberString + " ";
 					}
@@ -91,6 +96,5 @@ public class FilePrintAction extends GuiAction {
 		}
 		catch (IOException ioe) {
 		}
-		return;
 	}
 }
