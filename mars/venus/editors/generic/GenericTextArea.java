@@ -66,24 +66,18 @@ public class GenericTextArea extends JTextArea implements MARSTextEditingArea {
 
 		this.undoManager = new UndoManager();
 
-		this.getCaret().addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				editPane.displayCaretPosition(getCaretPosition());
-			}
-		});
+		this.getCaret().addChangeListener(e -> editPane.displayCaretPosition(getCaretPosition()));
 
 		// Needed to support unlimited undo/redo capability
-		undoableEditListener = new UndoableEditListener() {
-			public void undoableEditHappened(UndoableEditEvent e) {
-				// Remember the edit and update the menus.
-				if (isCompoundEdit) {
-					compoundEdit.addEdit(e.getEdit());
-				}
-				else {
-					undoManager.addEdit(e.getEdit());
-					editPane.updateUndoState();
-					editPane.updateRedoState();
-				}
+		undoableEditListener = e -> {
+			// Remember the edit and update the menus.
+			if (isCompoundEdit) {
+				compoundEdit.addEdit(e.getEdit());
+			}
+			else {
+				undoManager.addEdit(e.getEdit());
+				editPane.updateUndoState();
+				editPane.updateRedoState();
 			}
 		};
 		this.getDocument().addUndoableEditListener(undoableEditListener);
@@ -120,7 +114,7 @@ public class GenericTextArea extends JTextArea implements MARSTextEditingArea {
 	}
 
 	/**
-	 * For initalizing the source code when opening an ASM file
+	 * For initializing the source code when opening an ASM file
 	 * 
 	 * @param s        String containing text
 	 * @param editable set true if code is editable else false
@@ -151,6 +145,7 @@ public class GenericTextArea extends JTextArea implements MARSTextEditingArea {
 	 * @param s String with new contents for the editing area. Replaces current
 	 *          content.
 	 */
+	@Override
 	public void setText(String s) {
 		this.getDocument().removeUndoableEditListener(undoableEditListener);
 		super.setText(s);
@@ -305,7 +300,6 @@ public class GenericTextArea extends JTextArea implements MARSTextEditingArea {
 	 */
 	public int doReplace(String find, String replace, boolean caseSensitive) {
 		int nextPosn = 0;
-		int posn;
 		// Will perform a "find" and return, unless positioned at the end of
 		// a selected "find" result.
 		if (find == null || !find.equals(sourceCode.getSelectedText())
