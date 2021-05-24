@@ -51,12 +51,11 @@ public class Coprocessor0Window extends JPanel implements Observer {
 	private Object[][] tableData;
 	private boolean highlighting;
 	private int highlightRow;
-	private ExecutePane executePane;
 	private int[] rowGivenRegNumber; // translate register number to table row.
 	private static final int NAME_COLUMN = 0;
 	private static final int NUMBER_COLUMN = 1;
 	private static final int VALUE_COLUMN = 2;
-	private static Settings settings;
+	private static Settings settings = Globals.getSettings();
 
 	/**
 	 * Constructor which sets up a fresh window with a table that contains the
@@ -64,7 +63,6 @@ public class Coprocessor0Window extends JPanel implements Observer {
 	 */
 	public Coprocessor0Window() {
 		Simulator.getInstance().addObserver(this);
-		settings = Globals.getSettings();
 		this.highlighting = false;
 		table = new MyTippedJTable(new RegTableModel(setupWindow()));
 		table.getColumnModel().getColumn(NAME_COLUMN).setPreferredWidth(50);
@@ -92,10 +90,10 @@ public class Coprocessor0Window extends JPanel implements Observer {
 		for (int i = 0; i < registers.length; i++) {
 			rowGivenRegNumber[registers[i].getNumber()] = i;
 			tableData[i][0] = registers[i].getName();
-			tableData[i][1] = new Integer(registers[i].getNumber());
+			tableData[i][1] = registers[i].getNumber();
 			
 			tableData[i][2] = NumberDisplayBaseChooser.formatNumber(registers[i].getValue(),
-					NumberDisplayBaseChooser.getBase(settings.getDisplayValuesInHex()));
+					NumberDisplayBaseChooser.getBase(settings.getBooleanSetting(Settings.DISPLAY_VALUES_IN_HEX)));
 		}
 		return tableData;
 	}
@@ -230,13 +228,14 @@ public class Coprocessor0Window extends JPanel implements Observer {
 			this.alignment = alignment;
 		}
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
 				boolean isSelected,	boolean hasFocus, int row, int column) {
 			
 			JLabel cell = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			cell.setFont(font);
 			cell.setHorizontalAlignment(alignment);
-			if (settings.getRegistersHighlighting() && highlighting && row == highlightRow) {
+			if (settings.getBooleanSetting(Settings.REGISTERS_HIGHLIGHTING) && highlighting && row == highlightRow) {
 				cell.setBackground(settings.getColorSettingByPosition(Settings.REGISTER_HIGHLIGHT_BACKGROUND));
 				cell.setForeground(settings.getColorSettingByPosition(Settings.REGISTER_HIGHLIGHT_FOREGROUND));
 				cell.setFont(settings.getFontByPosition(Settings.REGISTER_HIGHLIGHT_FONT));
@@ -271,6 +270,7 @@ public class Coprocessor0Window extends JPanel implements Observer {
 			return data.length;
 		}
 
+		@Override
 		public String getColumnName(int col) {
 			return columnNames[col];
 		}
@@ -282,22 +282,19 @@ public class Coprocessor0Window extends JPanel implements Observer {
 		/*
 		 * JTable uses this method to determine the default renderer/editor for each cell.
 		 */
-		public Class getColumnClass(int c) {
+		@Override
+		public Class<?> getColumnClass(int c) {
 			return getValueAt(0, c).getClass();
 		}
 
 		/*
 		 * Don't need to implement this method unless your table's editable.
 		 */
+		@Override
 		public boolean isCellEditable(int row, int col) {
 			// Note that the data/cell address is constant,
 			// no matter where the cell appears onscreen.
-			if (col == VALUE_COLUMN) {
-				return true;
-			}
-			else {
-				return false;
-			}
+			return (col == VALUE_COLUMN);
 		}
 
 		/**
@@ -305,6 +302,7 @@ public class Coprocessor0Window extends JPanel implements Observer {
 		 * user edits cell, so input validation has to be done. If value is valid, MIPS
 		 * register is updated.
 		 */
+		@Override
 		public void setValueAt(Object value, int row, int col) {
 			int val = 0;
 			try {
@@ -323,7 +321,6 @@ public class Coprocessor0Window extends JPanel implements Observer {
 			int valueBase = Globals.getGui().getMainPane().getExecutePane().getValueDisplayBase();
 			data[row][col] = NumberDisplayBaseChooser.formatNumber(val, valueBase);
 			fireTableCellUpdated(row, col);
-			return;
 		}
 
 		/**
@@ -335,6 +332,7 @@ public class Coprocessor0Window extends JPanel implements Observer {
 		}
 
 		// handy for debugging....
+		@SuppressWarnings("unused")
 		private void printDebugData() {
 			int numRows = getRowCount();
 			int numCols = getColumnCount();
@@ -372,6 +370,7 @@ public class Coprocessor0Window extends JPanel implements Observer {
 		};
 
 		// Implement table cell tool tips.
+		@Override
 		public String getToolTipText(MouseEvent e) {
 			String tip = null;
 			java.awt.Point p = e.getPoint();
@@ -402,10 +401,11 @@ public class Coprocessor0Window extends JPanel implements Observer {
 		};
 
 		// Implement table header tool tips.
+		@Override
 		protected JTableHeader createDefaultTableHeader() {
 			return new JTableHeader(columnModel) {
+				@Override
 				public String getToolTipText(MouseEvent e) {
-					String tip = null;
 					java.awt.Point p = e.getPoint();
 					int index = columnModel.getColumnIndexAtX(p.x);
 					int realIndex = columnModel.getColumn(index).getModelIndex();
