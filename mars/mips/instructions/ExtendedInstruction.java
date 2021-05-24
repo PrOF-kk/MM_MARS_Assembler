@@ -66,8 +66,7 @@ public class ExtendedInstruction extends Instruction {
 	 *                           translation" can optimize code generation by
 	 *                           assuming that data label addresses are 16 bits
 	 *                           instead of 32
-	 **/
-
+	 */
 	public ExtendedInstruction(String example, String translation, String compactTranslation, String description) {
 		this.exampleFormat = example;
 		this.description = description;
@@ -85,8 +84,7 @@ public class ExtendedInstruction extends Instruction {
 	 * @param translation Specifications for translating this instruction into a
 	 *                    sequence of one or more MIPS basic instructions.
 	 * @param description a helpful description to be included on help requests
-	 **/
-
+	 */
 	public ExtendedInstruction(String example, String translation, String description) {
 		this.exampleFormat = example;
 		this.description = description;
@@ -104,8 +102,7 @@ public class ExtendedInstruction extends Instruction {
 	 *                    instruction.
 	 * @param translation Specifications for translating this instruction into a
 	 *                    sequence of one or more MIPS basic instructions.
-	 **/
-
+	 */
 	public ExtendedInstruction(String example, String translation) {
 		this(example, translation, "");
 	}
@@ -118,7 +115,7 @@ public class ExtendedInstruction extends Instruction {
 	 * 
 	 * @return int length in bytes of corresponding binary instruction(s).
 	 */
-
+	@Override
 	public int getInstructionLength() {
 		return getInstructionLength(translationStrings);
 	}
@@ -129,7 +126,6 @@ public class ExtendedInstruction extends Instruction {
 	 * 
 	 * @return ArrayList of Strings.
 	 */
-
 	public ArrayList<String> getBasicIntructionTemplateList() {
 		return translationStrings;
 	}
@@ -144,7 +140,6 @@ public class ExtendedInstruction extends Instruction {
 	 * @return int length in bytes of corresponding binary instruction(s). Returns 0
 	 *         if an alternative expansion is not defined for this instruction.
 	 */
-
 	public int getCompactInstructionLength() {
 		return getInstructionLength(compactTranslationStrings);
 	}
@@ -165,7 +160,6 @@ public class ExtendedInstruction extends Instruction {
 	 * @return ArrayList of Strings. Returns null if the instruction does not have a
 	 *         compact alternative.
 	 */
-
 	public ArrayList<String> getCompactBasicIntructionTemplateList() {
 		return compactTranslationStrings;
 	}
@@ -215,26 +209,25 @@ public class ExtendedInstruction extends Instruction {
 	 * @param theTokenList a TokenList containing tokens from extended instruction.
 	 * @return String representing basic assembler statement.
 	 */
-
 	public static String makeTemplateSubstitutions(MIPSprogram program, String template, TokenList theTokenList) {
 		String instruction = template;
 		int index;
 		// Added 22 Jan 2008 by DPS. The DBNOP template means to generate a "nop" instruction
 		// if delayed branching is enabled and generate no instruction otherwise.
 
-		// This is the goal, but it leads to a cascade of
-		// additional changes, so for now I will generate "nop" in either case, then
-		// come back to it for the next major release.
+		// This is the goal, but it leads to a cascade of additional changes,
+		// so for now I will generate "nop" in either case, then come back to it
+		// for the next major release.
 		if (instruction.indexOf("DBNOP") >= 0) {
 			return Globals.getSettings().getBooleanSetting(Settings.DELAYED_BRANCHING_ENABLED) ? "nop" : "";
 		}
-		// substitute first operand token for template's RG1 or OP1, second for RG2 or
-		// OP2, etc
+		// substitute first operand token for template's RG1 or OP1,
+		// second for RG2 or OP2, etc
 		for (int op = 1; op < theTokenList.size(); op++) {
 			instruction = substitute(instruction, "RG" + op, theTokenList.get(op).getValue());
 			instruction = substitute(instruction, "OP" + op, theTokenList.get(op).getValue());
-			// substitute upper 16 bits of label address, after adding singe digit constant
-			// following P
+			// substitute upper 16 bits of label address,
+			// after adding single digit constant following P
 			if ((index = instruction.indexOf("LH" + op + "P")) >= 0) {
 				// Label, last operand, has already been translated to address by symtab lookup
 				String label = theTokenList.get(op).getValue();
@@ -280,8 +273,7 @@ public class ExtendedInstruction extends Instruction {
 				catch (NumberFormatException e) {
 					// this won't happen...
 				}
-				instruction = substitute(instruction, "LL" + op + "P" + add, String.valueOf(addr << 16 >> 16));// addr &
-																												// 0xffff));
+				instruction = substitute(instruction, "LL" + op + "P" + add, String.valueOf(addr << 16 >> 16));// addr & 0xffff));
 			}
 			// substitute lower 16 bits of label address.
 			// NOTE: form LLnPm will not match here since it is discovered and substituted above.
@@ -299,8 +291,7 @@ public class ExtendedInstruction extends Instruction {
 					instruction = substitute(instruction, "LL" + op + "U", String.valueOf(addr & 0xffff));
 				}
 				else {
-					instruction = substitute(instruction, "LL" + op, String.valueOf(addr << 16 >> 16));// addr &
-																										// 0xffff));
+					instruction = substitute(instruction, "LL" + op, String.valueOf(addr << 16 >> 16));// addr & 0xffff));
 				}
 			}
 			// Substitute upper 16 bits of value after adding 1,2,3,4, (any single digit)
@@ -365,9 +356,7 @@ public class ExtendedInstruction extends Instruction {
 					instruction = substitute(instruction, "VL" + op + "P" + add + "U", String.valueOf(val & 0xffff));
 				}
 				else {
-					instruction = substitute(instruction, "VL" + op + "P" + add, String.valueOf(val << 16 >> 16));// val
-																													// &
-																													// 0xffff));
+					instruction = substitute(instruction, "VL" + op + "P" + add, String.valueOf(val << 16 >> 16));// val & 0xffff));
 				}
 			}
 			// substitute lower 16 bits of value. NOTE: VLnPm already substituted by above code.
@@ -486,7 +475,6 @@ public class ExtendedInstruction extends Instruction {
 			try {
 				addr = Binary.stringToInt(label) + // KENV 1/6/05
 						Binary.stringToInt(addend) + add;
-
 			}
 			catch (NumberFormatException e) {
 				// this won't happen...
@@ -502,8 +490,7 @@ public class ExtendedInstruction extends Instruction {
 			int addr = 0;
 			try {
 				addr = Binary.stringToInt(label) + // KENV 1/6/05
-					   Binary.stringToInt(addend);
-
+						Binary.stringToInt(addend);
 			}
 			catch (NumberFormatException e) {
 				// this won't happen...
@@ -589,10 +576,8 @@ public class ExtendedInstruction extends Instruction {
 	}
 
 	// Performs a String substitution. Java 1.5 adds an overloaded String.replace
-	// method to
-	// do this directly but I wanted to stay 1.4 compatible.
+	// method to do this directly but I wanted to stay 1.4 compatible.
 	// Modified 12 July 2006 to "substitute all occurrences", not just the first.
-	// TODO Break compatibility.
 	private static String substitute(String original, String find, String replacement) {
 		if (original.indexOf(find) < 0 || find.equals(replacement)) {
 			return original; // second condition prevents infinite loop below
@@ -608,7 +593,6 @@ public class ExtendedInstruction extends Instruction {
 	// Performs a String substitution, but will only substitute for the first match.
 	// Java 1.5 adds an overloaded String.replace method to do this directly but I
 	// wanted to stay 1.4 compatible.
-	// TODO Break compatibility.
 	private static String substituteFirst(String original, String find, String replacement) {
 		if (original.indexOf(find) < 0 || find.equals(replacement)) {
 			return original; // second condition prevents infinite loop below
@@ -621,10 +605,11 @@ public class ExtendedInstruction extends Instruction {
 		return modified;
 	}
 
-	// Takes list of basic instructions that this extended instruction
-	// expands to, which is a string, and breaks out into separate
-	// instructions. They are separated by '\n' character.
-
+	/**
+	 * Takes list of basic instructions that this extended instruction
+	 * expands to, which is a string, and breaks out into separate instructions.
+	 * They are separated by '\n' character.
+	 */
 	private ArrayList<String> buildTranslationList(String translation) {
 		if (translation == null || translation.length() == 0) {
 			return null;
@@ -637,7 +622,7 @@ public class ExtendedInstruction extends Instruction {
 		return translationList;
 	}
 
-	/*
+	/**
 	 * Get length in bytes that this extended instruction requires in its binary
 	 * form. The answer depends on how many basic instructions it expands to. This
 	 * may vary, if expansion includes a nop, depending on whether or not delayed
@@ -645,7 +630,7 @@ public class ExtendedInstruction extends Instruction {
 	 * corresponding binary instruction(s). Returns 0 if the ArrayList is null or empty.
 	 */
 	private int getInstructionLength(ArrayList<String> translationList) {
-		if (translationList == null || translationList.size() == 0) {
+		if (translationList == null || translationList.isEmpty()) {
 			return 0;
 		}
 		// If instruction template is DBNOP, that means generate a "nop" instruction but
