@@ -172,7 +172,10 @@ public class Settings extends Observable {
 	 * position.
 	 */
 	public static boolean[] defaultBooleanSettingsValues = { // match the above list by position
-			true, false, false, false, false, true, true, false, false, true, false, false, true, true, false, true,
+			true, false, false, false,
+			false, true, true, false,
+			false, true, false, false,
+			true, true, false, true,
 			true, false, false, true, false };
 
 	// STRING SETTINGS. Each array position has associated name.
@@ -493,6 +496,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.BARE_MACHINE_ENABLED</code>)
 	 */
+	@Deprecated
 	public boolean getBareMachineEnabled() {
 		return booleanSettingsValues[BARE_MACHINE_ENABLED];
 	}
@@ -506,6 +510,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.EXTENDED_ASSEMBLER_ENABLED</code>)
 	 */
+	@Deprecated
 	public boolean getExtendedAssemblerEnabled() {
 		return booleanSettingsValues[EXTENDED_ASSEMBLER_ENABLED];
 	}
@@ -520,6 +525,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.ASSEMBLE_ON_OPEN_ENABLED</code>)
 	 */
+	@Deprecated
 	public boolean getAssembleOnOpenEnabled() {
 		return booleanSettingsValues[ASSEMBLE_ON_OPEN_ENABLED];
 	}
@@ -532,6 +538,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.DISPLAY_ADDRESSES_IN_HEX</code>)
 	 */
+	@Deprecated
 	public boolean getDisplayAddressesInHex() {
 		return booleanSettingsValues[DISPLAY_ADDRESSES_IN_HEX];
 	}
@@ -545,6 +552,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.DISPLAY_VALUES_IN_HEX</code>)
 	 */
+	@Deprecated
 	public boolean getDisplayValuesInHex() {
 		return booleanSettingsValues[DISPLAY_VALUES_IN_HEX];
 	}
@@ -560,6 +568,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.ASSEMBLE_ALL_ENABLED</code>)
 	 */
+	@Deprecated
 	public boolean getAssembleAllEnabled() {
 		return booleanSettingsValues[ASSEMBLE_ALL_ENABLED];
 	}
@@ -572,6 +581,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.EXCEPTION_HANDLER_ENABLED</code>)
 	 */
+	@Deprecated
 	public boolean getExceptionHandlerEnabled() {
 		return booleanSettingsValues[EXCEPTION_HANDLER_ENABLED];
 	}
@@ -587,6 +597,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.DELAYED_BRANCHING_ENABLED</code>)
 	 */
+	@Deprecated
 	public boolean getDelayedBranchingEnabled() {
 		return booleanSettingsValues[DELAYED_BRANCHING_ENABLED];
 	}
@@ -598,6 +609,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.LABEL_WINDOW_VISIBILITY</code>)
 	 */
+	@Deprecated
 	public boolean getLabelWindowVisibility() {
 		return booleanSettingsValues[LABEL_WINDOW_VISIBILITY];
 	}
@@ -609,6 +621,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.EDITOR_LINE_NUMBERS_DISPLAYED</code>)
 	 */
+	@Deprecated
 	public boolean getEditorLineNumbersDisplayed() {
 		return booleanSettingsValues[EDITOR_LINE_NUMBERS_DISPLAYED];
 	}
@@ -620,6 +633,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.WARNINGS_ARE_ERRORS</code>)
 	 */
+	@Deprecated
 	public boolean getWarningsAreErrors() {
 		return booleanSettingsValues[WARNINGS_ARE_ERRORS];
 	}
@@ -631,6 +645,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.PROGRAM_ARGUMENTS</code>)
 	 */
+	@Deprecated
 	public boolean getProgramArguments() {
 		return booleanSettingsValues[PROGRAM_ARGUMENTS];
 	}
@@ -642,6 +657,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.DATA_SEGMENT_HIGHLIGHTING</code>)
 	 */
+	@Deprecated
 	public boolean getDataSegmentHighlighting() {
 		return booleanSettingsValues[DATA_SEGMENT_HIGHLIGHTING];
 	}
@@ -654,6 +670,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.REGISTERS_HIGHLIGHTING</code>)
 	 */
+	@Deprecated
 	public boolean getRegistersHighlighting() {
 		return booleanSettingsValues[REGISTERS_HIGHLIGHTING];
 	}
@@ -666,6 +683,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>getBooleanSetting(int id)</code> with the appropriate
 	 *             boolean setting ID (e.g. <code>Settings.START_AT_MAIN</code>)
 	 */
+	@Deprecated
 	public boolean getStartAtMain() {
 		return booleanSettingsValues[START_AT_MAIN];
 	}
@@ -887,6 +905,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with
 	 *             the appropriate boolean setting ID (e.g. <code>Settings.EXTENDED_ASSEMBLER_ENABLED</code>)
 	 */
+	@Deprecated
 	public void setExtendedAssemblerEnabled(boolean value) {
 		internalSetBooleanSetting(EXTENDED_ASSEMBLER_ENABLED, value);
 	}
@@ -900,6 +919,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with
 	 *             the appropriate boolean setting ID (e.g. <code>Settings.ASSEMBLE_ON_OPEN_ENABLED</code>)
 	 */
+	@Deprecated
 	public void setAssembleOnOpenEnabled(boolean value) {
 		internalSetBooleanSetting(ASSEMBLE_ON_OPEN_ENABLED, value);
 	}
@@ -914,6 +934,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with
 	 *             the appropriate boolean setting ID (e.g. <code>Settings.ASSEMBLE_ALL_ENABLED</code>)
 	 */
+	@Deprecated
 	public void setAssembleAllEnabled(boolean value) {
 		internalSetBooleanSetting(ASSEMBLE_ALL_ENABLED, value);
 	}
@@ -926,6 +947,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with
 	 *             the appropriate boolean setting ID (e.g. <code>Settings.DISPLAY_ADDRESSES_IN_HEX</code>)
 	 */
+	@Deprecated
 	public void setDisplayAddressesInHex(boolean value) {
 		internalSetBooleanSetting(DISPLAY_ADDRESSES_IN_HEX, value);
 	}
@@ -938,6 +960,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with
 	 *             the appropriate boolean setting ID (e.g. <code>Settings.DISPLAY_VALUES_IN_HEX</code>)
 	 */
+	@Deprecated
 	public void setDisplayValuesInHex(boolean value) {
 		internalSetBooleanSetting(DISPLAY_VALUES_IN_HEX, value);
 	}
@@ -951,6 +974,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with
 	 *             the appropriate boolean setting ID (e.g. <code>Settings.LABEL_WINDOW_VISIBILITY</code>)
 	 */
+	@Deprecated
 	public void setLabelWindowVisibility(boolean value) {
 		internalSetBooleanSetting(LABEL_WINDOW_VISIBILITY, value);
 	}
@@ -964,6 +988,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with
 	 *             the appropriate boolean setting ID (e.g. <code>Settings.EXCEPTION_HANDLER_ENABLED</code>)
 	 */
+	@Deprecated
 	public void setExceptionHandlerEnabled(boolean value) {
 		internalSetBooleanSetting(EXCEPTION_HANDLER_ENABLED, value);
 	}
@@ -979,7 +1004,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with
 	 *             the appropriate boolean setting ID (e.g. <code>Settings.DELAYED_BRANCHING_ENABLED</code>)
 	 */
-
+	@Deprecated
 	public void setDelayedBranchingEnabled(boolean value) {
 		internalSetBooleanSetting(DELAYED_BRANCHING_ENABLED, value);
 	}
@@ -992,6 +1017,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with
 	 *             the appropriate boolean setting ID (e.g. <code>Settings.EDITOR_LINE_NUMBERS_DISPLAYED</code>)
 	 */
+	@Deprecated
 	public void setEditorLineNumbersDisplayed(boolean value) {
 		internalSetBooleanSetting(EDITOR_LINE_NUMBERS_DISPLAYED, value);
 	}
@@ -1003,6 +1029,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with
 	 *             the appropriate boolean setting ID (e.g. <code>Settings.WARNINGS_ARE_ERRORS</code>)
 	 */
+	@Deprecated
 	public void setWarningsAreErrors(boolean value) {
 		internalSetBooleanSetting(WARNINGS_ARE_ERRORS, value);
 	}
@@ -1014,6 +1041,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with
 	 *             the appropriate boolean setting ID (e.g. <code>Settings.PROGRAM_ARGUMENTS</code>)
 	 */
+	@Deprecated
 	public void setProgramArguments(boolean value) {
 		internalSetBooleanSetting(PROGRAM_ARGUMENTS, value);
 	}
@@ -1026,6 +1054,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with
 	 *             the appropriate boolean setting ID (e.g. <code>Settings.DATA_SEGMENT_HIGHLIGHTING</code>)
 	 */
+	@Deprecated
 	public void setDataSegmentHighlighting(boolean value) {
 		internalSetBooleanSetting(DATA_SEGMENT_HIGHLIGHTING, value);
 	}
@@ -1038,6 +1067,7 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with
 	 *             the appropriate boolean setting ID (e.g. <code>Settings.REGISTERS_HIGHLIGHTING</code>)
 	 */
+	@Deprecated
 	public void setRegistersHighlighting(boolean value) {
 		internalSetBooleanSetting(REGISTERS_HIGHLIGHTING, value);
 	}
@@ -1050,13 +1080,14 @@ public class Settings extends Observable {
 	 * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with
 	 *             the appropriate boolean setting ID (e.g. <code>Settings.START_AT_MAIN</code>)
 	 */
+	@Deprecated
 	public void setStartAtMain(boolean value) {
 		internalSetBooleanSetting(START_AT_MAIN, value);
 	}
 
 	/**
 	 * Temporarily establish boolean setting. This setting will NOT be written to
-	 * persisent store! Currently this is used only when running MARS from the command line
+	 * persistent store! Currently this is used only when running MARS from the command line
 	 * 
 	 * @param id    setting identifier. These are defined for this class as static final int.
 	 * @param value True to enable the setting, false otherwise.
@@ -1081,6 +1112,7 @@ public class Settings extends Observable {
 	 *             with the appropriate boolean setting ID (e.g.
 	 *             <code>Settings.DELAYED_BRANCHING_ENABLED</code>)
 	 */
+	@Deprecated
 	public void setDelayedBranchingEnabledNonPersistent(boolean value) {
 		// Note: Doing assignment to array results in non-persistent
 		// setting (lost when MARS terminates). For persistent, use
@@ -1102,7 +1134,6 @@ public class Settings extends Observable {
 	 * 
 	 * @param config A string that identifies the current built-in memory configuration
 	 */
-
 	public void setMemoryConfiguration(String config) {
 		setStringSetting(MEMORY_CONFIGURATION, config);
 	}
@@ -1175,9 +1206,8 @@ public class Settings extends Observable {
 	 * 
 	 * @param columnOrder An array of int indicating column order.
 	 */
-
 	public void setTextColumnOrder(int[] columnOrder) {
-		String stringifiedOrder = new String();
+		String stringifiedOrder = "";
 		for (int i = 0; i < columnOrder.length; i++) {
 			stringifiedOrder += Integer.toString(columnOrder[i]) + " ";
 		}
@@ -1245,20 +1275,17 @@ public class Settings extends Observable {
 	// Default values. Will be replaced if available from property file or
 	// Preferences object.
 	private void applyDefaultSettings() {
-		for (int i = 0; i < booleanSettingsValues.length; i++) {
-			booleanSettingsValues[i] = defaultBooleanSettingsValues[i];
-		}
-		for (int i = 0; i < stringSettingsValues.length; i++) {
-			stringSettingsValues[i] = defaultStringSettingsValues[i];
-		}
-		for (int i = 0; i < fontFamilySettingsValues.length; i++) {
-			fontFamilySettingsValues[i] = defaultFontFamilySettingsValues[i];
-			fontStyleSettingsValues[i] = defaultFontStyleSettingsValues[i];
-			fontSizeSettingsValues[i] = defaultFontSizeSettingsValues[i];
-		}
-		for (int i = 0; i < colorSettingsValues.length; i++) {
-			colorSettingsValues[i] = defaultColorSettingsValues[i];
-		}
+
+		booleanSettingsValues = Arrays.copyOf(defaultBooleanSettingsValues, booleanSettingsValues.length);
+		stringSettingsValues = Arrays.copyOf(defaultStringSettingsValues, stringSettingsValues.length);
+
+		// Font settings
+		fontFamilySettingsValues = Arrays.copyOf(defaultFontFamilySettingsValues, fontFamilySettingsValues.length);
+		fontStyleSettingsValues  = Arrays.copyOf(defaultFontStyleSettingsValues,  fontStyleSettingsValues.length);
+		fontSizeSettingsValues   = Arrays.copyOf(defaultFontSizeSettingsValues,   fontSizeSettingsValues.length);
+
+		colorSettingsValues = Arrays.copyOf(defaultColorSettingsValues, colorSettingsValues.length);
+
 		initializeEditorSyntaxStyles();
 	}
 
@@ -1286,8 +1313,7 @@ public class Settings extends Observable {
 	}
 
 	// Get Color object for this key value. Get it from values array provided as
-	// argument (could be either
-	// the current or the default settings array).
+	// argument (could be either the current or the default settings array).
 	private Color getColorValueByKey(String key, String[] values) {
 		for (int i = 0; i < colorSettingsKeys.length; i++) {
 			if (key.equals(colorSettingsKeys[i])) {
@@ -1352,24 +1378,29 @@ public class Settings extends Observable {
 			}
 			for (int i = 0; i < stringSettingsKeys.length; i++) {
 				settingValue = Globals.getPropertyEntry(filename, stringSettingsKeys[i]);
-				if (settingValue != null)
+				if (settingValue != null) {
 					stringSettingsValues[i] = defaultStringSettingsValues[i] = settingValue;
+				}
 			}
 			for (int i = 0; i < fontFamilySettingsValues.length; i++) {
 				settingValue = Globals.getPropertyEntry(filename, fontFamilySettingsKeys[i]);
-				if (settingValue != null)
+				if (settingValue != null) {
 					fontFamilySettingsValues[i] = defaultFontFamilySettingsValues[i] = settingValue;
+				}
 				settingValue = Globals.getPropertyEntry(filename, fontStyleSettingsKeys[i]);
-				if (settingValue != null)
+				if (settingValue != null) {
 					fontStyleSettingsValues[i] = defaultFontStyleSettingsValues[i] = settingValue;
+				}
 				settingValue = Globals.getPropertyEntry(filename, fontSizeSettingsKeys[i]);
-				if (settingValue != null)
+				if (settingValue != null) {
 					fontSizeSettingsValues[i] = defaultFontSizeSettingsValues[i] = settingValue;
+				}
 			}
 			for (int i = 0; i < colorSettingsKeys.length; i++) {
 				settingValue = Globals.getPropertyEntry(filename, colorSettingsKeys[i]);
-				if (settingValue != null)
+				if (settingValue != null) {
 					colorSettingsValues[i] = defaultColorSettingsValues[i] = settingValue;
+				}
 			}
 		}
 		catch (Exception e) {
@@ -1466,7 +1497,8 @@ public class Settings extends Observable {
 	private int[] getTextSegmentColumnOrder(String stringOfColumnIndexes) {
 		StringTokenizer st = new StringTokenizer(stringOfColumnIndexes);
 		int[] list = new int[st.countTokens()];
-		int index = 0, value;
+		int index = 0;
+		int value;
 		boolean valuesOK = true;
 		while (st.hasMoreTokens()) {
 			try {
