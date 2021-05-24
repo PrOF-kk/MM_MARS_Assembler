@@ -475,7 +475,7 @@ public class VenusUI extends JFrame {
 		file.add(fileSave);
 		file.add(fileSaveAs);
 		file.add(fileSaveAll);
-		if (new mars.mips.dump.DumpFormatLoader().loadDumpFormats().size() > 0) {
+		if (new mars.mips.dump.DumpFormatLoader().loadDumpFormats().isEmpty()) {
 			file.add(fileDumpMemory);
 		}
 		file.addSeparator();
