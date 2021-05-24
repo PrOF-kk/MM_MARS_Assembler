@@ -50,12 +50,11 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
 	private Object[][] tableData;
 	private boolean highlighting;
 	private int highlightRow;
-	private ExecutePane executePane;
 	private JCheckBox[] conditionFlagCheckBox;
 	private static final int NAME_COLUMN = 0;
 	private static final int FLOAT_COLUMN = 1;
 	private static final int DOUBLE_COLUMN = 2;
-	private static Settings settings;
+	private static Settings settings = Globals.getSettings();
 
 	/**
 	 * Constructor which sets up a fresh window with a table that contains the
@@ -63,7 +62,6 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
 	 */
 	public Coprocessor1Window() {
 		Simulator.getInstance().addObserver(this);
-		settings = Globals.getSettings();
 		// Display registers in table contained in scroll pane.
 		this.setLayout(new BorderLayout()); // table display will occupy entire width if widened
 		
@@ -138,7 +136,7 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
 			tableData[i][0] = registers[i].getName();
 			
 			tableData[i][1] = NumberDisplayBaseChooser.formatFloatNumber(registers[i].getValue(),
-					NumberDisplayBaseChooser.getBase(settings.getDisplayValuesInHex()));// formatNumber(floatValue,NumberDisplayBaseChooser.getBase(settings.getDisplayValuesInHex()));
+					NumberDisplayBaseChooser.getBase(settings.getBooleanSetting(Settings.DISPLAY_VALUES_IN_HEX)));// formatNumber(floatValue,NumberDisplayBaseChooser.getBase(settings.getDisplayValuesInHex()));
 			
 			if (i % 2 == 0) { // even numbered double registers
 				long longValue = 0;
@@ -148,7 +146,7 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
 				catch (InvalidRegisterAccessException e) {
 				} // cannot happen since i must be even
 				tableData[i][2] = NumberDisplayBaseChooser.formatDoubleNumber(longValue,
-						NumberDisplayBaseChooser.getBase(settings.getDisplayValuesInHex()));
+						NumberDisplayBaseChooser.getBase(settings.getBooleanSetting(Settings.DISPLAY_VALUES_IN_HEX)));
 			}
 			else {
 				tableData[i][2] = "";
@@ -213,7 +211,7 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
 
 	private void updateConditionFlagDisplay() {
 		for (int i = 0; i < conditionFlagCheckBox.length; i++) {
-			conditionFlagCheckBox[i].setSelected((Coprocessor1.getConditionFlag(i) == 0) ? false : true);
+			conditionFlagCheckBox[i].setSelected(Coprocessor1.getConditionFlag(i) != 0);
 		}
 	}
 
@@ -330,13 +328,14 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
 			this.alignment = alignment;
 		}
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
 				boolean isSelected,	boolean hasFocus, int row, int column) {
 			
 			JLabel cell = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			cell.setFont(font);
 			cell.setHorizontalAlignment(alignment);
-			if (settings.getRegistersHighlighting() && highlighting && row == highlightRow) {
+			if (settings.getBooleanSetting(Settings.REGISTERS_HIGHLIGHTING) && highlighting && row == highlightRow) {
 				cell.setBackground(settings.getColorSettingByPosition(Settings.REGISTER_HIGHLIGHT_BACKGROUND));
 				cell.setForeground(settings.getColorSettingByPosition(Settings.REGISTER_HIGHLIGHT_FOREGROUND));
 				cell.setFont(settings.getFontByPosition(Settings.REGISTER_HIGHLIGHT_FONT));
@@ -374,6 +373,7 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
 			return data.length;
 		}
 
+		@Override
 		public String getColumnName(int col) {
 			return columnNames[col];
 		}
@@ -385,22 +385,19 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
 		/*
 		 * JTable uses this method to determine the default renderer/editor for each cell.
 		 */
-		public Class getColumnClass(int c) {
+		@Override
+		public Class<?> getColumnClass(int c) {
 			return getValueAt(0, c).getClass();
 		}
 
 		/*
 		 * Float column and even-numbered rows of double column are editable.
 		 */
+		@Override
 		public boolean isCellEditable(int row, int col) {
 			// Note that the data/cell address is constant,
 			// no matter where the cell appears onscreen.
-			if (col == FLOAT_COLUMN || (col == DOUBLE_COLUMN && row % 2 == 0)) {
-				return true;
-			}
-			else {
-				return false;
-			}
+			return (col == FLOAT_COLUMN || (col == DOUBLE_COLUMN && row % 2 == 0));
 		}
 
 		/*
@@ -408,6 +405,7 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
 		 * user edits cell, so input validation has to be done. If value is valid, MIPS
 		 * register is updated.
 		 */
+		@Override
 		public void setValueAt(Object value, int row, int col) {
 			int valueBase = Globals.getGui().getMainPane().getExecutePane().getValueDisplayBase();
 			float fVal;
@@ -474,7 +472,6 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
 				// Should not occur; code below will re-display original value
 				fireTableCellUpdated(row, col);
 			}
-			return;
 		}
 
 		/**
@@ -486,6 +483,7 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
 		}
 
 		// handy for debugging....
+		@SuppressWarnings("unused")
 		private void printDebugData() {
 			int numRows = getRowCount();
 			int numCols = getColumnCount();
@@ -551,6 +549,7 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
 		};
 
 		// Implement table cell tool tips.
+		@Override
 		public String getToolTipText(MouseEvent e) {
 			String tip = null;
 			java.awt.Point p = e.getPoint();
@@ -581,10 +580,11 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
 		};
 
 		// Implement table header tool tips.
+		@Override
 		protected JTableHeader createDefaultTableHeader() {
 			return new JTableHeader(columnModel) {
+				@Override
 				public String getToolTipText(MouseEvent e) {
-					String tip = null;
 					java.awt.Point p = e.getPoint();
 					int index = columnModel.getColumnIndexAtX(p.x);
 					int realIndex = columnModel.getColumn(index).getModelIndex();
