@@ -42,7 +42,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * adapted from Bret Barker's GameServer class from the book
  * "Developing Games In Java".
  */
-
 class SyscallLoader {
 
 	private static final String CLASS_PREFIX = "mars.mips.instructions.syscalls.";
@@ -100,7 +99,6 @@ class SyscallLoader {
 			}
 		}
 		syscallList = processSyscallNumberOverrides(syscallList);
-		return;
 	}
 
 	// Will get any syscall number override specifications from MARS config file and
@@ -132,7 +130,8 @@ class SyscallLoader {
 		// This will also detect duplicates that accidently occur from addition
 		// of a new Syscall subclass to the collection, even if the config file
 		// does not contain any overrides.
-		Syscall syscallA, syscallB;
+		Syscall syscallA;
+		Syscall syscallB;
 		boolean duplicates = false;
 		for (int i = 0; i < syscallList.size(); i++) {
 			syscallA = syscallList.get(i);
@@ -157,7 +156,8 @@ class SyscallLoader {
 	 */
 	Syscall findSyscall(int number) {
 		// linear search is OK since number of syscalls is small.
-		Syscall service, match = null;
+		Syscall service;
+		Syscall match = null;
 		if (syscallList == null) {
 			loadSyscalls();
 		}
