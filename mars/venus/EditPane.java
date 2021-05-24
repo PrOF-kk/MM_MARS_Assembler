@@ -245,6 +245,7 @@ public class EditPane extends JPanel implements Observer {
 	 *           better.
 	 */
 	public int getSourceLineCount() {
+		//TODO why not sourceCode.getText().lines().count() ?
 		BufferedReader bufStringReader = new BufferedReader(new StringReader(sourceCode.getText()));
 		int lineNums = 0;
 		try {
