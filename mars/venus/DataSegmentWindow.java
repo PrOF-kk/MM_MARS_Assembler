@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.table.*;
-import javax.swing.border.*;
 import javax.swing.event.*;
 
 /*
@@ -82,7 +81,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 	// The combo box replaced the row of buttons when number of buttons expanded to 7!
 	// We'll keep the button objects however and manually invoke their action listeners
 	// when the corresponding combo box item is selected.  DPS 22-Nov-2006
-	JComboBox  baseAddressSelector;
+	JComboBox baseAddressSelector;
 
 	// The next bunch are initialized dynamically in initializeBaseAddressChoices()
 	private String[] displayBaseAddressChoices; 
@@ -102,7 +101,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 		settings = Globals.getSettings();
 		settings.addObserver(this);
 
-		homeAddress = Globals.memory.dataBaseAddress;  // address for Home button
+		homeAddress = Memory.dataBaseAddress;  // address for Home button
 		firstAddress = homeAddress;  // first address to display at any given time
 		userOrKernelMode = USER_MODE;
 		addressHighlighting = false;
@@ -154,13 +153,10 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 		}
 		asciiDisplayCheckBox = new JCheckBox("ASCII", asciiDisplay);
 		asciiDisplayCheckBox.setToolTipText("Display data segment values in ASCII (overrides Hexadecimal Values setting)");
-		asciiDisplayCheckBox.addItemListener( 
-				new ItemListener() {
-					public void itemStateChanged(ItemEvent e) {
-						asciiDisplay = (e.getStateChange() == ItemEvent.SELECTED);
-						DataSegmentWindow.this.updateValues();
-					}
-				});
+		asciiDisplayCheckBox.addItemListener(e -> {
+			asciiDisplay = (e.getStateChange() == ItemEvent.SELECTED);
+			DataSegmentWindow.this.updateValues();
+		});
 		features.add(asciiDisplayCheckBox);
 
 		contentPane.add(features, BorderLayout.SOUTH);  
@@ -658,116 +654,92 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 		globButton.setToolTipText("View range around global pointer");
 		stakButton.setToolTipText("View range around stack pointer");
 		heapButton.setToolTipText("View range around heap base address "+
-				Binary.intToHexString(Globals.memory.heapBaseAddress));
+				Binary.intToHexString(Memory.heapBaseAddress));
 		kernButton.setToolTipText("View range around kernel data base address "+
-				Binary.intToHexString(Globals.memory.kernelDataBaseAddress));
+				Binary.intToHexString(Memory.kernelDataBaseAddress));
 		extnButton.setToolTipText("View range around static global base address "+
-				Binary.intToHexString(Globals.memory.externBaseAddress));
+				Binary.intToHexString(Memory.externBaseAddress));
 		mmioButton.setToolTipText("View range around MMIO base address "+
-				Binary.intToHexString(Globals.memory.memoryMapBaseAddress));
+				Binary.intToHexString(Memory.memoryMapBaseAddress));
 		textButton.setToolTipText("View range around program code "+
-				Binary.intToHexString(Globals.memory.textBaseAddress));
+				Binary.intToHexString(Memory.textBaseAddress));
 		prevButton.setToolTipText("View next lower address range; hold down for rapid fire");
 		nextButton.setToolTipText("View next higher address range; hold down for rapid fire");
 		dataButton.setToolTipText("View range around static data segment base address "+
-				Binary.intToHexString(Globals.memory.dataBaseAddress));
+				Binary.intToHexString(Memory.dataBaseAddress));
 
 		// add the action listeners to maintain button state and table contents
 		// Currently there is no memory upper bound so next button always enabled.
 
-		globButton.addActionListener( 
-				new ActionListener() {
-					public void actionPerformed(ActionEvent ae) {
-						userOrKernelMode = USER_MODE;
-						// get $gp global pointer, but guard against it having value below data segment
-						firstAddress = Math.max(Globals.memory.dataSegmentBaseAddress,RegisterFile.getValue(RegisterFile.GLOBAL_POINTER_REGISTER)); 
-						// updateModelForMemoryRange requires argument to be multiple of 4
-						// but for cleaner display we'll make it multiple of 32 (last nibble is 0).  
-						// This makes it easier to mentally calculate address from row address + column offset.
-						firstAddress = firstAddress - (firstAddress % BYTES_PER_ROW);
-						homeAddress = firstAddress; 
-						firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(firstAddress);
-						updateModelForMemoryRange(firstAddress);
-					}
-				});
+		globButton.addActionListener(ae -> {
+			userOrKernelMode = USER_MODE;
+			// get $gp global pointer, but guard against it having value below data segment
+			firstAddress = Math.max(Memory.dataSegmentBaseAddress,RegisterFile.getValue(RegisterFile.GLOBAL_POINTER_REGISTER)); 
+			// updateModelForMemoryRange requires argument to be multiple of 4
+			// but for cleaner display we'll make it multiple of 32 (last nibble is 0).  
+			// This makes it easier to mentally calculate address from row address + column offset.
+			firstAddress = firstAddress - (firstAddress % BYTES_PER_ROW);
+			homeAddress = firstAddress; 
+			firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(firstAddress);
+			updateModelForMemoryRange(firstAddress);
+		});
 
-		stakButton.addActionListener( 
-				new ActionListener() {
-					public void actionPerformed(ActionEvent ae) {
-						userOrKernelMode = USER_MODE;
-						// get $sp stack pointer, but guard against it having value below data segment
-						firstAddress = Math.max(Globals.memory.dataSegmentBaseAddress,RegisterFile.getValue(RegisterFile.STACK_POINTER_REGISTER)); 
-						// See comment above for gloButton...
-						firstAddress = firstAddress - (firstAddress % BYTES_PER_ROW);
-						homeAddress = Globals.memory.stackBaseAddress;
-						firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(firstAddress);
-						updateModelForMemoryRange(firstAddress);
-					}
-				});
+		stakButton.addActionListener(ae -> {
+			userOrKernelMode = USER_MODE;
+			// get $sp stack pointer, but guard against it having value below data segment
+			firstAddress = Math.max(Memory.dataSegmentBaseAddress,RegisterFile.getValue(RegisterFile.STACK_POINTER_REGISTER)); 
+			// See comment above for gloButton...
+			firstAddress = firstAddress - (firstAddress % BYTES_PER_ROW);
+			homeAddress = Memory.stackBaseAddress;
+			firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(firstAddress);
+			updateModelForMemoryRange(firstAddress);
+		});
 
-		heapButton.addActionListener( 
-				new ActionListener() {
-					public void actionPerformed(ActionEvent ae) {
-						userOrKernelMode = USER_MODE;
-						homeAddress = Globals.memory.heapBaseAddress;
-						firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(homeAddress);
-						updateModelForMemoryRange(firstAddress);
-					}
-				});
+		heapButton.addActionListener(ae -> {
+			userOrKernelMode = USER_MODE;
+			homeAddress = Memory.heapBaseAddress;
+			firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(homeAddress);
+			updateModelForMemoryRange(firstAddress);
+		});
 
-		extnButton.addActionListener( 
-				new ActionListener() {
-					public void actionPerformed(ActionEvent ae) {
-						userOrKernelMode = USER_MODE;
-						homeAddress = Globals.memory.externBaseAddress;
-						firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(homeAddress);
-						updateModelForMemoryRange(firstAddress);
-					}
-				}); 
+		extnButton.addActionListener(ae -> {
+			userOrKernelMode = USER_MODE;
+			homeAddress = Memory.externBaseAddress;
+			firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(homeAddress);
+			updateModelForMemoryRange(firstAddress);
+		}); 
 
-		kernButton.addActionListener( 
-				new ActionListener() {
-					public void actionPerformed(ActionEvent ae) {
-						userOrKernelMode = KERNEL_MODE;
-						homeAddress = Globals.memory.kernelDataBaseAddress;
-						firstAddress = homeAddress;
-						firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(firstAddress);
-						updateModelForMemoryRange(firstAddress);
-					}
-				});
+		kernButton.addActionListener(ae -> {
+			userOrKernelMode = KERNEL_MODE;
+			homeAddress = Memory.kernelDataBaseAddress;
+			firstAddress = homeAddress;
+			firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(firstAddress);
+			updateModelForMemoryRange(firstAddress);
+		});
 
-		mmioButton.addActionListener( 
-				new ActionListener() {
-					public void actionPerformed(ActionEvent ae) {
-						userOrKernelMode = KERNEL_MODE;
-						homeAddress = Globals.memory.memoryMapBaseAddress;
-						firstAddress = homeAddress;
-						firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(firstAddress);
-						updateModelForMemoryRange(firstAddress);
-					}
-				});      
+		mmioButton.addActionListener(ae -> {
+			userOrKernelMode = KERNEL_MODE;
+			homeAddress = Memory.memoryMapBaseAddress;
+			firstAddress = homeAddress;
+			firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(firstAddress);
+			updateModelForMemoryRange(firstAddress);
+		});      
 
-		textButton.addActionListener( 
-				new ActionListener() {
-					public void actionPerformed(ActionEvent ae) {
-						userOrKernelMode = USER_MODE;
-						homeAddress = Globals.memory.textBaseAddress;
-						firstAddress = homeAddress;
-						firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(firstAddress);
-						updateModelForMemoryRange(firstAddress);
-					}
-				});      
+		textButton.addActionListener(ae -> {
+			userOrKernelMode = USER_MODE;
+			homeAddress = Memory.textBaseAddress;
+			firstAddress = homeAddress;
+			firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(firstAddress);
+			updateModelForMemoryRange(firstAddress);
+		});      
 
-		dataButton.addActionListener( 
-				new ActionListener() {
-					public void actionPerformed(ActionEvent ae) {
-						userOrKernelMode = USER_MODE;
-						homeAddress = Globals.memory.dataBaseAddress;
-						firstAddress = homeAddress;
-						firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(firstAddress);
-						updateModelForMemoryRange(firstAddress);
-					}
-				});    
+		dataButton.addActionListener(ae -> {
+			userOrKernelMode = USER_MODE;
+			homeAddress = Memory.dataBaseAddress;
+			firstAddress = homeAddress;
+			firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(firstAddress);
+			updateModelForMemoryRange(firstAddress);
+		});    
 
 		// NOTE: action listeners for prevButton and nextButton are now in their
 		//       specialized inner classes at the bottom of this listing.  DPS 20 July 2008  			
@@ -787,12 +759,12 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 	// PrevButton and NextButton are enabled/disabled appropriately.
 	//
 	private int setFirstAddressAndPrevNextButtonEnableStatus(int lowAddress) {
-		int lowLimit = (userOrKernelMode==USER_MODE) ? Math.min(Math.min(Globals.memory.textBaseAddress,
-				Globals.memory.dataSegmentBaseAddress),
-				Globals.memory.dataBaseAddress)
-				: Globals.memory.kernelDataBaseAddress;
-		int highLimit= (userOrKernelMode==USER_MODE) ? Globals.memory.userHighAddress
-				: Globals.memory.kernelHighAddress;
+		int lowLimit = (userOrKernelMode==USER_MODE) ? Math.min(Math.min(Memory.textBaseAddress,
+				Memory.dataSegmentBaseAddress),
+				Memory.dataBaseAddress)
+				: Memory.kernelDataBaseAddress;
+		int highLimit= (userOrKernelMode==USER_MODE) ? Memory.userHighAddress
+				: Memory.kernelHighAddress;
 		if (lowAddress <= lowLimit) {
 			lowAddress = lowLimit;
 			prevButton.setEnabled(false);
@@ -896,6 +868,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 			return data.length;
 		}
 
+		@Override
 		public String getColumnName(int col) {
 			return columnNames[col];
 		}
@@ -912,15 +885,11 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 		 * it can't.  It is possible but not worth the
 		 * effort to implement.
 		 */
+		@Override
 		public boolean isCellEditable(int row, int col) {
 			//Note that the data/cell address is constant,
 			//no matter where the cell appears onscreen.
-			if (col != ADDRESS_COLUMN && !asciiDisplay) { 
-				return true;
-			} 
-			else {
-				return false;
-			}
+			return (col != ADDRESS_COLUMN && !asciiDisplay);
 		}
 
 
@@ -929,7 +898,8 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 		 * JTable uses this method to determine the default renderer/
 		 * editor for each cell.  
 		 */
-		public Class getColumnClass(int c) {
+		@Override
+		public Class<?> getColumnClass(int c) {
 			return getValueAt(0, c).getClass();
 		}
 
@@ -939,6 +909,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 		 * only when user edits cell, so input validation has to be done.  If
 		 * value is valid, MIPS memory is updated.
 		 */
+		@Override
 		public void setValueAt(Object value, int row, int col) {
 			int val=0;
 			int address=0;
@@ -974,7 +945,6 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 			int valueBase = Globals.getGui().getMainPane().getExecutePane().getValueDisplayBase();
 			data[row][col] = NumberDisplayBaseChooser.formatNumber(val, valueBase); 
 			fireTableCellUpdated(row, col);
-			return;
 		}
 
 
@@ -986,6 +956,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 			fireTableCellUpdated(row, col);
 		}
 
+		@SuppressWarnings("unused")
 		private void printDebugData() {
 			int numRows = getRowCount();
 			int numCols = getColumnCount();
@@ -1007,6 +978,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 
 	class AddressCellRenderer extends DefaultTableCellRenderer { 
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, 
 				boolean isSelected, boolean hasFocus, int row, int column) {									 
 			JLabel cell = (JLabel) super.getTableCellRendererComponent(table, value, 
@@ -1014,7 +986,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 
 			cell.setHorizontalAlignment(SwingConstants.RIGHT);
 			int rowFirstAddress = Binary.stringToInt(table.getValueAt(row,ADDRESS_COLUMN).toString());
-			if (settings.getDataSegmentHighlighting() && addressHighlighting  && rowFirstAddress==addressRowFirstAddress && column==addressColumn) {
+			if (settings.getBooleanSetting(Settings.DATA_SEGMENT_HIGHLIGHTING) && addressHighlighting  && rowFirstAddress==addressRowFirstAddress && column==addressColumn) {
 				cell.setBackground( settings.getColorSettingByPosition(Settings.DATASEGMENT_HIGHLIGHT_BACKGROUND) );
 				cell.setForeground( settings.getColorSettingByPosition(Settings.DATASEGMENT_HIGHLIGHT_FOREGROUND) );
 				cell.setFont( settings.getFontByPosition(Settings.DATASEGMENT_HIGHLIGHT_FONT) );
@@ -1052,11 +1024,11 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 		};
 
 		//Implement table header tool tips. 
+		@Override
 		protected JTableHeader createDefaultTableHeader() {
-			return 
-					new JTableHeader(columnModel) {
+			return new JTableHeader(columnModel) {
+				@Override
 				public String getToolTipText(MouseEvent e) {
-					String tip = null;
 					java.awt.Point p = e.getPoint();
 					int index = columnModel.getColumnIndexAtX(p.x);
 					int realIndex = columnModel.getColumn(index).getModelIndex();
@@ -1082,6 +1054,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 			this.addActionListener(this);
 		}
 		// This one will respond when either timer goes off or button lifted.
+		@Override
 		public void actionPerformed(ActionEvent ae) {
 			firstAddress -= PREV_NEXT_CHUNK_SIZE;
 			firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(firstAddress);
@@ -1104,6 +1077,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 			this.addActionListener(this);
 		}
 		// This one will respond when either timer goes off or button lifted.
+		@Override
 		public void actionPerformed(ActionEvent ae) {
 			firstAddress += PREV_NEXT_CHUNK_SIZE;
 			firstAddress = setFirstAddressAndPrevNextButtonEnableStatus(firstAddress);
