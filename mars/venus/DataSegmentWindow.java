@@ -41,11 +41,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /**
  *  Represents the Data Segment window, which is a type of JInternalFrame.
  *   @author Sanderson and Bumgarner
- **/
-
+ */
 public class DataSegmentWindow extends JInternalFrame implements Observer {
 
-	private static final String [] dataSegmentNames={"Data", "Stack", "Kernel"};
+	private static final String [] dataSegmentNames = {"Data", "Stack", "Kernel"};
 	private static  Object[][] dataData;
 
 	private static JTable dataTable;
@@ -81,7 +80,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 	// The combo box replaced the row of buttons when number of buttons expanded to 7!
 	// We'll keep the button objects however and manually invoke their action listeners
 	// when the corresponding combo box item is selected.  DPS 22-Nov-2006
-	JComboBox baseAddressSelector;
+	JComboBox<String> baseAddressSelector;
 
 	// The next bunch are initialized dynamically in initializeBaseAddressChoices()
 	private String[] displayBaseAddressChoices; 
@@ -93,7 +92,6 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 	 *  Constructor for the Data Segment window.
 	 *   @param choosers an array of objects used by user to select number display base (10 or 16)
 	 */
-
 	public DataSegmentWindow (NumberDisplayBaseChooser[] choosers){
 		super("Data Segment", true, false, true, true);
 
@@ -129,18 +127,15 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 		}
 
 		initializeBaseAddressChoices();      	      	
-		baseAddressSelector = new JComboBox();
+		baseAddressSelector = new JComboBox<>();
 		baseAddressSelector.setModel(new CustomComboBoxModel(displayBaseAddressChoices));
 		baseAddressSelector.setEditable(false);
 		baseAddressSelector.setSelectedIndex(defaultBaseAddressIndex);
 		baseAddressSelector.setToolTipText("Base address for data segment display");
-		baseAddressSelector.addActionListener(
-				new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						// trigger action listener for associated invisible button.
-						baseAddressButtons[baseAddressSelector.getSelectedIndex()].getActionListeners()[0].actionPerformed(null);
-					}
-				});
+		baseAddressSelector.addActionListener(e -> {
+			// trigger action listener for associated invisible button.
+			baseAddressButtons[baseAddressSelector.getSelectedIndex()].getActionListeners()[0].actionPerformed(null);
+		});
 
 		addButtonActionListenersAndInitialize();
 		JPanel navButtons = new JPanel(new GridLayout(1,4));
@@ -148,7 +143,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 		navButtons.add(nextButton);
 		features.add(navButtons);
 		features.add(baseAddressSelector);
-		for (int i=0; i<choosers.length; i++) {
+		for (int i = 0; i < choosers.length; i++) {
 			features.add(choosers[i]);
 		}
 		asciiDisplayCheckBox = new JCheckBox("ASCII", asciiDisplay);
@@ -164,14 +159,14 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 
 
 	public void updateBaseAddressComboBox() {
-		displayBaseAddressArray[EXTERN_BASE_ADDRESS_INDEX] = Memory.externBaseAddress;
-		displayBaseAddressArray[GLOBAL_POINTER_ADDRESS_INDEX] = -1; /*Memory.globalPointer*/
-		displayBaseAddressArray[DATA_BASE_ADDRESS_INDEX] = Memory.dataBaseAddress; 
-		displayBaseAddressArray[HEAP_BASE_ADDRESS_INDEX] = Memory.heapBaseAddress; 
+		displayBaseAddressArray[EXTERN_BASE_ADDRESS_INDEX]        = Memory.externBaseAddress;
+		displayBaseAddressArray[GLOBAL_POINTER_ADDRESS_INDEX]     = -1; /*Memory.globalPointer*/
+		displayBaseAddressArray[DATA_BASE_ADDRESS_INDEX]          = Memory.dataBaseAddress; 
+		displayBaseAddressArray[HEAP_BASE_ADDRESS_INDEX]          = Memory.heapBaseAddress; 
 		displayBaseAddressArray[STACK_POINTER_BASE_ADDRESS_INDEX] = -1; /*Memory.stackPointer*/ 
-		displayBaseAddressArray[KERNEL_DATA_BASE_ADDRESS_INDEX] = Memory.kernelDataBaseAddress; 
-		displayBaseAddressArray[MMIO_BASE_ADDRESS_INDEX] = Memory.memoryMapBaseAddress;
-		displayBaseAddressArray[TEXT_BASE_ADDRESS_INDEX] = Memory.textBaseAddress;
+		displayBaseAddressArray[KERNEL_DATA_BASE_ADDRESS_INDEX]   = Memory.kernelDataBaseAddress; 
+		displayBaseAddressArray[MMIO_BASE_ADDRESS_INDEX]          = Memory.memoryMapBaseAddress;
+		displayBaseAddressArray[TEXT_BASE_ADDRESS_INDEX]          = Memory.textBaseAddress;
 		displayBaseAddressChoices = createBaseAddressLabelsArray(displayBaseAddressArray, descriptions);
 		baseAddressSelector.setModel(new CustomComboBoxModel(displayBaseAddressChoices));
 		displayBaseAddresses = displayBaseAddressArray;
@@ -190,7 +185,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 	 */
 	void selectCellForAddress(int address) {
 		Point rowColumn = displayCellForAddress(address);
-		if (rowColumn==null) {
+		if (rowColumn == null) {
 			return;
 		}
 		Rectangle addressCell = dataTable.getCellRect(rowColumn.x, rowColumn.y, true);
@@ -201,7 +196,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 				(int)addressCell.getX()+1,
 				(int)addressCell.getY()+1, 1, false);
 		MouseListener[] mouseListeners = dataTable.getMouseListeners();
-		for (int i=0; i<mouseListeners.length; i++) {
+		for (int i = 0; i < mouseListeners.length; i++) {
 			mouseListeners[i].mousePressed(fakeMouseEvent);
 		}
 	}
@@ -213,7 +208,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 	 */   	 
 	void highlightCellForAddress(int address) {
 		Point rowColumn = displayCellForAddress(address);
-		if (rowColumn==null || rowColumn.x < 0 || rowColumn.y < 0) {
+		if (rowColumn == null || rowColumn.x < 0 || rowColumn.y < 0) {
 			return;
 		}
 		this.addressRow = rowColumn.x;
@@ -492,7 +487,6 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 	 * data segment space so we only plug a "chunk" at a time into the table.
 	 * @param firstAddr the first address in the memory range to be placed in the model.
 	 */
-
 	public void updateModelForMemoryRange(int firstAddr) {
 		if (tablePanel.getComponentCount() == 0) 
 			return; // ignore if no content to change
@@ -542,7 +536,6 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 	/**
 	 * Update data display to show this value (I'm not sure it is being called).
 	 */
-
 	public void updateCell(int address, int value) {
 		int offset = address-this.firstAddress;
 		if (offset<0 || offset>=MEMORY_CHUNK_SIZE) { // out of range
@@ -580,7 +573,6 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 	/**
 	 * Update data display to show all values
 	 */
-
 	public void updateValues(){
 		updateModelForMemoryRange(this.firstAddress);
 	}
@@ -645,7 +637,6 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 	/*
 	 * Establish action listeners for the data segment navigation buttons.
 	 */
-
 	private void addButtonActionListenersAndInitialize() {
 		// set initial states
 		disableAllButtons();
@@ -792,7 +783,6 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 	 * @param observable The Observable object who is notifying us
 	 * @param obj Auxiliary object with additional information.
 	 */
-
 	public void update(Observable observable, Object obj) { 
 		if (observable == mars.simulator.Simulator.getInstance()) {
 			SimulatorNotice notice = (SimulatorNotice) obj;
@@ -837,16 +827,14 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 	// setSelectedIndex to also call selectedItemChanged() did not help.  Only this 
 	// solution to extend the model class to call the protected 
 	// "fireContentsChanged()" method worked. DPS 25-Jan-2009
-	private class CustomComboBoxModel extends DefaultComboBoxModel {
-		public CustomComboBoxModel(Object[] list) {
+	private class CustomComboBoxModel extends DefaultComboBoxModel<String> {
+		public CustomComboBoxModel(String[] list) {
 			super(list);
 		}
 		private void forceComboBoxUpdate(int index) {
 			super.fireContentsChanged(this,index,index);
 		}
 	}
-
-
 
 	////////////////////////////////////////////////////////////////////////
 	// Class representing memory data table data
