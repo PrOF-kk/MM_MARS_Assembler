@@ -1,18 +1,13 @@
 package mars.venus;
 
-import mars.simulator.*;
 import mars.*;
-import mars.util.*;
 import mars.venus.editors.jeditsyntax.*;
 import mars.venus.editors.jeditsyntax.tokenmarker.*;
-import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.border.*;
-import javax.swing.event.*;
-import java.io.*;
 
 /*
 Copyright (c) 2003-2011,  Pete Sanderson and Kenneth Vollmar
@@ -48,7 +43,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 public class SettingsEditorAction extends GuiAction {
 
 	JDialog editorDialog;
-	JComboBox fontFamilySelector, fontStyleSelector;
+	JComboBox fontFamilySelector;
+	JComboBox fontStyleSelector;
 	JSlider tabSizeSelector;
 	JTextField fontSizeDisplay;
 
@@ -67,6 +63,7 @@ public class SettingsEditorAction extends GuiAction {
 	 * When this action is triggered, launch a dialog to view and modify
 	 * editor settings.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		editorDialog = new EditorFontDialog(Globals.getGui(),
 				"Text Editor Settings", true, Globals.getSettings().getEditorFont());
@@ -137,6 +134,7 @@ public class SettingsEditorAction extends GuiAction {
 		}
 
 		// build the dialog here
+		@Override
 		protected JPanel buildDialogPanel() {
 			JPanel dialog = new JPanel(new BorderLayout());
 			JPanel fontDialogPanel = super.buildDialogPanel();
@@ -157,48 +155,37 @@ public class SettingsEditorAction extends GuiAction {
 		// Row of control buttons to be placed along the button of the dialog
 		protected Component buildControlPanel() {
 			Box controlPanel = Box.createHorizontalBox();
+
 			JButton okButton = new JButton("Apply and Close");
 			okButton.setToolTipText(SettingsHighlightingAction.CLOSE_TOOL_TIP_TEXT);
-			okButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					performApply();
-					closeDialog();
-				}
+			okButton.addActionListener(e -> {
+				performApply();
+				closeDialog();
 			});
+
 			JButton applyButton = new JButton("Apply");
 			applyButton.setToolTipText(SettingsHighlightingAction.APPLY_TOOL_TIP_TEXT);
-			applyButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					performApply();
-				}
-			});
+			applyButton.addActionListener(e -> performApply());
+
 			JButton cancelButton = new JButton("Cancel");
 			cancelButton.setToolTipText(SettingsHighlightingAction.CANCEL_TOOL_TIP_TEXT);
-			cancelButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					closeDialog();
-				}
-			});
+			cancelButton.addActionListener(e -> closeDialog());
+
 			JButton resetButton = new JButton("Reset");
 			resetButton.setToolTipText(SettingsHighlightingAction.RESET_TOOL_TIP_TEXT);
-			resetButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					reset();
-				}
-			});
+			resetButton.addActionListener(e -> reset());
+
 			initialGenericTextEditor = Globals.getSettings().getBooleanSetting(Settings.GENERIC_TEXT_EDITOR);
 			genericEditorCheck = new JCheckBox("Use Generic Editor", initialGenericTextEditor);
 			genericEditorCheck.setToolTipText(GENERIC_TOOL_TIP_TEXT);
-			genericEditorCheck.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						syntaxStylePanel.setVisible(false);
-						otherSettingsPanel.setVisible(false);
-					}
-					else {
-						syntaxStylePanel.setVisible(true);
-						otherSettingsPanel.setVisible(true);
-					}
+			genericEditorCheck.addItemListener(e -> {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					syntaxStylePanel.setVisible(false);
+					otherSettingsPanel.setVisible(false);
+				}
+				else {
+					syntaxStylePanel.setVisible(true);
+					otherSettingsPanel.setVisible(true);
 				}
 			});
 
@@ -220,11 +207,12 @@ public class SettingsEditorAction extends GuiAction {
 		// abstract in superclass.
 		protected void apply(Font font) {
 			Globals.getSettings().setBooleanSetting(Settings.GENERIC_TEXT_EDITOR, genericEditorCheck.isSelected());
-			Globals.getSettings().setBooleanSetting(Settings.EDITOR_CURRENT_LINE_HIGHLIGHTING,
-					lineHighlightCheck.isSelected());
+			Globals.getSettings().setBooleanSetting(
+					Settings.EDITOR_CURRENT_LINE_HIGHLIGHTING, lineHighlightCheck.isSelected());
 			Globals.getSettings().setBooleanSetting(Settings.AUTO_INDENT, autoIndentCheck.isSelected());
 			Globals.getSettings().setCaretBlinkRate(((Integer) blinkRateSpinSelector.getValue()).intValue());
 			Globals.getSettings().setEditorTabSize(tabSizeSelector.getValue());
+
 			if (syntaxStylesAction) {
 				for (int i = 0; i < syntaxStyleIndex.length; i++) {
 					Globals.getSettings().setEditorSyntaxStyleByPosition(syntaxStyleIndex[i],
@@ -248,6 +236,7 @@ public class SettingsEditorAction extends GuiAction {
 		}
 
 		// User has clicked "Reset" button. Put everything back to initial state.
+		@Override
 		protected void reset() {
 			super.reset();
 			initializeSyntaxStyleChangeables();
@@ -259,10 +248,10 @@ public class SettingsEditorAction extends GuiAction {
 		// Perform reset on miscellaneous editor settings
 		private void resetOtherSettings() {
 			tabSizeSelector.setValue(initialEditorTabSize);
-			tabSizeSpinSelector.setValue(new Integer(initialEditorTabSize));
+			tabSizeSpinSelector.setValue(initialEditorTabSize);
 			lineHighlightCheck.setSelected(initialLineHighlighting);
 			autoIndentCheck.setSelected(initialAutoIndent);
-			blinkRateSpinSelector.setValue(new Integer(initialCaretBlinkRate));
+			blinkRateSpinSelector.setValue(initialCaretBlinkRate);
 			blinkCaret.setBlinkRate(initialCaretBlinkRate);
 			popupGuidanceOptions[initialPopupGuidance].setSelected(true);
 		}
@@ -275,21 +264,17 @@ public class SettingsEditorAction extends GuiAction {
 			initialEditorTabSize = Globals.getSettings().getEditorTabSize();
 			tabSizeSelector = new JSlider(Editor.MIN_TAB_SIZE, Editor.MAX_TAB_SIZE, initialEditorTabSize);
 			tabSizeSelector.setToolTipText("Use slider to select tab size from " + Editor.MIN_TAB_SIZE + " to " + Editor.MAX_TAB_SIZE + ".");
-			tabSizeSelector.addChangeListener(new ChangeListener() {
-				public void stateChanged(ChangeEvent e) {
-					Integer value = new Integer(((JSlider) e.getSource()).getValue());
-					tabSizeSpinSelector.setValue(value);
-				}
+			tabSizeSelector.addChangeListener(e -> {
+				int value = ((JSlider) e.getSource()).getValue();
+				tabSizeSpinSelector.setValue(value);
 			});
-			SpinnerNumberModel tabSizeSpinnerModel = new SpinnerNumberModel(initialEditorTabSize, Editor.MIN_TAB_SIZE,
-					Editor.MAX_TAB_SIZE, 1);
+			SpinnerNumberModel tabSizeSpinnerModel = new SpinnerNumberModel(initialEditorTabSize,
+					Editor.MIN_TAB_SIZE, Editor.MAX_TAB_SIZE, 1);
 			tabSizeSpinSelector = new JSpinner(tabSizeSpinnerModel);
 			tabSizeSpinSelector.setToolTipText(TAB_SIZE_TOOL_TIP_TEXT);
-			tabSizeSpinSelector.addChangeListener(new ChangeListener() {
-				public void stateChanged(ChangeEvent e) {
-					Object value = ((JSpinner) e.getSource()).getValue();
-					tabSizeSelector.setValue(((Integer) value).intValue());
-				}
+			tabSizeSpinSelector.addChangeListener(e -> {
+				Object value = ((JSpinner) e.getSource()).getValue();
+				tabSizeSelector.setValue((Integer) value);
 			});
 
 			// highlighting of current line
@@ -318,13 +303,11 @@ public class SettingsEditorAction extends GuiAction {
 					Editor.MIN_BLINK_RATE, Editor.MAX_BLINK_RATE, 100);
 			blinkRateSpinSelector = new JSpinner(blinkRateSpinnerModel);
 			blinkRateSpinSelector.setToolTipText(BLINK_SPINNER_TOOL_TIP_TEXT);
-			blinkRateSpinSelector.addChangeListener(new ChangeListener() {
-				public void stateChanged(ChangeEvent e) {
-					Object value = ((JSpinner) e.getSource()).getValue();
-					blinkCaret.setBlinkRate(((Integer) value).intValue());
-					blinkSample.requestFocus();
-					blinkCaret.setVisible(true);
-				}
+			blinkRateSpinSelector.addChangeListener(e -> {
+				Object value = ((JSpinner) e.getSource()).getValue();
+				blinkCaret.setBlinkRate(((Integer) value).intValue());
+				blinkSample.requestFocus();
+				blinkCaret.setVisible(true);
 			});
 
 			JPanel tabPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -450,8 +433,9 @@ public class SettingsEditorAction extends GuiAction {
 			JPanel instructions = new JPanel(new FlowLayout(FlowLayout.CENTER));
 			// create deaf, dumb and blind checkbox, for illustration
 			JCheckBox illustrate = new JCheckBox() {
+				@Override
 				protected void processMouseEvent(MouseEvent e) {}
-
+				@Override
 				protected void processKeyEvent(KeyEvent e) {}
 			};
 			illustrate.setSelected(true);
@@ -493,7 +477,7 @@ public class SettingsEditorAction extends GuiAction {
 			}
 		}
 
-		// set the foreground color, bold and italic of sample (a JLabel)
+		// Set the foreground color, bold and italic of sample (a JLabel)
 		private void setSampleStyles(JLabel sample, SyntaxStyle style) {
 			Font f = previewFont;
 			if (style.isBold()) {
@@ -517,7 +501,7 @@ public class SettingsEditorAction extends GuiAction {
 
 			public void actionPerformed(ActionEvent e) {
 				Font f = samples[row].getFont();
-				if (e.getActionCommand() == BOLD_BUTTON_TOOL_TIP_TEXT) {
+				if (e.getActionCommand().equals(BOLD_BUTTON_TOOL_TIP_TEXT)) {
 					if (bold[row].isSelected()) {
 						samples[row].setFont(f.deriveFont(f.getStyle() | Font.BOLD));
 					}
