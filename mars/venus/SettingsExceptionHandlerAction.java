@@ -1,12 +1,9 @@
 package mars.venus;
 
-import mars.simulator.*;
 import mars.*;
-import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.text.*;
 import javax.swing.border.*;
 import java.io.*;
 
@@ -58,13 +55,15 @@ public class SettingsExceptionHandlerAction extends GuiAction {
 	}
 
 	// launch dialog for setting and filename specification
+	@Override
 	public void actionPerformed(ActionEvent e) {
-		initialSelected = Globals.getSettings().getExceptionHandlerEnabled();
+		initialSelected = Globals.getSettings().getBooleanSetting(Settings.EXCEPTION_HANDLER_ENABLED);
 		initialPathname = Globals.getSettings().getExceptionHandler();
 		exceptionHandlerDialog = new JDialog(Globals.getGui(), "Exception Handler", true);
 		exceptionHandlerDialog.setContentPane(buildDialogPanel());
 		exceptionHandlerDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		exceptionHandlerDialog.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent we) {
 				closeDialog();
 			}
@@ -80,7 +79,7 @@ public class SettingsExceptionHandlerAction extends GuiAction {
 		contents.setBorder(new EmptyBorder(10, 10, 10, 10));
 		// Top row - the check box for setting...
 		exceptionHandlerSetting = new JCheckBox("Include this exception handler file in all assemble operations");
-		exceptionHandlerSetting.setSelected(Globals.getSettings().getExceptionHandlerEnabled());
+		exceptionHandlerSetting.setSelected(Globals.getSettings().getBooleanSetting(Settings.EXCEPTION_HANDLER_ENABLED));
 		exceptionHandlerSetting.addActionListener(new ExceptionHandlerSettingAction());
 		contents.add(exceptionHandlerSetting, BorderLayout.NORTH);
 		// Middle row - the button and text field for exception handler file selection
@@ -94,21 +93,19 @@ public class SettingsExceptionHandlerAction extends GuiAction {
 		specifyHandlerFile.add(exceptionHandlerSelectionButton);
 		specifyHandlerFile.add(exceptionHandlerDisplay);
 		contents.add(specifyHandlerFile, BorderLayout.CENTER);
+
 		// Bottom row - the control buttons for OK and Cancel
 		Box controlPanel = Box.createHorizontalBox();
+
 		JButton okButton = new JButton("OK");
-		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				performOK();
-				closeDialog();
-			}
+		okButton.addActionListener(e -> {
+			performOK();
+			closeDialog();
 		});
+
 		JButton cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				closeDialog();
-			}
-		});
+		cancelButton.addActionListener(e -> closeDialog());
+
 		controlPanel.add(Box.createHorizontalGlue());
 		controlPanel.add(okButton);
 		controlPanel.add(Box.createHorizontalGlue());
@@ -126,7 +123,7 @@ public class SettingsExceptionHandlerAction extends GuiAction {
 		if (initialSelected != finalSelected
 				|| initialPathname == null && finalPathname != null
 				|| initialPathname != null && !initialPathname.equals(finalPathname)) {
-			Globals.getSettings().setExceptionHandlerEnabled(finalSelected);
+			Globals.getSettings().setBooleanSetting(Settings.EXCEPTION_HANDLER_ENABLED, finalSelected);
 			if (finalSelected) {
 				Globals.getSettings().setExceptionHandler(finalPathname);
 			}
