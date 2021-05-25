@@ -5,13 +5,11 @@ import mars.*;
 import mars.util.*;
 import mars.mips.hardware.*;
 import java.util.*;
+import java.util.Map.Entry;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.text.*;
 import javax.swing.border.*;
-import javax.swing.event.*;
-import java.io.*;
 
 /*
 Copyright (c) 2003-2009,  Pete Sanderson and Kenneth Vollmar
@@ -47,7 +45,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 public class SettingsMemoryConfigurationAction extends GuiAction {
 
 	JDialog configDialog;
-	JComboBox fontFamilySelector, fontStyleSelector;
+	JComboBox fontFamilySelector;
+	JComboBox fontStyleSelector;
 	JSlider fontSizeSelector;
 	JTextField fontSizeDisplay;
 	SettingsMemoryConfigurationAction thisAction;
@@ -68,6 +67,7 @@ public class SettingsMemoryConfigurationAction extends GuiAction {
 	 * When this action is triggered, launch a dialog to view and modify
 	 * editor settings.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		configDialog = new MemoryConfigurationDialog(Globals.getGui(), "MIPS Memory Configuration", true);
 		configDialog.setVisible(true);
@@ -87,6 +87,7 @@ public class SettingsMemoryConfigurationAction extends GuiAction {
 			this.setContentPane(buildDialogPanel());
 			this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 			this.addWindowListener(new WindowAdapter() {
+				@Override
 				public void windowClosing(WindowEvent we) {
 					performClose();
 				}
@@ -111,9 +112,9 @@ public class SettingsMemoryConfigurationAction extends GuiAction {
 		private Component buildConfigChooser() {
 			JPanel chooserPanel = new JPanel(new GridLayout(4, 1));
 			ButtonGroup choices = new ButtonGroup();
-			Iterator configurationsIterator = MemoryConfigurations.getConfigurationsIterator();
+			Iterator<MemoryConfiguration> configurationsIterator = MemoryConfigurations.getConfigurationsIterator();
 			while (configurationsIterator.hasNext()) {
-				MemoryConfiguration config = (MemoryConfiguration) configurationsIterator.next();
+				MemoryConfiguration config = configurationsIterator.next();
 				ConfigurationButton button = new ConfigurationButton(config);
 				button.addActionListener(this);
 				if (button.isSelected()) {
@@ -172,35 +173,26 @@ public class SettingsMemoryConfigurationAction extends GuiAction {
 		// Row of control buttons to be placed along the button of the dialog
 		private Component buildControlPanel() {
 			Box controlPanel = Box.createHorizontalBox();
+
 			JButton okButton = new JButton("Apply and Close");
 			okButton.setToolTipText(SettingsHighlightingAction.CLOSE_TOOL_TIP_TEXT);
-			okButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					performApply();
-					performClose();
-				}
+			okButton.addActionListener(e -> {
+				performApply();
+				performClose();
 			});
+
 			JButton applyButton = new JButton("Apply");
 			applyButton.setToolTipText(SettingsHighlightingAction.APPLY_TOOL_TIP_TEXT);
-			applyButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					performApply();
-				}
-			});
+			applyButton.addActionListener(e -> performApply());
+
 			JButton cancelButton = new JButton("Cancel");
 			cancelButton.setToolTipText(SettingsHighlightingAction.CANCEL_TOOL_TIP_TEXT);
-			cancelButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					performClose();
-				}
-			});
+			cancelButton.addActionListener(e -> performClose());
+
 			JButton resetButton = new JButton("Reset");
 			resetButton.setToolTipText(SettingsHighlightingAction.RESET_TOOL_TIP_TEXT);
-			resetButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					performReset();
-				}
-			});
+			resetButton.addActionListener(e -> performReset());
+
 			controlPanel.add(Box.createHorizontalGlue());
 			controlPanel.add(okButton);
 			controlPanel.add(Box.createHorizontalGlue());
@@ -255,19 +247,19 @@ public class SettingsMemoryConfigurationAction extends GuiAction {
 			// results. There can be duplicate addresses, so I concatenate the name
 			// onto the address to make each key unique. Then slice off the name upon
 			// extraction.
-			TreeMap treeSortedByAddress = new TreeMap();
+			TreeMap<String, String> treeSortedByAddress = new TreeMap<>();
 			for (int i = 0; i < configurationItemValues.length; i++) {
 				treeSortedByAddress.put(
 						Binary.intToHexString(configurationItemValues[i]) + configurationItemNames[i],
 						configurationItemNames[i]);
 			}
-			Iterator setSortedByAddress = treeSortedByAddress.entrySet().iterator();
-			Map.Entry pair;
+			Iterator<Entry<String, String>> setSortedByAddress = treeSortedByAddress.entrySet().iterator();
+			Entry<String, String> pair;
 			int addressStringLength = Binary.intToHexString(configurationItemValues[0]).length();
 			for (int i = 0; i < configurationItemValues.length; i++) {
-				pair = (Map.Entry) setSortedByAddress.next();
-				nameDisplay[i].setText((String) pair.getValue());
-				addressDisplay[i].setText(((String) pair.getKey()).substring(0, addressStringLength));
+				pair = setSortedByAddress.next();
+				nameDisplay[i].setText(pair.getValue());
+				addressDisplay[i].setText(pair.getKey().substring(0, addressStringLength));
 			}
 		}
 
