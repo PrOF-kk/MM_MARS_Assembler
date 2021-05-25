@@ -3,7 +3,6 @@ package mars.venus;
 import mars.*;
 import mars.simulator.*;
 import mars.mips.hardware.*;
-import mars.mips.instructions.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -60,7 +59,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 	 * consistent once set up, since address column is not editable.
 	 */
 	private int[] intAddresses; // index is table model row, value is text address
-	private Hashtable addressRows; // key is text address, value is table model row
+	private Hashtable<Integer, Integer> addressRows; // key is text address, value is table model row
 	private Hashtable<Integer, ModifiedCode> executeMods; // key is table model row, value is original code, basic, source.
 	private Container contentPane;
 	private TextTableModel tableModel;
@@ -108,11 +107,11 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 		int addressBase = Globals.getGui().getMainPane().getExecutePane().getAddressDisplayBase();
 		codeHighlighting = true;
 		breakpointsEnabled = true;
-		ArrayList sourceStatementList = Globals.program.getMachineList();
+		ArrayList<ProgramStatement> sourceStatementList = Globals.program.getMachineList();
 		data = new Object[sourceStatementList.size()][columnNames.length];
 		intAddresses = new int[data.length];
-		addressRows = new Hashtable(data.length);
-		executeMods = new Hashtable<Integer, ModifiedCode>(data.length);
+		addressRows = new Hashtable<>(data.length);
+		executeMods = new Hashtable<>(data.length);
 		// Get highest source line number to determine #leading spaces
 		// so line numbers will vertically align.
 		// In multi-file situation, this will not necessarily be the last line
@@ -120,7 +119,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 		// DPS 3-Oct-10
 		int maxSourceLineNumber = 0;
 		for (int i = sourceStatementList.size() - 1; i >= 0; i--) {
-			ProgramStatement statement = (ProgramStatement) sourceStatementList.get(i);
+			ProgramStatement statement = sourceStatementList.get(i);
 			if (statement.getSourceLine() > maxSourceLineNumber) {
 				maxSourceLineNumber = statement.getSourceLine();
 			}
@@ -129,9 +128,9 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 		int leadingSpaces = 0;
 		int lastLine = -1;
 		for (int i = 0; i < sourceStatementList.size(); i++) {
-			ProgramStatement statement = (ProgramStatement) sourceStatementList.get(i);
+			ProgramStatement statement = sourceStatementList.get(i);
 			intAddresses[i] = statement.getAddress();
-			addressRows.put(new Integer(intAddresses[i]), new Integer(i));
+			addressRows.put(intAddresses[i], i);
 			data[i][BREAK_COLUMN] = Boolean.FALSE;
 			data[i][ADDRESS_COLUMN] = NumberDisplayBaseChooser.formatUnsignedInteger(statement.getAddress(), addressBase);
 			data[i][CODE_COLUMN] = NumberDisplayBaseChooser.formatNumber(statement.getBinaryStatement(), 16);
@@ -187,7 +186,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 		tableScroller = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		contentPane.add(tableScroller);
-		if (Globals.getSettings().getProgramArguments()) {
+		if (Globals.getSettings().getBooleanSetting(Settings.PROGRAM_ARGUMENTS)) {
 			addProgramArgumentsPanel();
 		}
 
@@ -250,7 +249,6 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 		if (contentPane.getComponentCount() == 0)
 			return; // ignore if no content to change
 		int addressBase = Globals.getGui().getMainPane().getExecutePane().getAddressDisplayBase();
-		int address;
 		String formattedAddress;
 		for (int i = 0; i < intAddresses.length; i++) {
 			formattedAddress = NumberDisplayBaseChooser.formatUnsignedInteger(intAddresses[i], addressBase);
@@ -265,14 +263,14 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 	public void updateBasicStatements() {
 		if (contentPane.getComponentCount() == 0)
 			return; // ignore if no content to change
-		ArrayList sourceStatementList = Globals.program.getMachineList();
+		ArrayList<ProgramStatement> sourceStatementList = Globals.program.getMachineList();
 		for (int i = 0; i < sourceStatementList.size(); i++) {
 			// Loop has been extended to cover self-modifying code.
 			// If code at this memory location has been modified at runtime,
 			// construct a ProgramStatement from the current address and binary
 			// code, then display its basic code. DPS 11-July-2013
 			if (executeMods.get(i) == null) { // not modified, so use original logic.
-				ProgramStatement statement = (ProgramStatement) sourceStatementList.get(i);
+				ProgramStatement statement = sourceStatementList.get(i);
 				table.getModel().setValueAt(statement.getPrintableBasicAssemblyStatement(), i, BASIC_COLUMN);
 			}
 			else {
@@ -685,7 +683,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 	private int findRowForAddress(int address) throws IllegalArgumentException {
 		int addressRow = 0;
 		try {
-			addressRow = ((Integer) addressRows.get(new Integer(address))).intValue();
+			addressRow = addressRows.get(address);
 		}
 		catch (NullPointerException e) {
 			throw new IllegalArgumentException(); // address not found in map
@@ -712,6 +710,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 			return data.length;
 		}
 
+		@Override
 		public String getColumnName(int col) {
 			return columnNames[col];
 		}
@@ -725,7 +724,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 		 * cell. If we didn't implement this method, then the break column would contain
 		 * text ("true"/"false"), rather than a check box.
 		 */
-		public Class getColumnClass(int c) {
+		public Class<?> getColumnClass(int c) {
 			return getValueAt(0, c).getClass();
 		}
 
@@ -733,6 +732,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 		 * Don't need to implement this method unless your table's editable. Only Column
 		 * #1, the Breakpoint, can be edited.
 		 */
+		@Override
 		public boolean isCellEditable(int row, int col) {
 			// Note that the data/cell address is constant,
 			// no matter where the cell appears onscreen.
@@ -790,9 +790,9 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 					return;
 				}
 			} // end synchronized block
-			return;
 		}
 
+		@SuppressWarnings("unused")
 		private void printDebugData() {
 			int numRows = getRowCount();
 			int numCols = getColumnCount();
@@ -842,6 +842,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 	 */
 	class CodeCellRenderer extends DefaultTableCellRenderer {
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
 				boolean isSelected, boolean hasFocus, int row, int column) {
 
@@ -885,6 +886,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 	 * otherwise is same as MonoRightCellRenderer.
 	 */
 	class MachineCodeCellRenderer extends DefaultTableCellRenderer {
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
 				boolean isSelected, boolean hasFocus, int row, int column) {
 
@@ -1019,6 +1021,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 		};
 
 		// Implement table header tool tips.
+		@Override
 		protected JTableHeader createDefaultTableHeader() {
 			tableHeader = new TextTableHeader(columnModel);
 			return tableHeader;
@@ -1061,6 +1064,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 				this.addMouseListener(new TextTableHeaderMouseListener());
 			}
 
+			@Override
 			public String getToolTipText(MouseEvent e) {
 				Point p = e.getPoint();
 				int index = columnModel.getColumnIndexAtX(p.x);
