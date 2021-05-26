@@ -79,6 +79,13 @@ public class InstructionSet {
 		 * Here is where the parade begins. Every instruction is added to the set here.
 		 */
 
+		// Error message constants
+		final String FIRST_REGISTER_EVEN = "first register must be even-numbered";
+		final String SECOND_REGISTER_EVEN = "second register must be even-numbered";
+		final String BOTH_REGISTERS_EVEN = "both registers must be even-numbered";
+		final String ALL_REGISTERS_EVEN = "all registers must be even-numbered";
+		final String ARITHMETIC_OVERFLOW = "arithmetic overflow";
+		
 		// //////////////////////////////////// BASIC INSTRUCTIONS START HERE ////////////////////////////////
 
 		instructionList.add(new BasicInstruction("nop",
@@ -102,7 +109,7 @@ public class InstructionSet {
 						int sum = add1 + add2;
 						// overflow on A+B detected when A and B have same sign and A+B has other sign.
 						if ((add1 >= 0 && add2 >= 0 && sum < 0) || (add1 < 0 && add2 < 0 && sum >= 0)) {
-							throw new ProcessingException(statement,"arithmetic overflow",
+							throw new ProcessingException(statement,ARITHMETIC_OVERFLOW,
 									Exceptions.ARITHMETIC_OVERFLOW_EXCEPTION);
 						}
 						RegisterFile.updateRegister(operands[0], sum);
@@ -121,7 +128,7 @@ public class InstructionSet {
 						// overflow on A-B detected when A and B have opposite signs and A-B has B's
 						// sign
 						if ((sub1 >= 0 && sub2 < 0 && dif < 0) || (sub1 < 0 && sub2 >= 0 && dif >= 0)) {
-							throw new ProcessingException(statement, "arithmetic overflow",
+							throw new ProcessingException(statement, ARITHMETIC_OVERFLOW,
 									Exceptions.ARITHMETIC_OVERFLOW_EXCEPTION);
 						}
 						RegisterFile.updateRegister(operands[0], dif);
@@ -139,7 +146,7 @@ public class InstructionSet {
 						int sum = add1 + add2;
 						// overflow on A+B detected when A and B have same sign and A+B has other sign.
 						if ((add1 >= 0 && add2 >= 0 && sum < 0) || (add1 < 0 && add2 < 0 && sum >= 0)) {
-							throw new ProcessingException(statement, "arithmetic overflow",
+							throw new ProcessingException(statement, ARITHMETIC_OVERFLOW,
 									Exceptions.ARITHMETIC_OVERFLOW_EXCEPTION);
 						}
 						RegisterFile.updateRegister(operands[0], sum);
@@ -1174,7 +1181,7 @@ public class InstructionSet {
 						// overflow detected when sum is positive or negative infinity.
 						/*
 						 * if (sum == Float.NEGATIVE_INFINITY || sum == Float.POSITIVE_INFINITY) { throw
-						 * new ProcessingException(statement,"arithmetic overflow"); }
+						 * new ProcessingException(statement,ARITHMETIC_OVERFLOW); }
 						 */
 						Coprocessor1.updateRegister(operands[0], Float.floatToIntBits(sum));
 					}
@@ -1351,7 +1358,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1 || operands[2] % 2 == 1) {
-							throw new ProcessingException(statement, "all registers must be even-numbered");
+							throw new ProcessingException(statement, ALL_REGISTERS_EVEN);
 						}
 						double add1 = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[1] + 1), Coprocessor1.getValue(operands[1])));
@@ -1371,7 +1378,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1 || operands[2] % 2 == 1) {
-							throw new ProcessingException(statement, "all registers must be even-numbered");
+							throw new ProcessingException(statement, ALL_REGISTERS_EVEN);
 						}
 						double sub1 = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[1] + 1), Coprocessor1.getValue(operands[1])));
@@ -1391,7 +1398,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1 || operands[2] % 2 == 1) {
-							throw new ProcessingException(statement, "all registers must be even-numbered");
+							throw new ProcessingException(statement, ALL_REGISTERS_EVEN);
 						}
 						double mul1 = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[1] + 1), Coprocessor1.getValue(operands[1])));
@@ -1411,7 +1418,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1 || operands[2] % 2 == 1) {
-							throw new ProcessingException(statement, "all registers must be even-numbered");
+							throw new ProcessingException(statement, ALL_REGISTERS_EVEN);
 						}
 						double div1 = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[1] + 1), Coprocessor1.getValue(operands[1])));
@@ -1431,7 +1438,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1 || operands[2] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						double value = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[1] + 1), Coprocessor1.getValue(operands[1])));
@@ -1462,7 +1469,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "second register must be even-numbered");
+							throw new ProcessingException(statement, SECOND_REGISTER_EVEN);
 						}
 						double doubleValue = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[1] + 1), Coprocessor1.getValue(operands[1])));
@@ -1485,7 +1492,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "second register must be even-numbered");
+							throw new ProcessingException(statement, SECOND_REGISTER_EVEN);
 						}
 						double doubleValue = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[1] + 1), Coprocessor1.getValue(operands[1])));
@@ -1513,7 +1520,7 @@ public class InstructionSet {
 						// (round to nearest/even).
 						int[] operands = statement.getOperands();
 						if (operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "second register must be even-numbered");
+							throw new ProcessingException(statement, SECOND_REGISTER_EVEN);
 						}
 						double doubleValue = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[1] + 1), Coprocessor1.getValue(operands[1])));
@@ -1553,7 +1560,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "second register must be even-numbered");
+							throw new ProcessingException(statement, SECOND_REGISTER_EVEN);
 						}
 						double doubleValue = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[1] + 1), Coprocessor1.getValue(operands[1])));
@@ -1716,7 +1723,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						double op1 = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[0] + 1), Coprocessor1.getValue(operands[0])));
@@ -1736,7 +1743,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[1] % 2 == 1 || operands[2] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						double op1 = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[1] + 1), Coprocessor1.getValue(operands[1])));
@@ -1756,7 +1763,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						double op1 = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[0] + 1), Coprocessor1.getValue(operands[0])));
@@ -1776,7 +1783,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[1] % 2 == 1 || operands[2] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						double op1 = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[1] + 1), Coprocessor1.getValue(operands[1])));
@@ -1796,7 +1803,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						double op1 = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[0] + 1), Coprocessor1.getValue(operands[0])));
@@ -1816,7 +1823,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[1] % 2 == 1 || operands[2] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						double op1 = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[1] + 1), Coprocessor1.getValue(operands[1])));
@@ -1848,7 +1855,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						// I need only clear the high order bit of high word register!
 						Coprocessor1.updateRegister(operands[0] + 1,
@@ -1864,7 +1871,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1) {
-							throw new ProcessingException(statement, "first register must be even-numbered");
+							throw new ProcessingException(statement, FIRST_REGISTER_EVEN);
 						}
 						// convert single precision in $f1 to double stored in $f2
 						long result = Double
@@ -1881,7 +1888,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1) {
-							throw new ProcessingException(statement, "first register must be even-numbered");
+							throw new ProcessingException(statement, FIRST_REGISTER_EVEN);
 						}
 						// convert integer to double (interpret $f1 value as int?)
 						long result = Double.doubleToLongBits((double) Coprocessor1.getValue(operands[1]));
@@ -1898,7 +1905,7 @@ public class InstructionSet {
 						int[] operands = statement.getOperands();
 						// convert double precision in $f2 to single stored in $f1
 						if (operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "second register must be even-numbered");
+							throw new ProcessingException(statement, SECOND_REGISTER_EVEN);
 						}
 						double val = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[1] + 1), Coprocessor1.getValue(operands[1])));
@@ -1926,7 +1933,7 @@ public class InstructionSet {
 						int[] operands = statement.getOperands();
 						// convert double precision in $f2 to integer stored in $f1
 						if (operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "second register must be even-numbered");
+							throw new ProcessingException(statement, SECOND_REGISTER_EVEN);
 						}
 						double val = Double.longBitsToDouble(Binary.twoIntsToLong(
 								Coprocessor1.getValue(operands[1] + 1), Coprocessor1.getValue(operands[1])));
@@ -1953,7 +1960,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						Coprocessor1.updateRegister(operands[0], Coprocessor1.getValue(operands[1]));
 						Coprocessor1.updateRegister(operands[0] + 1, Coprocessor1.getValue(operands[1] + 1));
@@ -1967,7 +1974,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						if (Coprocessor1.getConditionFlag(0) == 0) {
 							Coprocessor1.updateRegister(operands[0], Coprocessor1.getValue(operands[1]));
@@ -1983,7 +1990,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						if (Coprocessor1.getConditionFlag(operands[2]) == 0) {
 							Coprocessor1.updateRegister(operands[0], Coprocessor1.getValue(operands[1]));
@@ -1999,7 +2006,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						if (Coprocessor1.getConditionFlag(0) == 1) {
 							Coprocessor1.updateRegister(operands[0], Coprocessor1.getValue(operands[1]));
@@ -2015,7 +2022,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						if (Coprocessor1.getConditionFlag(operands[2]) == 1) {
 							Coprocessor1.updateRegister(operands[0], Coprocessor1.getValue(operands[1]));
@@ -2031,7 +2038,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						if (RegisterFile.getValue(operands[2]) != 0) {
 							Coprocessor1.updateRegister(operands[0], Coprocessor1.getValue(operands[1]));
@@ -2047,7 +2054,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						if (RegisterFile.getValue(operands[2]) == 0) {
 							Coprocessor1.updateRegister(operands[0], Coprocessor1.getValue(operands[1]));
@@ -2159,7 +2166,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1 || operands[1] % 2 == 1) {
-							throw new ProcessingException(statement, "both registers must be even-numbered");
+							throw new ProcessingException(statement, BOTH_REGISTERS_EVEN);
 						}
 						// flip the sign bit of the second register (high order word) of the pair
 						int value = Coprocessor1.getValue(operands[1] + 1);
@@ -2206,7 +2213,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1) {
-							throw new ProcessingException(statement, "first register must be even-numbered");
+							throw new ProcessingException(statement, FIRST_REGISTER_EVEN);
 						}
 						// IF statement added by DPS 13-July-2011.
 						if (!Memory
@@ -2253,7 +2260,7 @@ public class InstructionSet {
 					public void simulate(ProgramStatement statement) throws ProcessingException {
 						int[] operands = statement.getOperands();
 						if (operands[0] % 2 == 1) {
-							throw new ProcessingException(statement, "first register must be even-numbered");
+							throw new ProcessingException(statement, FIRST_REGISTER_EVEN);
 						}
 						// IF statement added by DPS 13-July-2011.
 						if (!Memory.doublewordAligned(RegisterFile.getValue(operands[2]) + operands[1])) {
@@ -2713,7 +2720,7 @@ public class InstructionSet {
 		}
 
 		public BasicInstruction find(int instr) {
-			int match = Integer.valueOf(instr & mask);
+			int match = instr & mask;
 			return matchMap.get(match);
 		}
 	}
