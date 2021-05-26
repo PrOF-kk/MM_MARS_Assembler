@@ -7,7 +7,6 @@ import mars.mips.hardware.*;
 import mars.mips.instructions.*;
 import java.util.*;
 import javax.swing.*;
-import java.awt.event.*;
 
 /*
 Copyright (c) 2003-2010,  Pete Sanderson and Kenneth Vollmar
@@ -159,7 +158,7 @@ public class Simulator extends Observable {
 		void stopped(Simulator s);
 	}
 
-	private ArrayList<StopListener> stopListeners = new ArrayList<StopListener>(1);
+	private ArrayList<StopListener> stopListeners = new ArrayList<>(1);
 
 	public void addStopListener(StopListener l) {
 		stopListeners.add(l);
@@ -200,7 +199,8 @@ public class Simulator extends Observable {
 	 */
 	class SimThread extends SwingWorker {
 		private MIPSprogram p;
-		private int pc, maxSteps;
+		private int pc;
+		private int maxSteps;
 		private int[] breakPoints;
 		private boolean done;
 		private ProcessingException pe;
@@ -249,7 +249,7 @@ public class Simulator extends Observable {
 		/**
 		 * This is comparable to the Runnable "run" method (it is called by
 		 * SwingWorker's "run" method). It simulates the program execution in the
-		 * backgorund.
+		 * background.
 		 *
 		 * @return boolean value true if execution done, false otherwise
 		 */
@@ -292,7 +292,7 @@ public class Simulator extends Observable {
 				this.done = true;
 				SystemIO.resetFiles(); // close any files opened in MIPS program
 				Simulator.getInstance().notifyObserversOfExecutionStop(maxSteps, pc);
-				return new Boolean(done);
+				return done;
 			}
 			int steps = 0;
 
@@ -364,7 +364,7 @@ public class Simulator extends Observable {
 							this.done = true;
 							SystemIO.resetFiles(); // close any files opened in MIPS program
 							Simulator.getInstance().notifyObserversOfExecutionStop(maxSteps, pc);
-							return new Boolean(done); // execution completed without error.
+							return done; // execution completed without error.
 						}
 						else {
 							// See if an exception handler is present. Assume this is the case
@@ -388,7 +388,7 @@ public class Simulator extends Observable {
 								this.done = true;
 								SystemIO.resetFiles(); // close any files opened in MIPS program
 								Simulator.getInstance().notifyObserversOfExecutionStop(maxSteps, pc);
-								return new Boolean(done);
+								return done;
 							}
 						}
 					}
@@ -405,11 +405,11 @@ public class Simulator extends Observable {
 
 				// Volatile variable initialized false but can be set true by the main thread.
 				// Used to stop or pause a running MIPS program. See stopSimulation() above.
-				if (stop == true) {
+				if (stop) {
 					this.constructReturnReason = PAUSE_OR_STOP;
 					this.done = false;
 					Simulator.getInstance().notifyObserversOfExecutionStop(maxSteps, pc);
-					return new Boolean(done);
+					return done;
 				}
 				// Return if we've reached a breakpoint.
 				if ((breakPoints != null)
@@ -417,7 +417,7 @@ public class Simulator extends Observable {
 					this.constructReturnReason = BREAKPOINT;
 					this.done = false;
 					Simulator.getInstance().notifyObserversOfExecutionStop(maxSteps, pc);
-					return new Boolean(done); // false;
+					return done; // false;
 				}
 				// Check number of MIPS instructions executed.
 				// Return if at limit (-1 is no limit).
@@ -427,7 +427,7 @@ public class Simulator extends Observable {
 						this.constructReturnReason = MAX_STEPS;
 						this.done = false;
 						Simulator.getInstance().notifyObserversOfExecutionStop(maxSteps, pc);
-						return new Boolean(done);// false;
+						return done;// false;
 					}
 				}
 
@@ -470,7 +470,7 @@ public class Simulator extends Observable {
 					this.done = true;
 					SystemIO.resetFiles(); // close any files opened in MIPS program
 					Simulator.getInstance().notifyObserversOfExecutionStop(maxSteps, pc);
-					return new Boolean(done);
+					return done;
 				}
 			}
 			// DPS July 2007. This "if" statement is needed for correct program
@@ -487,7 +487,7 @@ public class Simulator extends Observable {
 			this.done = true;
 			SystemIO.resetFiles(); // close any files opened in MIPS program
 			Simulator.getInstance().notifyObserversOfExecutionStop(maxSteps, pc);
-			return new Boolean(done); // true; // execution completed
+			return done; // true; // execution completed
 		}
 
 		/**
@@ -499,6 +499,7 @@ public class Simulator extends Observable {
 		 * Its action depends on what caused the return from construct() and what action
 		 * led to the call of construct() in the first place.
 		 */
+		@Override
 		public void finished() {
 			// If running from the command-line, then there is no GUI to update.
 			if (Globals.getGui() == null) {
@@ -525,9 +526,7 @@ public class Simulator extends Observable {
 					}
 				}
 			}
-			return;
 		}
-
 	}
 
 	private class UpdateGUI implements Runnable {
