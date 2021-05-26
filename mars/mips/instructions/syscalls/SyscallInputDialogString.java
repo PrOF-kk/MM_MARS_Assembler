@@ -36,7 +36,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * Service to input data.
  *
  */
-
 public class SyscallInputDialogString extends AbstractSyscall {
 	/**
 	 * Build an instance of the syscall with its default service number and name.
@@ -60,14 +59,14 @@ public class SyscallInputDialogString extends AbstractSyscall {
 		// 		-2: Cancel was chosen
 		// 		-3: OK was chosen but no data had been input into field
 
-		String message = new String(); // = "";
+		StringBuilder message = new StringBuilder();
 		int byteAddress = RegisterFile.getValue(4); // byteAddress of string is in $a0
-		char ch[] = { ' ' }; // Need an array to convert to String
+		char[] ch = { ' ' }; // Need an array to convert to String
 		try {
 			ch[0] = (char) Globals.memory.getByte(byteAddress);
 			while (ch[0] != 0) // only uses single location ch[0]
 			{
-				message = message.concat(new String(ch)); // parameter to String constructor is a char[] array
+				message.append(ch);
 				byteAddress++;
 				ch[0] = (char) Globals.memory.getByte(byteAddress);
 			}
@@ -81,7 +80,7 @@ public class SyscallInputDialogString extends AbstractSyscall {
 		// An empty string returned (that is, inputString.length() of zero)
 		// means that OK was chosen but no string was input.
 		String inputString = null;
-		inputString = JOptionPane.showInputDialog(message);
+		inputString = JOptionPane.showInputDialog(message.toString());
 		byteAddress = RegisterFile.getValue(5); // byteAddress of string is in $a1
 		int maxLength = RegisterFile.getValue(6); // input buffer size for input string is in $a2
 
@@ -101,9 +100,9 @@ public class SyscallInputDialogString extends AbstractSyscall {
 					Globals.memory.setByte(byteAddress + index, inputString.charAt(index));
 				}
 				if (inputString.length() < maxLength - 1) {
-					Globals.memory.setByte(byteAddress + (int) Math.min(inputString.length(), maxLength - 2), '\n'); // newline at string end
+					Globals.memory.setByte(byteAddress + Math.min(inputString.length(), maxLength - 2), '\n'); // newline at string end
 				}
-				Globals.memory.setByte(byteAddress + (int) Math.min((inputString.length() + 1), maxLength - 1), 0); // null char to end string
+				Globals.memory.setByte(byteAddress + Math.min((inputString.length() + 1), maxLength - 1), 0); // null char to end string
 
 				if (inputString.length() > maxLength - 1) {
 					// length of the input string exceeded the specified maximum
