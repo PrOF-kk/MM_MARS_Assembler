@@ -119,7 +119,7 @@ public class Assembler {
 	 **/
 	public ArrayList<ProgramStatement> assemble(MIPSprogram p, boolean extendedAssemblerEnabled,
 			boolean warningsAreErrors) throws ProcessingException {
-		ArrayList<MIPSprogram> programFiles = new ArrayList<MIPSprogram>();
+		ArrayList<MIPSprogram> programFiles = new ArrayList<>();
 		programFiles.add(p);
 		return this.assemble(programFiles, extendedAssemblerEnabled, warningsAreErrors);
 	}
@@ -345,7 +345,7 @@ public class Assembler {
 						// If this is the case, skip remainder of loop iteration. This should only
 						// happen if template substitution was for "nop" instruction but delayed branching
 						// is disabled so the "nop" is not generated.
-						if (instruction == null || instruction == "") {
+						if (instruction == null || instruction.equals("")) {
 							continue;
 						}
 
@@ -701,7 +701,6 @@ public class Assembler {
 			errors.add(new ErrorMessage(token.getSourceMIPSprogram(), token.getSourceLine(), token
 					.getStartPos(), "\"" + token.getValue()
 					+ "\" directive is invalid or not implemented in MARS"));
-			return;
 		}
 		else if (direct == Directives.EQV) { /* EQV added by DPS 11 July 2012 */
 			// Do nothing.  This was vetted and processed during tokenizing.
@@ -887,7 +886,6 @@ public class Assembler {
 			errors.add(new ErrorMessage(token.getSourceMIPSprogram(), token.getSourceLine(), token
 					.getStartPos(), "\"" + token.getValue()
 					+ "\" directive recognized but not yet implemented."));
-			return;
 		}
 	} // executeDirective()
 
@@ -931,10 +929,9 @@ public class Assembler {
 				storeNumeric(tokens, direct, errors);
 			}
 		} 
-		else if (direct == Directives.ASCII || direct == Directives.ASCIIZ) {
-			if (passesDataSegmentCheck(tokens.get(0))) {
-				storeStrings(tokens, direct, errors);
-			}
+		else if (direct == Directives.ASCII || direct == Directives.ASCIIZ && passesDataSegmentCheck(tokens.get(0))) {
+
+			storeStrings(tokens, direct, errors);
 		}
 	} // executeDirectiveContinuation()
 
@@ -1033,8 +1030,10 @@ public class Assembler {
 					 * de-assemble a binary value into its corresponding MIPS
 					 * instruction)
 					 * 
-					 * else { // not in data segment...which we assume to mean in text
-					 * segment. try { for (int i=0; i < repetitions; i++) {
+					 * else {
+					 *     // not in data segment...which we assume to mean in text
+					 * segment.
+					 * try { for (int i=0; i < repetitions; i++) {
 					 * Globals.memory.set(this.textAddress.get(),
 					 * Binary.stringToInt(valueToken.getValue()), lengthInBytes);
 					 * this.textAddress.increment(lengthInBytes); } } catch
@@ -1056,7 +1055,6 @@ public class Assembler {
 				storeRealNumber(token, directive, errors);
 			}
 		}
-		return;
 	} // storeNumeric()
 
 	// //////////////////////////////////////////////////////////////////////////////
