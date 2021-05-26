@@ -55,7 +55,7 @@ public class SyscallRandSeed extends AbstractSyscall {
 		// pseudorandom number generator.
 
 		Integer index = RegisterFile.getValue(4);
-		Random stream = (Random) RandomStreams.randomStreams.get(index);
+		Random stream = RandomStreams.randomStreams.get(index);
 		if (stream == null) {
 			RandomStreams.randomStreams.put(index, new Random(RegisterFile.getValue(5)));
 		}
