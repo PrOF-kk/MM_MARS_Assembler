@@ -109,7 +109,7 @@ public class Memory extends Observable {
 	// and high end of address range, but retrieval from the tree has to be based
 	// on target address being ANYWHERE IN THE RANGE (not an exact key match).
 
-	Collection observables = getNewMemoryObserversCollection();
+	Collection<MemoryObservable> observables = getNewMemoryObserversCollection();
 
 	// The data segment is allocated in blocks of 1024 ints (4096 bytes). Each block is
 	// referenced by a "block table" entry, and the table has 1024 entries. The capacity
@@ -297,7 +297,9 @@ public class Memory extends Observable {
 		kernelDataBlockTable = new int[BLOCK_TABLE_LENGTH][];
 		stackBlockTable = new int[BLOCK_TABLE_LENGTH][];
 		memoryMapBlockTable = new int[MMIO_TABLE_LENGTH][];
-		System.gc(); // call garbage collector on any Table memory just deallocated.
+		// System.gc(); // call garbage collector on any Table memory just deallocated.
+		// Actually don't, as it is considered bad practice.
+		// Let the JVM decide for itself
 	}
 
 	/**
@@ -771,7 +773,7 @@ public class Memory extends Observable {
 		else if (inTextSegment(address) || inKernelTextSegment(address)) {
 			try {
 				value = (getStatementNoNotify(address) == null) ? null
-						: new Integer(getStatementNoNotify(address).getBinaryStatement());
+						: getStatementNoNotify(address).getBinaryStatement();
 			}
 			catch (AddressErrorException aee) {
 				value = null;
@@ -1071,6 +1073,7 @@ public class Memory extends Observable {
 	 * 
 	 * @param obs the observer
 	 */
+	@Override
 	public void addObserver(Observer obs) {
 		try { // split so start address always >= end address
 			this.addObserver(obs, 0, 0x7ffffffc);
@@ -1132,6 +1135,7 @@ public class Memory extends Observable {
 	/**
 	 * Return number of observers
 	 */
+	@Override
 	public int countObservers() {
 		return observables.size();
 	}
@@ -1141,16 +1145,18 @@ public class Memory extends Observable {
 	 * 
 	 * @param obs Observer to be removed
 	 */
+	@Override
 	public void deleteObserver(Observer obs) {
-		Iterator it = observables.iterator();
+		Iterator<MemoryObservable> it = observables.iterator();
 		while (it.hasNext()) {
-			((MemoryObservable) it.next()).deleteObserver(obs);
+			it.next().deleteObserver(obs);
 		}
 	}
 
 	/**
 	 * Remove all memory observers
 	 */
+	@Override
 	public void deleteObservers() {
 		// just drop the collection
 		observables = getNewMemoryObserversCollection();
@@ -1162,6 +1168,7 @@ public class Memory extends Observable {
 	 * 
 	 * @throws UnsupportedOperationException
 	 */
+	@Override
 	public void notifyObservers() {
 		throw new UnsupportedOperationException();
 	}
@@ -1172,18 +1179,19 @@ public class Memory extends Observable {
 	 * 
 	 * @throws UnsupportedOperationException
 	 */
+	@Override
 	public void notifyObservers(Object obj) {
 		throw new UnsupportedOperationException();
 	}
 
-	private Collection getNewMemoryObserversCollection() {
-		return new Vector(); // Vectors are thread-safe
+	private Collection<MemoryObservable> getNewMemoryObserversCollection() {
+		return new Vector<>(); // Vectors are thread-safe
 	}
 
 	/////////////////////////////////////////////////////////////////////////
 	// Private class whose objects will represent an observable-observer pair
 	// for a given memory address or range.
-	private class MemoryObservable extends Observable implements Comparable {
+	private class MemoryObservable extends Observable implements Comparable<MemoryObservable> {
 		private int lowAddress, highAddress;
 
 		public MemoryObservable(Observer obs, int startAddr, int endAddr) {
@@ -1203,11 +1211,7 @@ public class Memory extends Observable {
 
 		// Useful to have for future refactoring, if it actually becomes worthwhile to
 		// sort these or put 'em in a tree (rather than sequential search through list).
-		public int compareTo(Object obj) {
-			if (!(obj instanceof MemoryObservable)) {
-				throw new ClassCastException();
-			}
-			MemoryObservable mo = (MemoryObservable) obj;
+		public int compareTo(MemoryObservable mo) {
 			if (this.lowAddress < mo.lowAddress
 					|| this.lowAddress == mo.lowAddress && this.highAddress < mo.highAddress) {
 				return -1;
@@ -1230,11 +1234,11 @@ public class Memory extends Observable {
 	// IF MIPS simulation is from command mode, Globals.program is null but still
 	// want ability to observe.
 	private void notifyAnyObservers(int type, int address, int length, int value) {
-		if ((Globals.program != null || Globals.getGui() == null) && this.observables.size() > 0) {
-			Iterator it = this.observables.iterator();
+		if ((Globals.program != null || Globals.getGui() == null) && !this.observables.isEmpty()) {
+			Iterator<MemoryObservable> it = this.observables.iterator();
 			MemoryObservable mo;
 			while (it.hasNext()) {
-				mo = (MemoryObservable) it.next();
+				mo = it.next();
 				if (mo.match(address)) {
 					mo.notifyObserver(new MemoryAccessNotice(type, address, length, value));
 				}
@@ -1382,7 +1386,8 @@ public class Memory extends Observable {
 
 	private synchronized Integer fetchWordOrNullFromTable(int[][] blockTable, int relative) {
 		int value = 0;
-		int block, offset;
+		int block;
+		int offset;
 		block = relative / BLOCK_LENGTH_WORDS;
 		offset = relative % BLOCK_LENGTH_WORDS;
 		if (blockTable[block] == null) {
@@ -1392,7 +1397,7 @@ public class Memory extends Observable {
 		else {
 			value = blockTable[block][offset];
 		}
-		return new Integer(value);
+		return value;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
