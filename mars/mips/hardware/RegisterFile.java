@@ -3,6 +3,7 @@ package mars.mips.hardware;
 import java.util.Observer;
 
 import mars.Globals;
+import mars.Settings;
 import mars.assembler.SymbolTable;
 import mars.mips.instructions.Instruction;
 import mars.util.Binary;
@@ -312,7 +313,7 @@ public class RegisterFile {
 		for (int i = 0; i < regFile.length; i++) {
 			regFile[i].resetValue();
 		}
-		initializeProgramCounter(Globals.getSettings().getStartAtMain());
+		initializeProgramCounter(Globals.getSettings().getBooleanSetting(Settings.START_AT_MAIN));
 		hi.resetValue();
 		lo.resetValue();
 	}
