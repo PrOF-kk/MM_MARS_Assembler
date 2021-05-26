@@ -4,7 +4,6 @@ import mars.mips.hardware.*;
 import mars.util.*;
 import mars.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.util.*;
 import java.io.*;
@@ -63,21 +62,19 @@ public class EditTabbedPane extends JTabbedPane {
 		this.fileOpener = new FileOpener(editor);
 		this.mainPane = mainPane;
 		this.editor.setEditTabbedPane(this);
-		this.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				EditPane editPane = (EditPane) getSelectedComponent();
-				if (editPane != null) {
-					// New IF statement to permit free traversal of edit panes w/o invalidating
-					// assembly if assemble-all is selected. DPS 9-Aug-2011
-					if (Globals.getSettings().getBooleanSetting(mars.Settings.ASSEMBLE_ALL_ENABLED)) {
-						EditTabbedPane.this.updateTitles(editPane);
-					}
-					else {
-						EditTabbedPane.this.updateTitlesAndMenuState(editPane);
-						EditTabbedPane.this.mainPane.getExecutePane().clearPane();
-					}
-					editPane.tellEditingComponentToRequestFocusInWindow();
+		this.addChangeListener(e -> {
+			EditPane editPane = (EditPane) getSelectedComponent();
+			if (editPane != null) {
+				// New IF statement to permit free traversal of edit panes w/o invalidating
+				// assembly if assemble-all is selected. DPS 9-Aug-2011
+				if (Globals.getSettings().getBooleanSetting(mars.Settings.ASSEMBLE_ALL_ENABLED)) {
+					EditTabbedPane.this.updateTitles(editPane);
 				}
+				else {
+					EditTabbedPane.this.updateTitlesAndMenuState(editPane);
+					EditTabbedPane.this.mainPane.getExecutePane().clearPane();
+				}
+				editPane.tellEditingComponentToRequestFocusInWindow();
 			}
 		});
 		
@@ -312,10 +309,8 @@ public class EditTabbedPane extends JTabbedPane {
 		}
 
 		File theFile = new File(editPane.getPathname());
-		try {
-			BufferedWriter outFileStream = new BufferedWriter(new FileWriter(theFile));
+		try (BufferedWriter outFileStream = new BufferedWriter(new FileWriter(theFile))) {
 			outFileStream.write(editPane.getSource(), 0, editPane.getSource().length());
-			outFileStream.close();
 		}
 		catch (IOException c) {
 			JOptionPane.showMessageDialog(null, "Save operation could not be completed due to an error:\n" + c,
@@ -410,10 +405,8 @@ public class EditTabbedPane extends JTabbedPane {
 			}
 			// Either file with selected name does not exist or user wants to
 			// overwrite it, so go for it!
-			try {
-				BufferedWriter outFileStream = new BufferedWriter(new FileWriter(theFile));
+			try (BufferedWriter outFileStream = new BufferedWriter(new FileWriter(theFile))) {
 				outFileStream.write(editPane.getSource(), 0, editPane.getSource().length());
-				outFileStream.close();
 			}
 			catch (java.io.IOException c) {
 				JOptionPane.showMessageDialog(null, "Save As operation could not be completed due to an error:\n" + c,
@@ -660,7 +653,9 @@ public class EditTabbedPane extends JTabbedPane {
 				// StringBuffer is preallocated to full filelength to eliminate dynamic
 				// expansion as lines are added to it. Previously, each line was appended
 				// to the Edit pane as it was read, way slower due to dynamic string alloc.
-				StringBuffer fileContents = new StringBuffer((int) theFile.length());
+				// Replaced StringBuffer with StringBuilder, as we shouldn't need
+				// synchronization. VCOL May 2021
+				StringBuilder fileContents = new StringBuilder((int) theFile.length());
 				int lineNumber = 1;
 				String line = Globals.program.getSourceLine(lineNumber++);
 				while (line != null) {
@@ -734,7 +729,7 @@ public class EditTabbedPane extends JTabbedPane {
 				// Last one added becomes the default.
 				fileChooser.resetChoosableFileFilters();
 				for (int i = 0; i < fileFilterList.size(); i++) {
-					fileChooser.addChoosableFileFilter((FileFilter) fileFilterList.get(i));
+					fileChooser.addChoosableFileFilter(fileFilterList.get(i));
 				}
 				// Restore listener.
 				if (activeListener) {
@@ -754,7 +749,7 @@ public class EditTabbedPane extends JTabbedPane {
 		// activation of MARS.
 		private class ChoosableFileFilterChangeListener implements PropertyChangeListener {
 			public void propertyChange(java.beans.PropertyChangeEvent e) {
-				if (e.getPropertyName() == JFileChooser.CHOOSABLE_FILE_FILTER_CHANGED_PROPERTY) {
+				if (e.getPropertyName().equals(JFileChooser.CHOOSABLE_FILE_FILTER_CHANGED_PROPERTY)) {
 					FileFilter[] newFilters = (FileFilter[]) e.getNewValue();
 					FileFilter[] oldFilters = (FileFilter[]) e.getOldValue();
 					if (newFilters.length > fileFilterList.size()) {
