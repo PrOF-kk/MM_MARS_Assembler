@@ -46,19 +46,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 public class FileDumpMemoryAction extends GuiAction {
 
 	private JDialog dumpDialog;
-	private static final String title = "Dump Memory To File";
+	private static final String TITLE = "Dump Memory To File";
 
-	// A series of parallel arrays representing the memory segments that can be dumped.
-	private String[] segmentArray;
-	private int[] baseAddressArray;
-	private int[] limitAddressArray;
-	private int[] highAddressArray;
-	// These three are allocated and filled by buildDialogPanel() and used by action listeners.
-	private String[] segmentListArray;
-	private int[] segmentListBaseArray;
-	private int[] segmentListHighArray;
-
-	private JComboBox segmentListSelector;
 	private JComboBox formatListSelector;
 
 	public FileDumpMemoryAction(String name, Icon icon, String descrip,
@@ -67,6 +56,7 @@ public class FileDumpMemoryAction extends GuiAction {
 
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		dumpMemory();
 	}
@@ -85,10 +75,11 @@ public class FileDumpMemoryAction extends GuiAction {
 
 	// The dump dialog that appears when menu item is selected.
 	private JDialog createDumpDialog() {
-		JDialog dumpDialog = new JDialog(Globals.getGui(), title, true);
+		JDialog dumpDialog = new JDialog(Globals.getGui(), TITLE, true);
 		dumpDialog.setContentPane(buildDialogPanel());
 		dumpDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		dumpDialog.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent we) {
 				closeDialog();
 			}
@@ -101,14 +92,16 @@ public class FileDumpMemoryAction extends GuiAction {
 		JPanel contents = new JPanel(new BorderLayout(20, 20));
 		contents.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-		segmentArray = MemoryDump.getSegmentNames();
-		baseAddressArray = MemoryDump.getBaseAddresses(segmentArray);
-		limitAddressArray = MemoryDump.getLimitAddresses(segmentArray);
-		highAddressArray = new int[segmentArray.length];
+		// A series of parallel arrays representing the memory segments that can be dumped.
+		String[] segmentArray = MemoryDump.getSegmentNames();
+		int[] baseAddressArray = MemoryDump.getBaseAddresses(segmentArray);
+		int[] limitAddressArray = MemoryDump.getLimitAddresses(segmentArray);
+		int[] highAddressArray = new int[segmentArray.length];
 
-		segmentListArray = new String[segmentArray.length];
-		segmentListBaseArray = new int[segmentArray.length];
-		segmentListHighArray = new int[segmentArray.length];
+		// These three are allocated and filled by buildDialogPanel() and used by action listeners.
+		String[] segmentListArray = new String[segmentArray.length];
+		int[] segmentListBaseArray = new int[segmentArray.length];
+		int[] segmentListHighArray = new int[segmentArray.length];
 
 		// Calculate the actual highest address to be dumped. For text segment, this depends on the
 		// program length (number of machine code instructions). For data segment, this depends on
@@ -147,11 +140,7 @@ public class FileDumpMemoryAction extends GuiAction {
 		if (segmentCount == 0) {
 			contents.add(new Label("There is nothing to dump!"), BorderLayout.NORTH);
 			JButton OKButton = new JButton("OK");
-			OKButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					closeDialog();
-				}
-			});
+			OKButton.addActionListener(e -> closeDialog());
 			contents.add(OKButton, BorderLayout.SOUTH);
 			return contents;
 		}
@@ -164,7 +153,7 @@ public class FileDumpMemoryAction extends GuiAction {
 		}
 
 		// Create segment selector. First element selected by default.
-		segmentListSelector = new JComboBox(segmentListArray);
+		JComboBox<String> segmentListSelector = new JComboBox<>(segmentListArray);
 		segmentListSelector.setSelectedIndex(0);
 		JPanel segmentPanel = new JPanel(new BorderLayout());
 		segmentPanel.add(new Label("Memory Segment"), BorderLayout.NORTH);
@@ -172,8 +161,8 @@ public class FileDumpMemoryAction extends GuiAction {
 		contents.add(segmentPanel, BorderLayout.WEST);
 
 		// Next, create list of all available dump formats.
-		ArrayList dumpFormats = (new DumpFormatLoader()).loadDumpFormats();
-		formatListSelector = new JComboBox(dumpFormats.toArray());
+		ArrayList<DumpFormat> dumpFormats = (new DumpFormatLoader()).loadDumpFormats();
+		formatListSelector = new JComboBox<>(dumpFormats.toArray());
 		formatListSelector.setRenderer(new DumpFormatComboBoxRenderer(formatListSelector));
 		formatListSelector.setSelectedIndex(0);
 		JPanel formatPanel = new JPanel(new BorderLayout());
@@ -184,21 +173,15 @@ public class FileDumpMemoryAction extends GuiAction {
 		// Bottom row - the control buttons for Dump and Cancel
 		Box controlPanel = Box.createHorizontalBox();
 		JButton dumpButton = new JButton("Dump To File...");
-		dumpButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (performDump(segmentListBaseArray[segmentListSelector.getSelectedIndex()],
-						segmentListHighArray[segmentListSelector.getSelectedIndex()],
-						(DumpFormat) formatListSelector.getSelectedItem())) {
-					closeDialog();
-				}
-			}
-		});
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		dumpButton.addActionListener(e -> {
+			if (performDump(segmentListBaseArray[segmentListSelector.getSelectedIndex()],
+					segmentListHighArray[segmentListSelector.getSelectedIndex()],
+					(DumpFormat) formatListSelector.getSelectedItem())) {
 				closeDialog();
 			}
 		});
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(e -> closeDialog());
 		controlPanel.add(Box.createHorizontalGlue());
 		controlPanel.add(dumpButton);
 		controlPanel.add(Box.createHorizontalGlue());
@@ -216,7 +199,7 @@ public class FileDumpMemoryAction extends GuiAction {
 		boolean operationOK = false;
 
 		saveDialog = new JFileChooser(mainUI.getEditor().getCurrentSaveDirectory());
-		saveDialog.setDialogTitle(title);
+		saveDialog.setDialogTitle(TITLE);
 		while (!operationOK) {
 			int decision = saveDialog.showSaveDialog(mainUI);
 			if (decision != JFileChooser.APPROVE_OPTION) {
@@ -245,10 +228,8 @@ public class FileDumpMemoryAction extends GuiAction {
 				try {
 					format.dumpMemoryRange(theFile, firstAddress, lastAddress);
 				}
-				catch (AddressErrorException aee) {
+				catch (AddressErrorException | IOException e) {
 
-				}
-				catch (IOException ioe) {
 				}
 			}
 		}
@@ -264,6 +245,8 @@ public class FileDumpMemoryAction extends GuiAction {
 	// Display tool tip for dump format list items. Got the technique from
 	// http://forum.java.sun.com/thread.jspa?threadID=488762&messageID=2292482
 
+	// BasicComboBoxRenderer doesn't support generics until Java 9.
+	// Until then, keep the raw class and the warnings
 	private class DumpFormatComboBoxRenderer extends BasicComboBoxRenderer {
 		private JComboBox myMaster;
 
@@ -272,6 +255,7 @@ public class FileDumpMemoryAction extends GuiAction {
 			this.myMaster = myMaster;
 		}
 
+		@Override
 		public Component getListCellRendererComponent(JList list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus) {
 			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
