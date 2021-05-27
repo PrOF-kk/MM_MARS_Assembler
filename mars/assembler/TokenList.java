@@ -40,14 +40,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 public class TokenList implements Cloneable {
 
-	private ArrayList tokenList;
+	private ArrayList<Token> tokenList;
 	private String processedLine;// DPS 03-Jan-2013
 
 	/**
 	 * Constructor for objects of class TokenList
 	 */
 	public TokenList() {
-		tokenList = new ArrayList();
+		tokenList = new ArrayList<>();
 		processedLine = ""; // DPS 03-Jan-2013
 	}
 
@@ -80,7 +80,7 @@ public class TokenList implements Cloneable {
 	 * @return the requested token, or ArrayIndexOutOfBounds exception
 	 */
 	public Token get(int pos) {
-		return (Token) tokenList.get(pos);
+		return tokenList.get(pos);
 	}
 
 	/**
@@ -140,13 +140,13 @@ public class TokenList implements Cloneable {
 	 * @return String version of the token list (a blank is inserted after each
 	 *         token).
 	 */
-
 	public String toString() {
-		String stringified = "";
+		StringBuilder stringified = new StringBuilder(tokenList.size());
 		for (int i = 0; i < tokenList.size(); i++) {
-			stringified += tokenList.get(i).toString() + " ";
+			stringified.append(tokenList.get(i).toString());
+			stringified.append(" ");
 		}
-		return stringified;
+		return stringified.toString();
 	}
 
 	/**
@@ -155,13 +155,13 @@ public class TokenList implements Cloneable {
 	 * @return String version of the token types for this list (a blank is inserted
 	 *         after each token type).
 	 */
-
 	public String toTypeString() {
-		String stringified = "";
+		StringBuilder stringified = new StringBuilder(tokenList.size());
 		for (int i = 0; i < tokenList.size(); i++) {
-			stringified += ((Token) tokenList.get(i)).getType().toString() + " ";
+			stringified.append(tokenList.get(i).getType().toString());
+			stringified.append(" ");
 		}
-		return stringified;
+		return stringified.toString();
 	}
 
 	/**
@@ -174,10 +174,11 @@ public class TokenList implements Cloneable {
 	// but the ArrayList itself has to be cloned separately -- otherwise clone will
 	// have
 	// alias to original token list!!
+	@Override
 	public Object clone() {
 		try {
 			TokenList t = (TokenList) super.clone();
-			t.tokenList = (ArrayList) tokenList.clone();
+			t.tokenList = (ArrayList<Token>) tokenList.clone();
 			return t;
 		}
 		catch (CloneNotSupportedException e) {
