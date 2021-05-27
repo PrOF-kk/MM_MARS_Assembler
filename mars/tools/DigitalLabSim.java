@@ -5,14 +5,11 @@ import java.awt.event.*;
 import java.util.*;
 
 import javax.swing.*;
-import javax.swing.Timer;
-
 import mars.Globals;
 import mars.mips.hardware.AddressErrorException;
 import mars.mips.hardware.Coprocessor0;
 import mars.mips.hardware.Memory;
 import mars.mips.hardware.MemoryAccessNotice;
-import mars.simulator.Exceptions;
 
 @SuppressWarnings("serial")
 /*
@@ -67,11 +64,13 @@ public class DigitalLabSim extends AbstractMarsToolAndApplication {
 		return "Digital Lab Sim";
 	}
 
+	@Override
 	protected void addAsObserver() {
 		addAsObserver(IN_ADRESS_DISPLAY_1, IN_ADRESS_DISPLAY_1);
 		addAsObserver(Memory.textBaseAddress, Memory.textLimitAddress);
 	}
 
+	@Override
 	public void update(Observable ressource, Object accessNotice) {
 		MemoryAccessNotice notice = (MemoryAccessNotice) accessNotice;
 		int address = notice.getAddress();
@@ -101,6 +100,7 @@ public class DigitalLabSim extends AbstractMarsToolAndApplication {
 		}
 	}
 
+	@Override
 	protected void reset() {
 		sevenSegPanel.resetSevenSegment();
 		hexaKeyPanel.resetHexaKeyboard();
@@ -135,6 +135,7 @@ public class DigitalLabSim extends AbstractMarsToolAndApplication {
 		}
 	}
 
+	@Override
 	protected JComponent getHelpComponent() {
 		final String helpContent =
 				  " This tool is composed of 3 parts : two seven-segment displays, an hexadecimal keyboard and counter \n"
@@ -156,16 +157,14 @@ public class DigitalLabSim extends AbstractMarsToolAndApplication {
 				+ " If counter interruption is enable, every 30 instructions, an exception is started with cause register bit number 10.\n"
 				+ "   (contributed by Didier Teifreto, dteifreto@lifc.univ-fcomte.fr)";
 		JButton help = new JButton("Help");
-		help.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JTextArea ja = new JTextArea(helpContent);
-				ja.setRows(20);
-				ja.setColumns(60);
-				ja.setLineWrap(true);
-				ja.setWrapStyleWord(true);
-				JOptionPane.showMessageDialog(theWindow, new JScrollPane(ja),
-						"Simulating the Hexa Keyboard and Seven segment display", JOptionPane.INFORMATION_MESSAGE);
-			}
+		help.addActionListener(e -> {
+			JTextArea ja = new JTextArea(helpContent);
+			ja.setRows(20);
+			ja.setColumns(60);
+			ja.setLineWrap(true);
+			ja.setWrapStyleWord(true);
+			JOptionPane.showMessageDialog(theWindow, new JScrollPane(ja),
+					"Simulating the Hexa Keyboard and Seven segment display", JOptionPane.INFORMATION_MESSAGE);
 		});
 		return help;
 	}
@@ -253,6 +252,7 @@ public class DigitalLabSim extends AbstractMarsToolAndApplication {
 			}
 		}
 
+		@Override
 		public void paint(Graphics g) {
 			char c = 'a';
 			while (c <= 'h') {
