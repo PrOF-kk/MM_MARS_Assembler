@@ -6,7 +6,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import mars.util.*;
-import mars.tools.*;
 import mars.mips.hardware.*;
 
 /*
@@ -59,7 +58,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication {
 	private static String version = "Version 1.2";
 	private static String heading = "Simulate and illustrate data cache performance";
 	// Major GUI components
-	private JComboBox cacheBlockSizeSelector, cacheBlockCountSelector, cachePlacementSelector, cacheReplacementSelector,
+	private JComboBox<String> cacheBlockSizeSelector, cacheBlockCountSelector, cachePlacementSelector, cacheReplacementSelector,
 			cacheSetSizeSelector;
 	private JTextField memoryAccessCountDisplay, cacheHitCountDisplay, cacheMissCountDisplay, replacementPolicyDisplay,
 			cachableAddressesDisplay, cacheSizeDisplay;
@@ -78,7 +77,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication {
 
 	// Values for Combo Boxes
 	private int[] cacheBlockSizeChoicesInt, cacheBlockCountChoicesInt;
-	private String[] cacheBlockSizeChoices = { "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024",
+	private String[] cacheBlockSizeChoices = {"1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024",
 			"2048" };
 	private String[] cacheBlockCountChoices = { "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024",
 			"2048" };
@@ -164,13 +163,11 @@ public class CacheSimulator extends AbstractMarsToolAndApplication {
 		ltb.setTitleJustification(TitledBorder.CENTER);
 		logPanel.setBorder(ltb);
 		logShow = new JCheckBox("Enabled", debug);
-		logShow.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				debug = e.getStateChange() == ItemEvent.SELECTED;
-				resetLogDisplay();
-				logText.setEnabled(debug);
-				logText.setBackground(debug ? Color.WHITE : logPanel.getBackground());
-			}
+		logShow.addItemListener(e -> {
+			debug = e.getStateChange() == ItemEvent.SELECTED;
+			resetLogDisplay();
+			logText.setEnabled(debug);
+			logText.setBackground(debug ? Color.WHITE : logPanel.getBackground());
 		});
 		logPanel.add(logShow);
 		logText = new JTextArea(5, 70);
@@ -191,56 +188,46 @@ public class CacheSimulator extends AbstractMarsToolAndApplication {
 		TitledBorder otb = new TitledBorder("Cache Organization");
 		otb.setTitleJustification(TitledBorder.CENTER);
 		organization.setBorder(otb);
-		cachePlacementSelector = new JComboBox(placementPolicyChoices);
+		cachePlacementSelector = new JComboBox<>(placementPolicyChoices);
 		cachePlacementSelector.setEditable(false);
 		cachePlacementSelector.setBackground(backgroundColor);
 		cachePlacementSelector.setSelectedIndex(defaultPlacementPolicyIndex);
-		cachePlacementSelector.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				updateCacheSetSizeSelector();
-				reset();
-			}
+		cachePlacementSelector.addActionListener(e -> {
+			updateCacheSetSizeSelector();
+			reset();
 		});
 
-		cacheReplacementSelector = new JComboBox(replacementPolicyChoices);
+		cacheReplacementSelector = new JComboBox<>(replacementPolicyChoices);
 		cacheReplacementSelector.setEditable(false);
 		cacheReplacementSelector.setBackground(backgroundColor);
 		cacheReplacementSelector.setSelectedIndex(defaultReplacementPolicyIndex);
 
-		cacheBlockSizeSelector = new JComboBox(cacheBlockSizeChoices);
+		cacheBlockSizeSelector = new JComboBox<>(cacheBlockSizeChoices);
 		cacheBlockSizeSelector.setEditable(false);
 		cacheBlockSizeSelector.setBackground(backgroundColor);
 		cacheBlockSizeSelector.setSelectedIndex(defaultCacheBlockSizeIndex);
-		cacheBlockSizeSelector.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				updateCacheSizeDisplay();
-				reset();
-			}
+		cacheBlockSizeSelector.addActionListener(e -> {
+			updateCacheSizeDisplay();
+			reset();
 		});
-		cacheBlockCountSelector = new JComboBox(cacheBlockCountChoices);
+		cacheBlockCountSelector = new JComboBox<>(cacheBlockCountChoices);
 		cacheBlockCountSelector.setEditable(false);
 		cacheBlockCountSelector.setBackground(backgroundColor);
 		cacheBlockCountSelector.setSelectedIndex(defaultCacheBlockCountIndex);
-		cacheBlockCountSelector.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				updateCacheSetSizeSelector();
-				theCache = createNewCache();
-				resetCounts();
-				updateDisplay();
-				updateCacheSizeDisplay();
-				animations.fillAnimationBoxWithCacheBlocks();
-			}
+		cacheBlockCountSelector.addActionListener(e -> {
+			updateCacheSetSizeSelector();
+			theCache = createNewCache();
+			resetCounts();
+			updateDisplay();
+			updateCacheSizeDisplay();
+			animations.fillAnimationBoxWithCacheBlocks();
 		});
 
-		cacheSetSizeSelector = new JComboBox(cacheSetSizeChoices);
+		cacheSetSizeSelector = new JComboBox<>(cacheSetSizeChoices);
 		cacheSetSizeSelector.setEditable(false);
 		cacheSetSizeSelector.setBackground(backgroundColor);
 		cacheSetSizeSelector.setSelectedIndex(defaultCacheSetSizeIndex);
-		cacheSetSizeSelector.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				reset();
-			}
-		});
+		cacheSetSizeSelector.addActionListener(e -> reset());
 
 		// ALL COMPONENTS FOR "CACHE ORGANIZATION" SECTION
 		JPanel placementPolicyRow = getPanelWithBorderLayout();
@@ -426,6 +413,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication {
 	 * @param accessNotice information provided by memory in MemoryAccessNotice
 	 *                     object
 	 */
+	@Override
 	protected void processMIPSUpdate(Observable memory, AccessNotice accessNotice) {
 		MemoryAccessNotice notice = (MemoryAccessNotice) accessNotice;
 		memoryAccessCount++;
@@ -446,6 +434,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication {
 	 * declaration. Also creates initial default cache object. Overrides inherited
 	 * method that does nothing.
 	 */
+	@Override
 	protected void initializePreGUI() {
 		cacheBlockSizeChoicesInt = new int[cacheBlockSizeChoices.length];
 		for (int i = 0; i < cacheBlockSizeChoices.length; i++) {
@@ -473,7 +462,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication {
 	 * on the default settings of the various combo boxes. Overrides inherited
 	 * method that does nothing.
 	 */
-
+	@Override
 	protected void initializePostGUI() {
 		theCache = createNewCache();
 	}
@@ -482,6 +471,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication {
 	 * Method to reset cache, counters and display when the Reset button selected.
 	 * Overrides inherited method that does nothing.
 	 */
+	@Override
 	protected void reset() {
 		theCache = createNewCache();
 		resetCounts();
@@ -496,6 +486,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication {
 	 * when Mars is running in timed mode. Overrides inherited method that does
 	 * nothing.
 	 */
+	@Override
 	protected void updateDisplay() {
 		updateMemoryAccessCountDisplay();
 		updateCacheHitCountDisplay();
@@ -536,7 +527,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication {
 	// Update the Set Size combo box selection in response to other selections..
 	private void updateCacheSetSizeSelector() {
 		cacheSetSizeSelector.setModel(
-				new DefaultComboBoxModel(
+				new DefaultComboBoxModel<>(
 						determineSetSizeChoices(
 								cacheBlockCountSelector.getSelectedIndex(),
 								cachePlacementSelector.getSelectedIndex())));
@@ -564,15 +555,15 @@ public class CacheSimulator extends AbstractMarsToolAndApplication {
 	}
 
 	private void updateMemoryAccessCountDisplay() {
-		memoryAccessCountDisplay.setText(new Integer(memoryAccessCount).toString());
+		memoryAccessCountDisplay.setText(String.valueOf(memoryAccessCount));
 	}
 
 	private void updateCacheHitCountDisplay() {
-		cacheHitCountDisplay.setText(new Integer(cacheHitCount).toString());
+		cacheHitCountDisplay.setText(String.valueOf(cacheHitCount));
 	}
 
 	private void updateCacheMissCountDisplay() {
-		cacheMissCountDisplay.setText(new Integer(cacheMissCount).toString());
+		cacheMissCountDisplay.setText(String.valueOf(cacheMissCount));
 	}
 
 	private void updateCacheHitRateDisplay() {
@@ -712,7 +703,8 @@ public class CacheSimulator extends AbstractMarsToolAndApplication {
 			for (int i = 0; i < numberOfBlocks; i++) {
 				this.blocks[i] = new CacheBlock(blockSizeInWords);
 			}
-			System.gc(); // scoop 'em up now
+			//System.gc(); // scoop 'em up now
+			// No guarantee the gc will run, bad practice
 		}
 
 		// Subclass must implement this according to its policies
