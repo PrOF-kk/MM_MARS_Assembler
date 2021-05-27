@@ -1,12 +1,10 @@
 package mars.tools;
 
-import java.text.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.awt.geom.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.border.*;
 
 /*
@@ -66,12 +64,7 @@ public class ScreenMagnifier implements MarsTool {
 	// Permits stand-alone execution.
 
 	public static void main(String[] args) {
-		new Thread(
-				new Runnable() {
-					public void run() {
-						new ScreenMagnifier().action();
-					}
-				}).start();
+		new Thread(() -> new ScreenMagnifier().action()).start();
 	}
 
 
@@ -128,20 +121,10 @@ class Magnifier extends JFrame implements ComponentListener {
 
 		close = new JButton("Close");
 		close.setToolTipText(CLOSE_TOOLTIP_TEXT);
-		close.addActionListener(
-				new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						setVisible(false);
-					}
-				});
+		close.addActionListener(e -> setVisible(false));
 		settings = new JButton("Settings...");
 		settings.setToolTipText(SETTINGS_TOOLTIP_TEXT);
-		settings.addActionListener(
-				new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						new SettingsDialog(frame);
-					}
-				});
+		settings.addActionListener(e -> new SettingsDialog(frame));
 		magnifierImage = new MagnifierImage(this);
 		view = new JScrollPane(magnifierImage);
 		viewSize = new Dimension(200,150);
@@ -149,13 +132,10 @@ class Magnifier extends JFrame implements ComponentListener {
 
 		capture = new JButton("Capture");
 		capture.setToolTipText(CAPTURE_TOOLTIP_TEXT);
-		captureActionListener = 
-				new ActionListener() {
-			public void actionPerformed (ActionEvent e) {          
-				magnifierImage.setImage(MagnifierImage.getScaledImage(captureScreenSection(captureLocationSize.getCaptureRectangle(getFrameRectangle())), scale)); 
-				alignment.setScrollBarValue(view.getHorizontalScrollBar()); 
-				alignment.setScrollBarValue(view.getVerticalScrollBar());
-			}
+		captureActionListener = e -> {          
+			magnifierImage.setImage(MagnifierImage.getScaledImage(captureScreenSection(captureLocationSize.getCaptureRectangle(getFrameRectangle())), scale)); 
+			alignment.setScrollBarValue(view.getHorizontalScrollBar()); 
+			alignment.setScrollBarValue(view.getVerticalScrollBar());
 		};
 		JLabel scaleLabel = new JLabel("Scale: ");
 		SpinnerModel scaleModel = new SpinnerNumberModel(SCALE_DEFAULT, SCALE_MINIMUM, SCALE_MAXIMUM, SCALE_INCREMENT);
@@ -164,16 +144,13 @@ class Magnifier extends JFrame implements ComponentListener {
 		JSpinner.NumberEditor scaleEditor = new JSpinner.NumberEditor(scaleAdjuster, "0.0");
 		scaleEditor.getTextField().setEditable(false);
 		scaleAdjuster.setEditor(scaleEditor);
-		scaleAdjuster.addChangeListener(
-				new ChangeListener() {
-					public void stateChanged(ChangeEvent e) {
-						scale =  ((Double) scaleAdjuster.getValue()).doubleValue();
-						if (captureRescale.isEnabled()) {
-							captureActionListener.actionPerformed(
-									new ActionEvent(frame, 0, "capture")); 
-						}
-					}
-				});
+		scaleAdjuster.addChangeListener(e -> {
+			scale =  ((Double) scaleAdjuster.getValue()).doubleValue();
+			if (captureRescale.isEnabled()) {
+				captureActionListener.actionPerformed(
+						new ActionEvent(frame, 0, "capture")); 
+			}
+		});
 		JPanel scalePanel = new JPanel();
 		scalePanel.add(scaleLabel);
 		scalePanel.add(scaleAdjuster);
@@ -264,12 +241,7 @@ class Magnifier extends JFrame implements ComponentListener {
 						"Contact Pete Sanderson at psanderson@otterbein.edu with\n"+
 						"questions or comments.\n";
 		JButton help = new JButton("Help");
-		help.addActionListener(
-				new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						JOptionPane.showMessageDialog(frame, helpContent);
-					}
-				});		
+		help.addActionListener(e -> JOptionPane.showMessageDialog(frame, helpContent));		
 		return help;  
 	} 
 
@@ -394,11 +366,8 @@ class SettingsDialog extends JDialog {
 	JButton applyButton, cancelButton;
 	JCheckBox captureResizeCheckBox, captureMoveCheckBox, captureRescaleCheckBox;
 	JRadioButton captureDisplayCenteredButton, captureDisplayUpperleftButton;
-	Integer[] scribblerLineWidthSettings = { new Integer(1), new Integer(2), 
-			new Integer(3), new Integer(4),
-			new Integer(5), new Integer(6),
-			new Integer(7), new Integer(8) };
-	JComboBox lineWidthSetting;
+	Integer[] scribblerLineWidthSettings = { 1, 2, 3, 4, 5, 6, 7, 8 };
+	JComboBox<Integer> lineWidthSetting;
 	JButton lineColorSetting;
 	JCheckBox dialogCentered; // Whether or not dialog appears centered over the magnfier frame.
 	JDialog dialog;
@@ -441,35 +410,27 @@ class SettingsDialog extends JDialog {
 		applyButton = new JButton("Apply and Close");
 		applyButton.setToolTipText(SETTINGS_APPLY_TOOLTIP_TEXT);
 		// Action to perform when APply button pressed: commit GUI settings to the models
-		applyButton.addActionListener(
-				new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						// commit settings
-						((Magnifier)getOwner()).captureResize.setEnabled(captureResizeCheckBox.isSelected());
-						((Magnifier)getOwner()).captureMove.setEnabled(captureMoveCheckBox.isSelected());
-						((Magnifier)getOwner()).captureRescale.setEnabled(captureRescaleCheckBox.isSelected());
-						((Magnifier)getOwner()).captureDisplayCenter.setEnabled(captureDisplayCenteredButton.isSelected());
-						((Magnifier)getOwner()).captureDisplayUpperleft.setEnabled(captureDisplayUpperleftButton.isSelected());
-						((Magnifier)getOwner()).dialogDisplayCenter.setEnabled(dialogCentered.isSelected());
-						if (captureDisplayCenteredButton.isSelected()) {
-							((Magnifier)getOwner()).alignment = new CaptureDisplayCentered();
-						} 
-						else if (captureDisplayUpperleftButton.isSelected()) {
-							((Magnifier)getOwner()).alignment = new CaptureDisplayUpperleft();
-						}
-						((Magnifier)getOwner()).scribblerSettings.setLineWidth(scribblerLineWidthSettings[lineWidthSetting.getSelectedIndex()].intValue());            
-						((Magnifier)getOwner()).scribblerSettings.setLineColor(lineColorSetting.getBackground());
-						dialog.dispose();
-					}
-				});
+		applyButton.addActionListener(e -> {
+			// commit settings
+			((Magnifier)getOwner()).captureResize.setEnabled(captureResizeCheckBox.isSelected());
+			((Magnifier)getOwner()).captureMove.setEnabled(captureMoveCheckBox.isSelected());
+			((Magnifier)getOwner()).captureRescale.setEnabled(captureRescaleCheckBox.isSelected());
+			((Magnifier)getOwner()).captureDisplayCenter.setEnabled(captureDisplayCenteredButton.isSelected());
+			((Magnifier)getOwner()).captureDisplayUpperleft.setEnabled(captureDisplayUpperleftButton.isSelected());
+			((Magnifier)getOwner()).dialogDisplayCenter.setEnabled(dialogCentered.isSelected());
+			if (captureDisplayCenteredButton.isSelected()) {
+				((Magnifier)getOwner()).alignment = new CaptureDisplayCentered();
+			} 
+			else if (captureDisplayUpperleftButton.isSelected()) {
+				((Magnifier)getOwner()).alignment = new CaptureDisplayUpperleft();
+			}
+			((Magnifier)getOwner()).scribblerSettings.setLineWidth(scribblerLineWidthSettings[lineWidthSetting.getSelectedIndex()].intValue());            
+			((Magnifier)getOwner()).scribblerSettings.setLineColor(lineColorSetting.getBackground());
+			dialog.dispose();
+		});
 		cancelButton = new JButton("Cancel");
 		cancelButton.setToolTipText(SETTINGS_CANCEL_TOOLTIP_TEXT);
-		cancelButton.addActionListener(
-				new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						dialog.dispose();
-					}
-				});
+		cancelButton.addActionListener(e -> dialog.dispose());
 		// By default, display dialog centered over the Magnifier's frame.  This
 		// can be changed however to display at upper left corner of screen.  Why
 		// would you want to change this?  So you can use the settings dialog to
@@ -536,19 +497,16 @@ class SettingsDialog extends JDialog {
 		scribblerSettings.setBorder(new TitledBorder("Scribbler"));
 		Box scribblerSettingsBox = Box.createHorizontalBox();
 		scribblerSettings.add(scribblerSettingsBox);
-		lineWidthSetting = new JComboBox(scribblerLineWidthSettings);
+		lineWidthSetting = new JComboBox<>(scribblerLineWidthSettings);
 		lineWidthSetting.setToolTipText(SETTINGS_SCRIBBLER_WIDTH_TOOLTIP_TEXT);
 		lineWidthSetting.setSelectedIndex(((Magnifier)getOwner()).scribblerSettings.getLineWidth()-1);
 		lineColorSetting = new JButton("   ");
 		lineColorSetting.setToolTipText(SETTINGS_SCRIBBLER_COLOR_TOOLTIP_TEXT);
 		lineColorSetting.setBackground(((Magnifier)getOwner()).scribblerSettings.getLineColor());
-		lineColorSetting.addActionListener(
-				new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						Color newColor = JColorChooser.showDialog(dialog, "Scribbler line color", lineColorSetting.getBackground());
-						lineColorSetting.setBackground(newColor);
-					}
-				});
+		lineColorSetting.addActionListener(e -> {
+			Color newColor = JColorChooser.showDialog(dialog, "Scribbler line color", lineColorSetting.getBackground());
+			lineColorSetting.setBackground(newColor);
+		});
 		scribblerLineColorSetting = lineColorSetting.getBackground();
 		JPanel settingsColumn = new JPanel(new GridLayout(2,1,5,5));
 		settingsColumn.add(lineWidthSetting);
@@ -624,6 +582,7 @@ class MagnifierImage extends JPanel  {
 
 		addMouseListener (
 				new MouseAdapter ()  {
+					@Override
 					public void mousePressed (MouseEvent e)  {
 						scribbler.moveto(e.getX(), e.getY()); // Move to click position
 					}
@@ -632,6 +591,7 @@ class MagnifierImage extends JPanel  {
 		// Install a mouse motion listener to draw the scribble.
 		addMouseMotionListener (
 				new MouseMotionAdapter () {
+					@Override
 					public void mouseDragged (MouseEvent e) {
 						scribbler.lineto(e.getX(), e.getY(),(Graphics2D)getGraphics()); 
 					}
@@ -654,7 +614,7 @@ class MagnifierImage extends JPanel  {
 	 *
 	 *  @param g graphics context
 	 */
-
+	@Override
 	public void paintComponent (Graphics g) {
 		// Repaint the component's background.
 		super.paintComponent (g);
