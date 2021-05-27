@@ -2,17 +2,12 @@ package mars.tools;
 
 import mars.*;
 import mars.util.*;
-import mars.assembler.*;
-import mars.mips.instructions.*;
 import mars.mips.hardware.*;
 import java.util.*;
-import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.border.*;
-import javax.swing.text.html.*;
 
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -362,30 +357,28 @@ public class FloatRepresentation extends AbstractMarsToolAndApplication {
 		for (int i = 0; i < fpRegisters.length; i++) {
 			registerList[i + 1] = fpRegisters[i].getName();
 		}
-		JComboBox registerSelect = new JComboBox(registerList);
+		JComboBox<String> registerSelect = new JComboBox<>(registerList);
 		registerSelect.setSelectedIndex(0); // No register attached
 		registerSelect.setToolTipText("Attach to selected FP register");
-		registerSelect.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JComboBox cb = (JComboBox) e.getSource();
-				int selectedIndex = cb.getSelectedIndex();
+		registerSelect.addActionListener(e -> {
+			JComboBox<String> cb = (JComboBox<String>) e.getSource();
+			int selectedIndex = cb.getSelectedIndex();
+			if (isObserving()) {
+				deleteAsObserver();
+			}
+			if (selectedIndex == 0) {
+				attachedRegister = null;
+				updateDisplays(new FlavorsOfFloat());
+				instructions.setText("The program is not attached to any MIPS floating point registers.");
+			}
+			else {
+				attachedRegister = fpRegisters[selectedIndex - 1];
+				updateDisplays(new FlavorsOfFloat().buildOneFromInt(attachedRegister.getValue()));
 				if (isObserving()) {
-					deleteAsObserver();
+					addAsObserver();
 				}
-				if (selectedIndex == 0) {
-					attachedRegister = null;
-					updateDisplays(new FlavorsOfFloat());
-					instructions.setText("The program is not attached to any MIPS floating point registers.");
-				}
-				else {
-					attachedRegister = fpRegisters[selectedIndex - 1];
-					updateDisplays(new FlavorsOfFloat().buildOneFromInt(attachedRegister.getValue()));
-					if (isObserving()) {
-						addAsObserver();
-					}
-					instructions.setText("The program and register " + attachedRegister.getName()
-							+ " will respond to each other when MIPS program connected or running.");
-				}
+				instructions.setText("The program and register " + attachedRegister.getName()
+						+ " will respond to each other when MIPS program connected or running.");
 			}
 		});
 
