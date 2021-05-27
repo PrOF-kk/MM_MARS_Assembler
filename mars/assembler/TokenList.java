@@ -170,10 +170,8 @@ public class TokenList implements Cloneable {
 	 * @return the cloned list.
 	 */
 	// Clones are a bit tricky. super.clone() handles primitives (e.g. values)
-	// correctly
-	// but the ArrayList itself has to be cloned separately -- otherwise clone will
-	// have
-	// alias to original token list!!
+	// correctly but the ArrayList itself has to be cloned separately -- otherwise
+	// clone will have alias to original token list!!
 	@Override
 	public Object clone() {
 		try {
