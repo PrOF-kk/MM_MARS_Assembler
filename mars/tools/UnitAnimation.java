@@ -1,23 +1,15 @@
 package mars.tools;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.MouseInfo;
-import java.awt.PointerInfo;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.font.FontRenderContext;
-import java.awt.font.TextLayout;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -26,9 +18,9 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -124,7 +116,7 @@ implements ActionListener {
 			this.active = false;
 			this.isText = isText;
 			this.color = new Color(0,153,0);
-			if(isMovingXaxis == true){
+			if(isMovingXaxis){
 				if( init < end)
 					direction = movingLeft;
 				else 
@@ -138,7 +130,7 @@ implements ActionListener {
 					direction = movingDownside;
 			}
 			String[] list =  listTargetVertex.split("#");
-			targetVertex = new ArrayList<Integer>();
+			targetVertex = new ArrayList<>();
 			for(int i = 0; i < list.length; i++){
 				targetVertex.add(Integer.parseInt(list[i]));
 				//	System.out.println("Adding " + i + " " +  Integer.parseInt(list[i])+ " in target");
@@ -240,13 +232,13 @@ implements ActionListener {
 		// load and initialise the images
 		initImages();
 
-		vertexList = new ArrayList<Vertex>();
+		vertexList = new ArrayList<>();
 		counter = 0;
 		justStarted = true;
 		instructionCode = instructionBinary;
 
 		//declaration of labels definition.
-		registerEquivalenceTable = new  HashMap<String, String>();
+		registerEquivalenceTable = new  HashMap<>();
 
 		countRegLabel = 400;
 		countALULabel = 380;
@@ -274,13 +266,15 @@ implements ActionListener {
 	}
 
 	//import the list of opcodes of mips set of instructions
-	public void importXmlStringData(String xmlName, HashMap table, String elementTree, String tagId, String tagData){
+	public void importXmlStringData(String xmlName, HashMap<String, String> table, String elementTree, String tagId, String tagData){
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(false);
 		DocumentBuilder docBuilder;
 		try {
 			//System.out.println();
 			docBuilder = dbf.newDocumentBuilder();
+			dbf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // Avoid security issues
+			dbf.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
 			Document doc = docBuilder.parse(getClass().getResource(xmlName).toString());
 			Element root = doc.getDocumentElement();
 			Element equivalenceItem;
@@ -307,6 +301,8 @@ implements ActionListener {
 		DocumentBuilder docBuilder;
 		try {
 			docBuilder = dbf.newDocumentBuilder();
+			dbf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // Avoid security issues
+			dbf.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
 			Document doc = docBuilder.parse(getClass().getResource(xmlName).toString());
 			Element root = doc.getDocumentElement();
 			Element datapath_mapItem;
@@ -359,15 +355,15 @@ implements ActionListener {
 				}
 			}
 			//loading matrix of control of vertex.
-			outputGraph = new Vector<Vector<Vertex>>();
-			vertexTraversed = new ArrayList<Vertex>();
+			outputGraph = new Vector<>();
+			vertexTraversed = new ArrayList<>();
 			int size = vertexList.size();
 			Vertex vertex;
 			ArrayList<Integer> targetList;
 			for(int i = 0; i < vertexList.size(); i++){
 				vertex = vertexList.get(i);
 				targetList = vertex.getTargetVertex();
-				Vector<Vertex> vertexOfTargets = new Vector<Vertex>();
+				Vector<Vertex> vertexOfTargets = new Vector<>();
 				for(int k = 0; k < targetList.size(); k++){
 					vertexOfTargets.add(vertexList.get(targetList.get(k)));
 				}
@@ -393,6 +389,8 @@ implements ActionListener {
 		DocumentBuilder docBuilder;
 		try {
 			docBuilder = dbf.newDocumentBuilder();
+			dbf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // Avoid security issues
+			dbf.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
 			Document doc = docBuilder.parse(getClass().getResource(xmlName).toString());
 			Element root = doc.getDocumentElement();
 			Element datapath_mapItem;
@@ -463,15 +461,15 @@ implements ActionListener {
 				}
 			}
 			//loading matrix of control of vertex.
-			outputGraph = new Vector<Vector<Vertex>>();
-			vertexTraversed = new ArrayList<Vertex>();
+			outputGraph = new Vector<>();
+			vertexTraversed = new ArrayList<>();
 			int size = vertexList.size();
 			Vertex vertex;
 			ArrayList<Integer> targetList;
 			for(int i = 0; i < vertexList.size(); i++){
 				vertex = vertexList.get(i);
 				targetList = vertex.getTargetVertex();
-				Vector<Vertex> vertexOfTargets = new Vector<Vertex>();
+				Vector<Vertex> vertexOfTargets = new Vector<>();
 				for(int k = 0; k < targetList.size(); k++){
 					vertexOfTargets.add(vertexList.get(targetList.get(k)));
 				}
@@ -548,7 +546,7 @@ implements ActionListener {
 		repaint(); 
 	} 
 
-
+	@Override
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -587,7 +585,7 @@ implements ActionListener {
 		track =  new int[size];
 		for(int i = 0; i < size; i++)
 			track[i] = v.getInit()+i;
-		if(v.isActive() == true){
+		if(v.isActive()){
 			v.setFirst_interaction(false);
 			for(int i = 0; i < size; i++){
 				if(track[i] <= v.getCurrent()){
@@ -599,7 +597,7 @@ implements ActionListener {
 				v.setActive(false);
 			v.setCurrent(v.getCurrent()+1);	
 		}
-		else if(v.isFirst_interaction() == false){
+		else if(!v.isFirst_interaction()){
 			for(int i = 0; i < size ; i++){
 				g2d.setColor(v.getColor());  
 				g2d.fillRect(track[i],v.getOppositeAxis(),  3, 3);
@@ -620,7 +618,7 @@ implements ActionListener {
 		for(int i = 0; i < size; i++)
 			track[i] = v.getInit()-i; 
 
-		if(v.isActive() == true){
+		if(v.isActive()){
 			v.setFirst_interaction(false);
 			for(int i = 0; i < size; i++){
 				if(track[i] >= v.getCurrent()){
@@ -633,7 +631,7 @@ implements ActionListener {
 
 			v.setCurrent(v.getCurrent()-1);	
 		}
-		else if(v.isFirst_interaction() == false){
+		else if(!v.isFirst_interaction()){
 			for(int i = 0; i < size ; i++){
 				g2d.setColor(v.getColor());  
 				g2d.fillRect(track[i],v.getOppositeAxis(),  3, 3);
@@ -661,7 +659,7 @@ implements ActionListener {
 				track[i] = v.getInit()+i;
 		}
 
-		if(v.isActive() == true){
+		if(v.isActive()){
 			v.setFirst_interaction(false);
 			for(int i = 0; i < size; i++){
 				if(track[i] >= v.getCurrent()){
@@ -674,7 +672,7 @@ implements ActionListener {
 			v.setCurrent(v.getCurrent()-1);	
 
 		}
-		else if(v.isFirst_interaction() == false){
+		else if(!v.isFirst_interaction()){
 			for(int i = 0; i < size; i++){
 				g2d.setColor(v.getColor());  
 				g2d.fillRect(v.getOppositeAxis(), track[i], 3, 3);
@@ -694,7 +692,7 @@ implements ActionListener {
 		for(int i = 0; i < size; i++)
 			track[i] = v.getInit()+i;
 
-		if(v.isActive() == true){
+		if(v.isActive()){
 			v.setFirst_interaction(false);
 			for(int i = 0; i < size; i++){
 				if(track[i] <= v.getCurrent()){
@@ -707,7 +705,7 @@ implements ActionListener {
 				v.setActive(false);
 			v.setCurrent(v.getCurrent()+1);
 		}
-		else if(v.isFirst_interaction() == false){
+		else if(!v.isFirst_interaction()){
 			for(int i = 0; i < size; i++){
 				g2d.setColor(v.getColor());  
 				g2d.fillRect(v.getOppositeAxis(), track[i], 3, 3);
@@ -736,10 +734,10 @@ implements ActionListener {
 		Vertex vert;
 		for(int i = 0; i < vertexTraversed.size(); i++){
 			vert = vertexTraversed.get(i);
-			if(vert.isMovingXaxis == true){
-				if(vert.getDirection() == vert.movingLeft){
+			if(vert.isMovingXaxis){
+				if(vert.getDirection() == Vertex.movingLeft){
 					printTrackLtoR(vert);
-					if(vert.isActive() == false){
+					if(!vert.isActive()){
 						int j = vert.getTargetVertex().size();
 						Vertex tempVertex;
 						for(int k = 0; k < j; k++){
@@ -749,7 +747,7 @@ implements ActionListener {
 								if(tempVertex.getNumIndex() == vertexTraversed.get(m).getNumIndex())
 									hasThisVertex = true;
 							}
-							if(hasThisVertex == false){
+							if(!hasThisVertex){
 								outputGraph.get(vert.getNumIndex()).get(k).setActive(true);
 								vertexTraversed.add( outputGraph.get(vert.getNumIndex()).get(k));
 							} 
@@ -758,7 +756,7 @@ implements ActionListener {
 				}
 				else{
 					printTrackRtoL(vert);
-					if(vert.isActive() == false){
+					if(!vert.isActive()){
 						int j = vert.getTargetVertex().size();
 						Vertex tempVertex;
 						for(int k = 0; k < j; k++){
@@ -768,7 +766,7 @@ implements ActionListener {
 								if(tempVertex.getNumIndex() == vertexTraversed.get(m).getNumIndex())
 									hasThisVertex = true;
 							}
-							if(hasThisVertex == false){
+							if(!hasThisVertex){
 								outputGraph.get(vert.getNumIndex()).get(k).setActive(true);
 								vertexTraversed.add( outputGraph.get(vert.getNumIndex()).get(k));
 							} 
@@ -777,13 +775,11 @@ implements ActionListener {
 				}
 			} //end of condition of X axis
 			else{
-				if(vert.getDirection() == vert.movingDownside){
-					if(vert.isText == true)
-						;
-					else
+				if(vert.getDirection() == Vertex.movingDownside){
+					if(!vert.isText)
 						printTrackDtoU(vert);
 
-					if(vert.isActive() == false){
+					if(!vert.isActive()){
 						int j = vert.getTargetVertex().size();
 						Vertex tempVertex;
 						for(int k = 0; k < j; k++){
@@ -793,7 +789,7 @@ implements ActionListener {
 								if(tempVertex.getNumIndex() == vertexTraversed.get(m).getNumIndex())
 									hasThisVertex = true;
 							}
-							if(hasThisVertex == false){
+							if(!hasThisVertex){
 								outputGraph.get(vert.getNumIndex()).get(k).setActive(true);
 								vertexTraversed.add( outputGraph.get(vert.getNumIndex()).get(k));
 							} 
@@ -803,7 +799,7 @@ implements ActionListener {
 				}
 				else{
 					printTrackUtoD(vert);
-					if(vert.isActive() == false){
+					if(!vert.isActive()){
 						int j = vert.getTargetVertex().size();
 						Vertex tempVertex;
 						for(int k = 0; k < j; k++){
@@ -813,7 +809,7 @@ implements ActionListener {
 								if(tempVertex.getNumIndex() == vertexTraversed.get(m).getNumIndex())
 									hasThisVertex = true;
 							}
-							if(hasThisVertex == false){
+							if(!hasThisVertex){
 								outputGraph.get(vert.getNumIndex()).get(k).setActive(true);
 								vertexTraversed.add( outputGraph.get(vert.getNumIndex()).get(k));
 							} 
