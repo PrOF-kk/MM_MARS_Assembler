@@ -73,13 +73,13 @@ public class BHTSimGUI extends JPanel {
 	private JTextField m_tfIndex;
 
 	/** combo box for selecting the number of BHT entries */
-	private JComboBox m_cbBHTentries;
+	private JComboBox<Integer> m_cbBHTentries;
 	
 	/** combo box for selecting the history size */
-	private JComboBox m_cbBHThistory;
+	private JComboBox<Integer> m_cbBHThistory;
 	
 	/** combo box for selecting the initial value */
-	private JComboBox m_cbBHTinitVal;
+	private JComboBox<String> m_cbBHTinitVal;
 	
 	/** the table representing the BHT */
 	private JTable m_tabBHT;
@@ -88,19 +88,19 @@ public class BHTSimGUI extends JPanel {
 	private JTextArea m_taLog;
 	
 	/** constant for the color that highlights the current BHT entry */
-	public final static Color COLOR_PREPREDICTION = Color.yellow;
-	
+	public static final Color COLOR_PREPREDICTION = Color.yellow;
+
 	/** constant for the color to signal a correct prediction */
-	public final static Color COLOR_PREDICTION_CORRECT = Color.green;
-	
+	public static final Color COLOR_PREDICTION_CORRECT = Color.green;
+
 	/** constant for the color to signal a misprediction */
-	public final static Color COLOR_PREDICTION_INCORRECT = Color.red;
-	
+	public static final Color COLOR_PREDICTION_INCORRECT = Color.red;
+
 	/** constant for the String representing "take the branch" */
-	public final static String BHT_TAKE_BRANCH = "TAKE";
-	
+	public static final String BHT_TAKE_BRANCH = "TAKE";
+
 	/** constant for the String representing "do not take the branch" */
-	public final static String BHT_DO_NOT_TAKE_BRANCH = "NOT TAKE";
+	public static final String BHT_DO_NOT_TAKE_BRANCH = "NOT TAKE";
 	
 	
 	
@@ -135,6 +135,7 @@ public class BHTSimGUI extends JPanel {
 		DefaultTableCellRenderer doubleRenderer = new DefaultTableCellRenderer() {
 		    private DecimalFormat formatter = new DecimalFormat("##0.00");
 		    
+		    @Override
 			public void setValue(Object value) {				        			   
 			    setText((value == null) ? "" : formatter.format(value));
 			}	
@@ -216,22 +217,22 @@ public class BHTSimGUI extends JPanel {
 	private JPanel buildConfigPanel() {
 		JPanel panel = new JPanel();
 		
-		Vector sizes = new Vector();
-		sizes.add(new Integer(8));
-		sizes.add(new Integer(16));
-		sizes.add(new Integer(32));
+		Vector<Integer> sizes = new Vector<>();
+		sizes.add(8);
+		sizes.add(16);
+		sizes.add(32);
 		
-		Vector bits = new Vector();
-		bits.add(new Integer(1));
-		bits.add(new Integer(2));
+		Vector<Integer> bits = new Vector<>();
+		bits.add(1);
+		bits.add(2);
 		
-		Vector initVals = new Vector();		
+		Vector<String> initVals = new Vector<>();		
 		initVals.add(BHTSimGUI.BHT_DO_NOT_TAKE_BRANCH);
 		initVals.add(BHTSimGUI.BHT_TAKE_BRANCH);		
 		
-		m_cbBHTentries = new JComboBox(sizes);
-		m_cbBHThistory = new JComboBox(bits);
-		m_cbBHTinitVal = new JComboBox(initVals);
+		m_cbBHTentries = new JComboBox<>(sizes);
+		m_cbBHThistory = new JComboBox<>(bits);
+		m_cbBHTinitVal = new JComboBox<>(initVals);
 		
 		panel.add(new JLabel("# of BHT entries"));
 		panel.add(m_cbBHTentries);
@@ -268,7 +269,7 @@ public class BHTSimGUI extends JPanel {
 	 * 
 	 * @return the reference to the combo box
 	 */
-	public JComboBox getCbBHTentries() {
+	public JComboBox<Integer> getCbBHTentries() {
 		return m_cbBHTentries;
 	}
 	
@@ -278,7 +279,7 @@ public class BHTSimGUI extends JPanel {
 	 * 
 	 * @return the reference to the combo box
 	 */	
-	public JComboBox getCbBHThistory() {
+	public JComboBox<Integer> getCbBHThistory() {
 		return m_cbBHThistory;
 	}
 
@@ -288,7 +289,7 @@ public class BHTSimGUI extends JPanel {
 	 * 
 	 * @return the reference to the combo box
 	 */		
-	public JComboBox getCbBHTinitVal() {
+	public JComboBox<String> getCbBHTinitVal() {
 		return m_cbBHTinitVal;
 	}
 	
