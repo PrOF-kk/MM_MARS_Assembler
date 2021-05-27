@@ -1,9 +1,7 @@
 package mars.tools;
 import mars.*;
 import mars.mips.hardware.*;
-import mars.venus.*;
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 /**
@@ -44,34 +42,19 @@ public class MarsBot implements Observer, MarsTool
 			graphicArea = new MarsBotDisplay(GRAPHIC_WIDTH, GRAPHIC_HEIGHT);
 			JPanel buttonPanel = new JPanel();
 			JButton clearButton = new JButton("Clear");
-			clearButton.addActionListener(
-					new ActionListener()
-					{
-						public void actionPerformed(ActionEvent e)
-						{
-							graphicArea.clear();
-							MarsBotLeaveTrack = false; // true --> leave track when moving, false --> do not ...
-							MarsBotXPosition = 0; // X pixel position of MarsBot
-							MarsBotYPosition = 0; // Y pixel position of MarsBot
-							MarsBotMoving = false; // true --> MarsBot is moving, false --> MarsBot not moving
+			clearButton.addActionListener(e -> {
+				graphicArea.clear();
+				MarsBotLeaveTrack = false; // true --> leave track when moving, false --> do not ...
+				MarsBotXPosition = 0; // X pixel position of MarsBot
+				MarsBotYPosition = 0; // Y pixel position of MarsBot
+				MarsBotMoving = false; // true --> MarsBot is moving, false --> MarsBot not moving
 
-							trackIndex = 0;
+				trackIndex = 0;
 
-						}
-
-					});
+			});
 			buttonPanel.add(clearButton);
 			JButton closeButton = new JButton("Close");
-			closeButton.addActionListener(
-					new ActionListener()
-					{
-						public void actionPerformed(ActionEvent e)
-						{
-							frame.setVisible(false);
-
-						}
-
-					});
+			closeButton.addActionListener(e -> frame.setVisible(false));
 			buttonPanel.add(closeButton);
 			panel.add(graphicArea, BorderLayout.CENTER);
 			panel.add(buttonPanel, BorderLayout.SOUTH);
@@ -186,6 +169,7 @@ public class MarsBot implements Observer, MarsTool
 			repaint();
 		}
 
+		@Override
 		public void paintComponent(Graphics g)
 		{
 			long tempN;
@@ -295,7 +279,7 @@ public class MarsBot implements Observer, MarsTool
 
 					// If we HAD NOT been leaving a track, but we should NOW leave
 					// a track, put start point into array.
-					if (MarsBotLeaveTrack == false && notice.getValue() == 1)
+					if (!MarsBotLeaveTrack && notice.getValue() == 1)
 					{
 						MarsBotLeaveTrack = true;
 						arrayOfTrack[trackIndex] = new Point((int) MarsBotXPosition, (int) MarsBotYPosition);
@@ -303,19 +287,19 @@ public class MarsBot implements Observer, MarsTool
 					}
 					// If we HAD NOT been leaving a track, and get another directive
 					// to NOT leave a track, do nothing (nothing to do).
-					else if (MarsBotLeaveTrack == false && notice.getValue() == 0)
+					else if (!MarsBotLeaveTrack && notice.getValue() == 0)
 					{
 						// NO ACTION
 					}
 					// If we HAD been leaving a track, and get another directive
 					// to LEAVE a track, do nothing (nothing to do).
-					else if (MarsBotLeaveTrack == true && notice.getValue() == 1)
+					else if (MarsBotLeaveTrack && notice.getValue() == 1)
 					{
 						// NO ACTION
 					}
 					// If we HAD been leaving a track, and get another directive
 					// to NOT leave a track, put end point into array.
-					else if (MarsBotLeaveTrack == true && notice.getValue() == 0)
+					else if (MarsBotLeaveTrack && notice.getValue() == 0)
 					{
 						MarsBotLeaveTrack = false;
 						arrayOfTrack[trackIndex] = new Point((int) MarsBotXPosition, (int) MarsBotYPosition);
