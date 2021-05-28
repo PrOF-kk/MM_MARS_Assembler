@@ -10,9 +10,10 @@ import javax.swing.undo.UndoManager;
 
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import org.fife.ui.rtextarea.SearchContext;
+import org.fife.ui.rtextarea.SearchEngine;
 
 import mars.Globals;
 import mars.venus.EditPane;
@@ -101,9 +102,20 @@ public class RSyntaxBasedTextArea extends RSyntaxTextArea implements MARSTextEdi
 		this.getDocument().addUndoableEditListener(undoableEditListener);
 	}
 
+	/**
+	 * Finds next occurrence of text in a forward search of a string. Search begins
+	 * at the current cursor location, and wraps around when the end of the string
+	 * is reached.
+	 * 
+	 * @param find          the text to locate in the string
+	 * @param caseSensitive true if search is to be case-sensitive, false otherwise
+	 * @return TEXT_FOUND or TEXT_NOT_FOUND, depending on the result.
+	 */
 	@Override
 	public int doFindText(String find, boolean caseSensitive) {
-		return 0;
+		SearchContext context = new SearchContext(find, caseSensitive);
+		context.setSearchWrap(true);
+		return SearchEngine.find(this, context).wasFound() ? TEXT_FOUND : TEXT_NOT_FOUND ;
 	}
 
 	@Override
