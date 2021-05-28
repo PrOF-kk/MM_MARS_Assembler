@@ -4,12 +4,15 @@ import mars.*;
 import mars.venus.editors.MARSTextEditingArea;
 import mars.venus.editors.generic.GenericTextArea;
 import mars.venus.editors.jeditsyntax.JEditBasedTextArea;
+import mars.venus.editors.rsyntax.RSyntaxBasedTextArea;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.Document;
 
 import java.awt.*;
 import javax.swing.undo.*;
+
 import java.util.*;
 import java.io.*;
 
@@ -74,12 +77,18 @@ public class EditPane extends JPanel implements Observer {
 		Globals.getSettings().addObserver(this);
 		this.fileStatus = new FileStatus();
 		lineNumbers = new JLabel();
-
-		if (Globals.getSettings().getBooleanSetting(Settings.GENERIC_TEXT_EDITOR)) {
-			this.sourceCode = new GenericTextArea(this, lineNumbers);
+		
+		if (Globals.getSettings().getBooleanSetting(Settings.RSYNTAX_TESTING)) {
+			this.sourceCode = new RSyntaxBasedTextArea(this,
+					Globals.getSettings().getBooleanSetting(Settings.EDITOR_LINE_NUMBERS_DISPLAYED));
 		}
 		else {
-			this.sourceCode = new JEditBasedTextArea(this, lineNumbers);
+			if (Globals.getSettings().getBooleanSetting(Settings.GENERIC_TEXT_EDITOR)) {
+				this.sourceCode = new GenericTextArea(this, lineNumbers);
+			}
+			else {
+				this.sourceCode = new JEditBasedTextArea(this, lineNumbers);
+			}
 		}
 		// sourceCode is responsible for its own scrolling
 		this.add(this.sourceCode.getOuterComponent(), BorderLayout.CENTER);

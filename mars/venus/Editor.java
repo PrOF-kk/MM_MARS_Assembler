@@ -171,7 +171,14 @@ public class Editor {
 			String titleName = (status == FileStatus.NEW_EDITED || status == FileStatus.NEW_NOT_EDITED) ? name : path;
 			String edited = (status == FileStatus.NEW_EDITED || status == FileStatus.EDITED) ? "*" : " ";
 			mainUI.setTitle(titleName + edited + " - " + mainUIbaseTitle);
-			editTabbedPane.setTitleAt(editTabbedPane.getSelectedIndex(), name + edited);
+			try {
+				//TODO crashes with RSyntaxArea
+				editTabbedPane.setTitleAt(editTabbedPane.getSelectedIndex(), name + edited);
+			}
+			catch (IndexOutOfBoundsException iobe) {
+				// The title doesn't get set, maybe
+				// iobe.printStackTrace(); -> getSelectedIndex returns -1 when it shouldn't
+			}
 		}
 	}
 

@@ -155,6 +155,9 @@ public class Settings extends Observable {
 	 * segment and execute that code.
 	 */
 	public static final int SELF_MODIFYING_CODE_ENABLED = 20;
+	/** Flag to opt-in to use the new RSyntax-based editor. Temporary flag for testing */
+	@Deprecated
+	public static final int RSYNTAX_TESTING = 21;
 
 	// NOTE: key sequence must match up with labels above which are used for array indexes!
 	private static String[] booleanSettingsKeys = {
@@ -162,8 +165,9 @@ public class Settings extends Observable {
 			"LabelWindowVisibility", "DisplayAddressesInHex", "DisplayValuesInHex", "LoadExceptionHandler",
 			"DelayedBranching", "EditorLineNumbersDisplayed", "WarningsAreErrors", "ProgramArguments",
 			"DataSegmentHighlighting", "RegistersHighlighting", "StartAtMain", "EditorCurrentLineHighlighting",
-			"PopupInstructionGuidance", "PopupSyscallInput", "GenericTextEditor", "AutoIndent", "SelfModifyingCode"
-			};
+			"PopupInstructionGuidance", "PopupSyscallInput", "GenericTextEditor", "AutoIndent", "SelfModifyingCode",
+			"RSyntaxTesting"
+	};
 
 	/**
 	 * Last resort default values for boolean settings; will use only if neither the
@@ -176,7 +180,9 @@ public class Settings extends Observable {
 			false, true, true, false,
 			false, true, false, false,
 			true, true, false, true,
-			true, false, false, true, false };
+			true, false, false, true, false,
+			false
+	};
 
 	// STRING SETTINGS. Each array position has associated name.
 	/** Current specified exception handler file (a MIPS assembly source file) */

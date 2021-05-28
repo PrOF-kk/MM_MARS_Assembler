@@ -114,6 +114,7 @@ public class SettingsEditorAction extends GuiAction {
 		private JSlider tabSizeSelector;
 		private JSpinner tabSizeSpinSelector, blinkRateSpinSelector, popupPrefixLengthSpinSelector;
 		private JCheckBox lineHighlightCheck, genericEditorCheck, autoIndentCheck;
+		private JCheckBox rsyntaxTestingCheck;
 		private Caret blinkCaret;
 		private JTextField blinkSample;
 		private ButtonGroup popupGuidanceButtons;
@@ -124,6 +125,7 @@ public class SettingsEditorAction extends GuiAction {
 
 		private int initialEditorTabSize, initialCaretBlinkRate, initialPopupGuidance;
 		private boolean initialLineHighlighting, initialGenericTextEditor, initialAutoIndent;
+		private boolean initialRsyntaxTesting;
 
 		public EditorFontDialog(Frame owner, String title, boolean modality, Font font) {
 			super(owner, title, modality, font);
@@ -188,6 +190,20 @@ public class SettingsEditorAction extends GuiAction {
 					otherSettingsPanel.setVisible(true);
 				}
 			});
+			
+			initialRsyntaxTesting = Globals.getSettings().getBooleanSetting(Settings.RSYNTAX_TESTING);
+			rsyntaxTestingCheck = new JCheckBox("Use RSyntax Editor (BETA, requires restart)", initialRsyntaxTesting);
+			rsyntaxTestingCheck.addItemListener(e -> {
+				// Hide other settings for now
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					syntaxStylePanel.setVisible(false);
+					otherSettingsPanel.setVisible(false);
+				}
+				else {
+					syntaxStylePanel.setVisible(true);
+					otherSettingsPanel.setVisible(true);
+				}
+			});
 
 			controlPanel.add(Box.createHorizontalGlue());
 			controlPanel.add(okButton);
@@ -199,6 +215,7 @@ public class SettingsEditorAction extends GuiAction {
 			controlPanel.add(resetButton);
 			controlPanel.add(Box.createHorizontalGlue());
 			controlPanel.add(genericEditorCheck);
+			controlPanel.add(rsyntaxTestingCheck);
 			controlPanel.add(Box.createHorizontalGlue());
 			return controlPanel;
 		}
@@ -207,6 +224,7 @@ public class SettingsEditorAction extends GuiAction {
 		// abstract in superclass.
 		protected void apply(Font font) {
 			Globals.getSettings().setBooleanSetting(Settings.GENERIC_TEXT_EDITOR, genericEditorCheck.isSelected());
+			Globals.getSettings().setBooleanSetting(Settings.RSYNTAX_TESTING, rsyntaxTestingCheck.isSelected());
 			Globals.getSettings().setBooleanSetting(
 					Settings.EDITOR_CURRENT_LINE_HIGHLIGHTING, lineHighlightCheck.isSelected());
 			Globals.getSettings().setBooleanSetting(Settings.AUTO_INDENT, autoIndentCheck.isSelected());
@@ -243,6 +261,7 @@ public class SettingsEditorAction extends GuiAction {
 			resetOtherSettings();
 			syntaxStylesAction = true;
 			genericEditorCheck.setSelected(initialGenericTextEditor);
+			rsyntaxTestingCheck.setSelected(initialRsyntaxTesting);
 		}
 
 		// Perform reset on miscellaneous editor settings
