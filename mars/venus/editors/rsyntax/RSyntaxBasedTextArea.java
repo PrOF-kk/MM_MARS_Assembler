@@ -103,6 +103,60 @@ public class RSyntaxBasedTextArea extends RSyntaxTextArea implements MARSTextEdi
 	}
 
 	/**
+	 * For initializing the source code when opening an ASM file
+	 * 
+	 * @param code        String containing text
+	 * @param editable true if code is editable else false
+	 */
+	@Override
+	public void setSourceCode(String code, boolean editable) {
+		this.setText(code);
+		this.setEditable(editable);
+		this.setEnabled(editable);
+		this.setCaretPosition(0);
+		if (editable)
+			this.requestFocusInWindow();
+	}
+	
+	/**
+	 * Returns the undo manager for this editing area
+	 * 
+	 * @return the undo manager
+	 */
+	@Override
+	public UndoManager getUndoManager() {
+		return getUndoManager();
+	}
+	
+	/**
+	 * Undo previous edit
+	 */
+	@Override
+	public void undo() {
+		undoLastAction();
+	}
+	
+	/**
+	 * Redo previous edit
+	 */
+	@Override
+	public void redo() {
+		redoLastAction();
+	}
+	
+	/**
+	 * Get rid of any accumulated undoable edits. It is useful to call this method
+	 * after opening a file into the text area. The act of setting its text content
+	 * upon reading the file will generate an undoable edit. Normally you don't want
+	 * a freshly-opened file to appear with its Undo action enabled. But it will
+	 * unless you call this after setting the text.
+	 */
+	@Override
+	public void discardAllUndoableEdits() {
+		discardAllEdits();
+	}
+	
+	/**
 	 * Finds next occurrence of text in a forward search of a string. Search begins
 	 * at the current cursor location, and wraps around when the end of the string
 	 * is reached.
@@ -142,40 +196,6 @@ public class RSyntaxBasedTextArea extends RSyntaxTextArea implements MARSTextEdi
 	}
 
 	/**
-	 * Returns the undo manager for this editing area
-	 * 
-	 * @return the undo manager
-	 */
-	@Override
-	public UndoManager getUndoManager() {
-		return getUndoManager();
-	}
-
-	/**
-	 * Redo previous edit
-	 */
-	@Override
-	public void redo() {
-		redoLastAction();
-	}
-
-	/**
-	 * For initializing the source code when opening an ASM file
-	 * 
-	 * @param code        String containing text
-	 * @param editable true if code is editable else false
-	 */
-	@Override
-	public void setSourceCode(String code, boolean editable) {
-		this.setText(code);
-		this.setEditable(editable);
-		this.setEnabled(editable);
-		this.setCaretPosition(0);
-		if (editable)
-			this.requestFocusInWindow();
-	}
-
-	/**
 	 * Control caret visibility
 	 *
 	 * @param vis true to display caret, false to hide it
@@ -193,26 +213,6 @@ public class RSyntaxBasedTextArea extends RSyntaxTextArea implements MARSTextEdi
 	@Override
 	public void setSelectionVisible(boolean vis) {
 		getCaret().setSelectionVisible(vis);
-	}
-
-	/**
-	 * Undo previous edit
-	 */
-	@Override
-	public void undo() {
-		undoLastAction();
-	}
-
-	/**
-	 * Get rid of any accumulated undoable edits. It is useful to call this method
-	 * after opening a file into the text area. The act of setting its text content
-	 * upon reading the file will generate an undoable edit. Normally you don't want
-	 * a freshly-opened file to appear with its Undo action enabled. But it will
-	 * unless you call this after setting the text.
-	 */
-	@Override
-	public void discardAllUndoableEdits() {
-		discardAllEdits();
 	}
 
 	/**
