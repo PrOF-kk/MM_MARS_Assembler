@@ -209,11 +209,12 @@ public class MIPSTokenMarker extends TokenMarker {
 	 * @param tokenText the source String that matched to the token
 	 * @return ArrayList of PopupHelpItem objects, one per match.
 	 */
+	@Override
 	public ArrayList<PopupHelpItem> getTokenExactMatchHelp(Token token, String tokenText) {
 		ArrayList<PopupHelpItem> matches = null;
 		if (token != null && token.id == Token.KEYWORD1) {
 			ArrayList<Instruction> instrMatches = Globals.instructionSet.matchOperator(tokenText);
-			if (instrMatches.size() > 0) {
+			if (!instrMatches.isEmpty()) {
 				int realMatches = 0;
 				matches = new ArrayList<>();
 				for (int i = 0; i < instrMatches.size(); i++) {
@@ -251,7 +252,7 @@ public class MIPSTokenMarker extends TokenMarker {
 	 *                  parameter
 	 * @return ArrayList of PopupHelpItem objects, one per match.
 	 */
-
+	@Override
 	public ArrayList<PopupHelpItem> getTokenPrefixMatchHelp(String line, Token tokenList, Token token, String tokenText) {
 	
 		// CASE: Unlikely boundary case...
