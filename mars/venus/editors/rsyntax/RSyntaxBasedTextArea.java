@@ -8,8 +8,10 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoManager;
 
+import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import mars.Globals;
@@ -66,7 +68,10 @@ public class RSyntaxBasedTextArea extends RSyntaxTextArea implements MARSTextEdi
 		this.editPane = editPain;
 		this.undoManager = new UndoManager();
 		
-		this.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_ASSEMBLER_X86);
+		// Syntax highlighting
+		AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory)TokenMakerFactory.getDefaultInstance();
+		atmf.putMapping("text/mips", "mars.venus.editors.rsyntax.MIPSTokenMaker");
+		this.setSyntaxEditingStyle("text/mips");
 		
 		this.setFont(Globals.getSettings().getEditorFont());
 		this.setTabSize(Globals.getSettings().getEditorTabSize());
