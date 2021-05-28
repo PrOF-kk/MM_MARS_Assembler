@@ -174,6 +174,7 @@ public class RSyntaxBasedTextArea extends RSyntaxTextArea implements MARSTextEdi
 
 	@Override
 	public void setLineHighlightEnabled(boolean highlight) {
+		setHighlightCurrentLine(highlight);
 	}
 
 	/**
