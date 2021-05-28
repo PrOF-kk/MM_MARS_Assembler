@@ -1,5 +1,6 @@
 package mars.venus.editors.rsyntax;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
 
@@ -78,6 +79,7 @@ public class RSyntaxBasedTextArea extends RSyntaxTextArea implements MARSTextEdi
 		this.setTabSize(Globals.getSettings().getEditorTabSize());
 		this.setMargin(new Insets(0, 3, 3, 3));
 		this.setCaretBlinkRate(Globals.getSettings().getCaretBlinkRate());
+		this.setCurrentLineHighlightColor(new Color(0xE8F2FE)); // Light blue, same as Eclipse
 		
 		editAreaScrollPane = new RTextScrollPane(this);
 		//JScrollPane editAreaScrollPane = new JScrollPane(source);
