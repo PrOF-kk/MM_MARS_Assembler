@@ -8,6 +8,9 @@ import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rsyntaxtextarea.TokenMaker;
 import org.fife.ui.rsyntaxtextarea.TokenMap;
 
+import mars.assembler.Directives;
+import mars.mips.hardware.Register;
+import mars.mips.hardware.RegisterFile;
 import mars.mips.instructions.InstructionSet;
 import mars.venus.editors.jeditsyntax.tokenmarker.MIPSTokenMarker;
 
@@ -53,6 +56,14 @@ public class MIPSTokenMaker extends AbstractTokenMaker implements TokenMaker {
 		InstructionSet iSet = new InstructionSet();
 		iSet.populate();
 		iSet.getInstructionList().forEach(instr -> tokenMap.put(instr.getName(), Token.RESERVED_WORD));
+		
+		Directives.getDirectiveList().forEach(dir -> tokenMap.put(dir.getName(), Token.COMMENT_DOCUMENTATION));
+		
+		// Currently not working...
+		for (Register reg : RegisterFile.getRegisters()) {
+			tokenMap.put(reg.getName(), Token.RESERVED_WORD_2);
+			//System.out.println(reg.getName());
+		}
 		
 		return tokenMap;
 	}
