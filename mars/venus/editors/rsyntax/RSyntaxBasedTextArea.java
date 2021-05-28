@@ -125,7 +125,7 @@ public class RSyntaxBasedTextArea extends RSyntaxTextArea implements MARSTextEdi
 	 */
 	@Override
 	public UndoManager getUndoManager() {
-		return getUndoManager();
+		return undoManager;
 	}
 	
 	/**
