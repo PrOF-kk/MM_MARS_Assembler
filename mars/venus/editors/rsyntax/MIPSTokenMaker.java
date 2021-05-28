@@ -232,8 +232,10 @@ public class MIPSTokenMaker extends AbstractTokenMaker implements TokenMaker {
 							break;
 						
 						case ':':
-							addToken(text, currentTokenStart, i, Token.FUNCTION, newStartOffset + currentTokenStart);
+							addToken(text, currentTokenStart, i, Token.FUNCTION,
+									newStartOffset + currentTokenStart);
 							currentTokenStart = i + 1;
+							currentTokenType = Token.NULL;
 							break;
 
 						default:
