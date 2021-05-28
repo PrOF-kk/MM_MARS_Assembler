@@ -20,7 +20,7 @@ import mars.venus.editors.MARSTextEditingArea;
  * Adapter subclass for RSyntaxTextArea
  *
  * Provides those methods required by the MARSTextEditingArea interface that are
- * not defined by JEditTextArea. This permits JEditTextArea to be used within
+ * not defined by RSyntaxTextArea. This permits RSyntaxTextArea to be used within
  * MARS largely without modification.
  *
  * @author Valerio Colella
