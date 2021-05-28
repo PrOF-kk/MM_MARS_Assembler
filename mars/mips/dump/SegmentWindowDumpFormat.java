@@ -2,6 +2,7 @@ package mars.mips.dump;
 
 import mars.Globals;
 import mars.ProgramStatement;
+import mars.Settings;
 import mars.util.Binary;
 import mars.mips.hardware.*;
 import java.io.*;
@@ -78,17 +79,16 @@ public class SegmentWindowDumpFormat extends AbstractDumpFormat {
 	 */
 	public void dumpMemoryRange(File file, int firstAddress, int lastAddress)
 			throws AddressErrorException, IOException {
+		
+		try (PrintStream out = new PrintStream(new FileOutputStream(file))) {
 
-		PrintStream out = new PrintStream(new FileOutputStream(file));
-
-		boolean hexAddresses = Globals.getSettings().getDisplayAddressesInHex();
-
-		// If address in data segment, print in same format as Data Segment Window
-		if (Memory.inDataSegment(firstAddress)) {
-			boolean hexValues = Globals.getSettings().getDisplayValuesInHex();
-			int offset = 0;
-			String string = "";
-			try {
+			boolean hexAddresses = Globals.getSettings().getBooleanSetting(Settings.DISPLAY_ADDRESSES_IN_HEX);
+			
+			// If address in data segment, print in same format as Data Segment Window
+			if (Memory.inDataSegment(firstAddress)) {
+				boolean hexValues = Globals.getSettings().getBooleanSetting(Settings.DISPLAY_VALUES_IN_HEX);
+				int offset = 0;
+				String string = "";
 				for (int address = firstAddress; address <= lastAddress; address += Memory.WORD_LENGTH_BYTES) {
 					if (offset % 8 == 0) {
 						string = ((hexAddresses)
@@ -108,48 +108,42 @@ public class SegmentWindowDumpFormat extends AbstractDumpFormat {
 						string = "";
 					}
 				}
+				return;
 			}
-			finally {
-				out.close();
-			}
-			return;
-		}
+	
+			if (Memory.inTextSegment(firstAddress)) {
 
-		if (!Memory.inTextSegment(firstAddress)) {
-			return;
-		}
-		// If address in text segment, print in same format as Text Segment Window
-		out.println(" Address    Code        Basic                     Source");
-		//           12345678901234567890123456789012345678901234567890
-		//                    1         2         3         4         5
-		out.println();
-		String string = null;
-		try {
-			for (int address = firstAddress; address <= lastAddress; address += Memory.WORD_LENGTH_BYTES) {
-				string = ((hexAddresses)
-						? Binary.intToHexString(address)
-						: Binary.unsignedIntToIntString(address))
-						+ "  ";
-				Integer temp = Globals.memory.getRawWordOrNull(address);
-				if (temp == null)
-					break;
-				string += Binary.intToHexString(temp.intValue()) + "  ";
-				try {
-					ProgramStatement ps = Globals.memory.getStatement(address);
-					string += (ps.getPrintableBasicAssemblyStatement() + "                      ").substring(0, 22);
-					string += (((ps.getSource() == "")
-							? ""
-							: new Integer(ps.getSourceLine()).toString()) + "     ")
-							.substring(0, 5);
-					string += ps.getSource();
+				// If address in text segment, print in same format as Text Segment Window
+				out.println(" Address    Code        Basic                     Source");
+				//           12345678901234567890123456789012345678901234567890
+				//                    1         2         3         4         5
+				out.println();
+				String string = null;
+				for (int address = firstAddress; address <= lastAddress; address += Memory.WORD_LENGTH_BYTES) {
+					string = ((hexAddresses)
+							? Binary.intToHexString(address)
+							: Binary.unsignedIntToIntString(address))
+							+ "  ";
+					Integer temp = Globals.memory.getRawWordOrNull(address);
+					if (temp == null)
+						break;
+					string += Binary.intToHexString(temp.intValue()) + "  ";
+					try {
+						ProgramStatement ps = Globals.memory.getStatement(address);
+						string += (ps.getPrintableBasicAssemblyStatement() + "                      ").substring(0, 22);
+						string += (((ps.getSource().equals(""))
+								? ""
+								: ps.getSourceLine())
+								+ "     ").substring(0, 5);
+						string += ps.getSource();
+					}
+					catch (AddressErrorException aee) {
+						// Already checked that firstAddress is in Text Segment,
+						// this shouldn't happen.
+					}
+					out.println(string);
 				}
-				catch (AddressErrorException aee) {
-				}
-				out.println(string);
 			}
-		}
-		finally {
-			out.close();
 		}
 	}
 
