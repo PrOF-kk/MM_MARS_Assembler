@@ -129,8 +129,7 @@ public class SettingsEditorAction extends GuiAction {
 
 		public EditorFontDialog(Frame owner, String title, boolean modality, Font font) {
 			super(owner, title, modality, font);
-			if (Globals.getSettings().getBooleanSetting(Settings.GENERIC_TEXT_EDITOR)
-					|| Globals.getSettings().getBooleanSetting(Settings.RSYNTAX_TESTING)) {
+			if (Globals.getSettings().getBooleanSetting(Settings.GENERIC_TEXT_EDITOR)) {
 				syntaxStylePanel.setVisible(false);
 				otherSettingsPanel.setVisible(false);
 			}
@@ -194,17 +193,6 @@ public class SettingsEditorAction extends GuiAction {
 			
 			initialRsyntaxTesting = Globals.getSettings().getBooleanSetting(Settings.RSYNTAX_TESTING);
 			rsyntaxTestingCheck = new JCheckBox("Use RSyntax Editor (BETA, requires restart)", initialRsyntaxTesting);
-			rsyntaxTestingCheck.addItemListener(e -> {
-				// Hide other settings for now
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					syntaxStylePanel.setVisible(false);
-					otherSettingsPanel.setVisible(false);
-				}
-				else {
-					syntaxStylePanel.setVisible(true);
-					otherSettingsPanel.setVisible(true);
-				}
-			});
 
 			controlPanel.add(Box.createHorizontalGlue());
 			controlPanel.add(okButton);
