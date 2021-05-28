@@ -29,6 +29,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package mars.venus.editors.jeditsyntax;
 
+import java.util.List;
+
 /**
  *  Handy little class to contain help information for a popupMenu or 
  *  tool tip item.
@@ -39,7 +41,7 @@ public class PopupHelpItem {
 	private String description;
 	private boolean exact;		// from exact match?
 	private int exampleLength;
-	private static final String spaces = "                                        "; // 40 spaces
+	private static final String SPACES = "                                        "; // 40 spaces
 
 	/**
 	 * Create popup help item.  This is created as result of either an exact-match or
@@ -104,10 +106,10 @@ public class PopupHelpItem {
 		String result = null;
 		if (length > this.exampleLength) {
 			int numSpaces = length - this.exampleLength;
-			if (numSpaces > spaces.length()) {
-				numSpaces = spaces.length();
+			if (numSpaces > SPACES.length()) {
+				numSpaces = SPACES.length();
 			}
-			result = this.example + spaces.substring(0,numSpaces);
+			result = this.example + SPACES.substring(0,numSpaces);
 		} 
 		else if (length == this.exampleLength) {
 			result = this.example;
@@ -129,14 +131,12 @@ public class PopupHelpItem {
 
 	// Utility method.  Traverse ArrayList of PopupHelpItem objects
 	// and return String length of longest example.
-	public static int maxExampleLength(java.util.ArrayList matches) {
+	public static int maxExampleLength(List<PopupHelpItem> matches) {
 		int length = 0;
 		if (matches != null) {
 			for (int i=0; i<matches.size(); i++) {
-				Object match = matches.get(i);
-				if (match instanceof PopupHelpItem) {
-					length = Math.max(length, ((PopupHelpItem)match).getExampleLength());
-				}
+				PopupHelpItem match = matches.get(i);
+				length = Math.max(length, match.getExampleLength());
 			}
 		}
 		return length;
