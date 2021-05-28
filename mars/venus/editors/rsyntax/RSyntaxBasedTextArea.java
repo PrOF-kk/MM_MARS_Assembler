@@ -141,11 +141,19 @@ public class RSyntaxBasedTextArea extends RSyntaxTextArea implements MARSTextEdi
 		return SearchEngine.replaceAll(this, context).getCount();
 	}
 
+	/**
+	 * Returns the undo manager for this editing area
+	 * 
+	 * @return the undo manager
+	 */
 	@Override
 	public UndoManager getUndoManager() {
-		return undoManager;
+		return getUndoManager();
 	}
 
+	/**
+	 * Redo previous edit
+	 */
 	@Override
 	public void redo() {
 		redoLastAction();
@@ -187,16 +195,31 @@ public class RSyntaxBasedTextArea extends RSyntaxTextArea implements MARSTextEdi
 		getCaret().setSelectionVisible(vis);
 	}
 
+	/**
+	 * Undo previous edit
+	 */
 	@Override
 	public void undo() {
 		undoLastAction();
 	}
 
+	/**
+	 * Get rid of any accumulated undoable edits. It is useful to call this method
+	 * after opening a file into the text area. The act of setting its text content
+	 * upon reading the file will generate an undoable edit. Normally you don't want
+	 * a freshly-opened file to appear with its Undo action enabled. But it will
+	 * unless you call this after setting the text.
+	 */
 	@Override
 	public void discardAllUndoableEdits() {
 		discardAllEdits();
 	}
 
+	/**
+	 * Use for highlighting the line currently being edited.
+	 * 
+	 * @param highlight true to enable line highlighting, false to disable.
+	 */
 	@Override
 	public void setLineHighlightEnabled(boolean highlight) {
 		setHighlightCurrentLine(highlight);
