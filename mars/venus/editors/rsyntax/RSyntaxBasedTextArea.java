@@ -123,9 +123,22 @@ public class RSyntaxBasedTextArea extends RSyntaxTextArea implements MARSTextEdi
 		return 0;
 	}
 
+	/**
+	 * Finds and replaces <B>ALL</B> occurrences of text in a string in a forward search.
+	 * All replacements are bundled into one CompoundEdit, so one Undo operation
+	 * will undo all of them.
+	 * 
+	 * @param find          the text to locate in the string
+	 * @param replace       the text to replace the find text with - if the find
+	 *                      text exists
+	 * @param caseSensitive true for case sensitive. false to ignore case
+	 * @return the number of occurrences that were matched and replaced.
+	 */
 	@Override
 	public int doReplaceAll(String find, String replace, boolean caseSensitive) {
-		return 0;
+		SearchContext context = new SearchContext(find, caseSensitive);
+		context.setReplaceWith(replace);
+		return SearchEngine.replaceAll(this, context).getCount();
 	}
 
 	@Override
