@@ -37,6 +37,10 @@ public class RSyntaxBasedTextArea extends RSyntaxTextArea implements MARSTextEdi
 	
 	public RSyntaxBasedTextArea(EditPane editPain, boolean lineNumbers) {
 		super();
+		
+		this.editPane = editPain;
+		this.undoManager = new UndoManager();
+		
 		this.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_ASSEMBLER_X86);
 		
 		this.setFont(Globals.getSettings().getEditorFont());
@@ -50,8 +54,7 @@ public class RSyntaxBasedTextArea extends RSyntaxTextArea implements MARSTextEdi
 		editAreaScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		editAreaScrollPane.setLineNumbersEnabled(lineNumbers);
 		
-		this.editPane = editPain;
-		this.undoManager = new UndoManager();
+		this.getCaret().addChangeListener(e -> editPane.displayCaretPosition(getCaretPosition()));
 		
 		// Needed to support unlimited undo/redo capability
 		undoableEditListener = e -> {
