@@ -39,7 +39,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 public class EditFindReplaceAction extends GuiAction {
 	private static String searchString = "";
-	private static boolean caseSensitivity = true;
+	private static boolean caseSensitivity = false;
 	private static final String DIALOG_TITLE = "Find and Replace";
 	JDialog findReplaceDialog;
 
