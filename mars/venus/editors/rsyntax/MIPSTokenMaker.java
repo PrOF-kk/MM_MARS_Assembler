@@ -278,23 +278,14 @@ public class MIPSTokenMaker extends AbstractTokenMaker implements TokenMaker {
 
 		} // End of for (int i=offset; i<end; i++).
 
-		switch (currentTokenType) {
-
-			// Remember what token type to begin the next line with.
-			case Token.LITERAL_STRING_DOUBLE_QUOTE:
-				addToken(text, currentTokenStart, end - 1, currentTokenType, newStartOffset + currentTokenStart);
-				break;
-
+		if (currentTokenType == Token.NULL) {
 			// Do nothing if everything was okay.
-			case Token.NULL:
-				addNullToken();
-				break;
-
-			// All other token types don't continue to the next line...
-			default:
-				addToken(text, currentTokenStart, end - 1, currentTokenType, newStartOffset + currentTokenStart);
-				addNullToken();
-
+			addNullToken();
+		}
+		else {
+			// In MIPS no token types continue to the next line...
+			addToken(text, currentTokenStart, end - 1, currentTokenType, newStartOffset + currentTokenStart);
+			addNullToken();
 		}
 
 		// Return the first token in our linked list.
