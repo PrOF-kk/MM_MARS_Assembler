@@ -9,8 +9,6 @@ import org.fife.ui.rsyntaxtextarea.TokenMaker;
 import org.fife.ui.rsyntaxtextarea.TokenMap;
 
 import mars.assembler.Directives;
-import mars.mips.hardware.Register;
-import mars.mips.hardware.RegisterFile;
 import mars.mips.instructions.InstructionSet;
 import mars.venus.editors.jeditsyntax.tokenmarker.MIPSTokenMarker;
 
@@ -48,6 +46,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 public class MIPSTokenMaker extends AbstractTokenMaker implements TokenMaker {
 	
+	/**
+	 * Returns the words to highlight for MIPS programs.
+	 *
+	 * @return A <code>TokenMap</code> containing the words to highlight for
+	 *         MIPS programs.
+	 * @see org.fife.ui.rsyntaxtextarea.AbstractTokenMaker#getWordsToHighlight
+	 */
 	@Override
 	public TokenMap getWordsToHighlight() {
 		
@@ -59,13 +64,20 @@ public class MIPSTokenMaker extends AbstractTokenMaker implements TokenMaker {
 		
 		Directives.getDirectiveList().forEach(dir -> tokenMap.put(dir.getName(), Token.COMMENT_DOCUMENTATION));
 		
-		// Currently not working...
-		for (Register reg : RegisterFile.getRegisters()) {
-			tokenMap.put(reg.getName(), Token.RESERVED_WORD_2);
-			//System.out.println(reg.getName());
-		}
-		
 		return tokenMap;
+	}
+
+	@Override
+	public void addToken(Segment segment, int start, int end, int tokenType, int startOffset) {
+		// This assumes all keywords, etc. were parsed as "identifiers."
+		// Registers are highlighted on their own
+		if (tokenType == Token.IDENTIFIER) {
+			int value = wordsToHighlight.get(segment, start, end);
+			if (value != -1) {
+				tokenType = value;
+			}
+		}
+		super.addToken(segment, start, end, tokenType, startOffset);
 	}
 	
 	/**
@@ -76,18 +88,6 @@ public class MIPSTokenMaker extends AbstractTokenMaker implements TokenMaker {
 	 * @param startOffset    The offset at which the line of tokens begins.
 	 * @return A linked list of tokens representing <code>text</code>.
 	 */
-	@Override
-	public void addToken(Segment segment, int start, int end, int tokenType, int startOffset) {
-		// This assumes all keywords, etc. were parsed as "identifiers."
-		if (tokenType == Token.IDENTIFIER) {
-			int value = wordsToHighlight.get(segment, start, end);
-			if (value != -1) {
-				tokenType = value;
-			}
-		}
-		super.addToken(segment, start, end, tokenType, startOffset);
-	}
-	
 	@Override
 	public Token getTokenList(Segment text, int initialTokenType, int startOffset) {
 		resetTokenList();
@@ -130,6 +130,11 @@ public class MIPSTokenMaker extends AbstractTokenMaker implements TokenMaker {
 						case '#':
 							currentTokenType = Token.COMMENT_EOL;
 							break;
+						
+						case '$':
+						case '%':
+							currentTokenType = Token.VARIABLE;
+							break;
 
 						default:
 							if (RSyntaxUtilities.isDigit(c)) {
@@ -169,6 +174,11 @@ public class MIPSTokenMaker extends AbstractTokenMaker implements TokenMaker {
 									newStartOffset + currentTokenStart);
 							currentTokenStart = i;
 							currentTokenType = Token.COMMENT_EOL;
+							break;
+						
+						case '$':
+						case '%':
+							currentTokenType = Token.VARIABLE;
 							break;
 
 						default: // Add the whitespace token and start anew.
@@ -211,6 +221,14 @@ public class MIPSTokenMaker extends AbstractTokenMaker implements TokenMaker {
 									newStartOffset + currentTokenStart);
 							currentTokenStart = i;
 							currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
+							break;
+							
+						case '$':
+						case '%':
+							addToken(text, currentTokenStart, i - 1, Token.IDENTIFIER,
+									newStartOffset + currentTokenStart);
+							currentTokenStart = i;
+							currentTokenType = Token.VARIABLE;
 							break;
 
 						default:
@@ -273,6 +291,16 @@ public class MIPSTokenMaker extends AbstractTokenMaker implements TokenMaker {
 						currentTokenType = Token.NULL;
 					}
 					break;
+				
+				case Token.VARIABLE:
+					if (!RSyntaxUtilities.isLetterOrDigit(c)) {
+						addToken(text, currentTokenStart, i-1, currentTokenType, newStartOffset + currentTokenStart);
+						// Last char after the register might be a parenthesis or
+						// a comma, reevaluate it
+						i--;
+						currentTokenType = Token.NULL;
+					}
+					
 
 			} // End of switch (currentTokenType).
 
