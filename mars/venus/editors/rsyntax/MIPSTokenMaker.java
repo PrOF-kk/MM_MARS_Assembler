@@ -230,6 +230,11 @@ public class MIPSTokenMaker extends AbstractTokenMaker implements TokenMaker {
 							currentTokenStart = i;
 							currentTokenType = Token.VARIABLE;
 							break;
+						
+						case ':':
+							addToken(text, currentTokenStart, i, Token.FUNCTION, newStartOffset + currentTokenStart);
+							currentTokenStart = i + 1;
+							break;
 
 						default:
 							if (RSyntaxUtilities.isLetterOrDigit(c) || c == '/' || c == '_') {
