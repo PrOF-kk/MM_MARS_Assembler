@@ -117,6 +117,8 @@ public class EditFindReplaceAction extends GuiAction {
 				findInputField.setText(searchString);
 				findInputField.selectAll();
 			}
+			// Perform find on Enter
+			findInputField.addActionListener(e -> performFind());
 			
 			replaceInputField = new JTextField(30);
 			JPanel inputPanel = new JPanel();
