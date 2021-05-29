@@ -2420,8 +2420,10 @@ public class JEditTextArea extends JComponent
 
 
 	////////////////////////////////////////////////////////////////////////////////////
-	// Compose and display syntax-sensitive help. Typically invoked upon typing a key.
-	// Results in popup menu.  Is not used for creating tool tips.
+	/**
+	 * Compose and display syntax-sensitive help. Typically invoked upon typing a key.
+	 * Results in popup menu. Is not used for creating tool tips. 
+	 */
 	private void applySyntaxSensitiveHelp() {
 		if (!mars.Globals.getSettings().getBooleanSetting(mars.Settings.POPUP_INSTRUCTION_GUIDANCE)) {
 			return;
@@ -2488,8 +2490,10 @@ public class JEditTextArea extends JComponent
 	}
 
 
-	// Carries out the instruction/directive completion when popup menu
-	// item is selected. 
+	/**
+	 * Carries out the instruction/directive completion when popup menu
+	 * item is selected.
+	 */
 	private class PopupHelpActionListener implements ActionListener {
 		private String tokenText, text;
 
@@ -2538,9 +2542,11 @@ public class JEditTextArea extends JComponent
 
 
 	////////////////////////////////////////////////////////////////////////////////////
-	// Called after processing a Key Pressed event. Will make popup menu disappear if
-	// Enter or Escape keys pressed.  Will update if Backspace or Delete pressed.
-	// Not really concerned with modifiers here.
+	/**
+	 * Called after processing a Key Pressed event. Will make popup menu disappear if
+	 * Enter or Escape keys pressed. Will update if Backspace or Delete pressed.
+	 * Not really concerned with modifiers here.
+	 */
 	private void checkPopupMenu(KeyEvent evt) {
 		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE || evt.getKeyCode() == KeyEvent.VK_DELETE)
 			applySyntaxSensitiveHelp();
@@ -2551,8 +2557,10 @@ public class JEditTextArea extends JComponent
 
 
 	////////////////////////////////////////////////////////////////////////////////////
-	// Called before processing Key Pressed event. If popup menu is visible, will process
-	// tab and enter keys to select from the menu, and arrow keys to traverse the menu.
+	/**
+	 * Called before processing Key Pressed event. If popup menu is visible, will process
+	 * tab and enter keys to select from the menu, and arrow keys to traverse the menu.
+	 */
 	private boolean checkPopupCompletion(KeyEvent evt) {
 		if ((evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) && popupMenu != null
 				&& popupMenu.isVisible() && popupMenu.getComponentCount() > 0) {
