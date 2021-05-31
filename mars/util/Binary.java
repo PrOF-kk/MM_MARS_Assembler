@@ -69,7 +69,6 @@ public class Binary {
 	 * @param value The int value to convert.
 	 * @return String consisting of '1' and '0' characters corresponding to the requested binary sequence.
 	 */
-
 	public static String intToBinaryString(int value) {
 		return intToBinaryString(value, 32);
 	}
@@ -81,7 +80,6 @@ public class Binary {
 	 * @param length The number of bit positions, starting at least significant, to process.
 	 * @return String consisting of '1' and '0' characters corresponding to the requested binary sequence.
 	 */
-
 	public static String longToBinaryString(long value, int length) {
 		char[] result = new char[length];
 		int index = length - 1;
@@ -99,7 +97,6 @@ public class Binary {
 	 * @param value The long value to convert.
 	 * @return String consisting of '1' and '0' characters corresponding to the requested binary sequence.
 	 */
-
 	public static String longToBinaryString(long value) {
 		return longToBinaryString(value, 64);
 	}
@@ -112,7 +109,6 @@ public class Binary {
 	 * @param value The String value to convert.
 	 * @return int whose binary value corresponds to decoded String.
 	 */
-
 	public static int binaryStringToInt(String value) {
 		int result = value.charAt(0) - 48;
 		for (int i = 1; i < value.length(); i++) {
@@ -129,7 +125,6 @@ public class Binary {
 	 * @param value The String value to convert.
 	 * @return long whose binary value corresponds to decoded String.
 	 */
-
 	public static long binaryStringToLong(String value) {
 		long result = value.charAt(0) - 48L;
 		for (int i = 1; i < value.length(); i++) {
@@ -159,8 +154,9 @@ public class Binary {
 			pow = 1;
 			rep = 0;
 			while (rep < 4 && position >= 0) {
-				if (value.charAt(position) == '1')
+				if (value.charAt(position) == '1') {
 					result = result + pow;
+				}
 				pow *= 2;
 				position--;
 				rep++;
@@ -257,13 +253,15 @@ public class Binary {
 	 * If string length > 4, returns '0'.
 	 */
 	public static char binaryStringToHexDigit(String value) {
-		if (value.length() > 4)
+		if (value.length() > 4) {
 			return '0';
+		}
 		int result = 0;
 		int pow = 1;
 		for (int i = value.length() - 1; i >= 0; i--) {
-			if (value.charAt(i) == '1')
+			if (value.charAt(i) == '1') {
 				result = result + pow;
+			}
 			pow *= 2;
 		}
 		return chars[result];
@@ -281,8 +279,9 @@ public class Binary {
 		String leadingZero = "0";
 		String leadingX = "0x";
 		String t = Integer.toHexString(d);
-		while (t.length() < 8)
+		while (t.length() < 8) {
 			t = leadingZero.concat(t);
+		}
 
 		t = leadingX.concat(t);
 		return t;
@@ -305,8 +304,9 @@ public class Binary {
 		if (t.length() > 4) {
 			t = t.substring(t.length() - 4, t.length());
 		}
-		while (t.length() < 4)
+		while (t.length() < 4) {
 			t = leadingZero.concat(t);
+		}
 
 		t = leadingX.concat(t);
 		return t;
@@ -467,78 +467,79 @@ public class Binary {
 	}
 
 	/**
-	*  Returns int representing the bit values of the high order 32 bits of given
-	*  64 bit long value.
-	*   @param longValue The long value from which to extract bits.
-	*   @return int containing high order 32 bits of argument
-	*/
-
+	 *  Returns int representing the bit values of the high order 32 bits of given
+	 *  64 bit long value.
+	 *   @param longValue The long value from which to extract bits.
+	 *   @return int containing high order 32 bits of argument
+	 */
 	public static int highOrderLongToInt(long longValue) {
 		return (int) (longValue >> 32); // high order 32 bits
 	}
 
 	/**
-	*  Returns int representing the bit values of the low order 32 bits of given
-	*  64 bit long value.
-	*   @param longValue The long value from which to extract bits.
-	*   @return int containing low order 32 bits of argument
-	*/
+	 * Returns int representing the bit values of the low order 32 bits of given 64
+	 * bit long value.
+	 * 
+	 * @param longValue The long value from which to extract bits.
+	 * @return int containing low order 32 bits of argument
+	 */
 	public static int lowOrderLongToInt(long longValue) {
 		return (int) (longValue << 32 >> 32); // low order 32 bits
 	}
 
 	/**
-	*  Returns long (64 bit integer) combining the bit values of two given 32 bit
-	*  integer values.
-	*   @param highOrder Integer to form the high-order 32 bits of result.
-	*   @param lowOrder Integer to form the high-order 32 bits of result.
-	*   @return long containing concatenated 32 bit int values.
-	*/
+	 * Returns long (64 bit integer) combining the bit values of two given 32 bit
+	 * integer values.
+	 * 
+	 * @param highOrder Integer to form the high-order 32 bits of result.
+	 * @param lowOrder  Integer to form the high-order 32 bits of result.
+	 * @return long containing concatenated 32 bit int values.
+	 */
 	public static long twoIntsToLong(int highOrder, int lowOrder) {
 		return (((long) highOrder) << 32) | (((long) lowOrder) & 0xFFFFFFFFL);
 	}
 
 	/**
-	  *  Returns the bit value of the given bit position of the given int value.
-	  *   @param value The value to read the bit from.
-	  *   @param bit bit position in range 0 (least significant) to 31 (most)
-	  *   @return 0 if the bit position contains 0, and 1 otherwise.
-	  */
-
+	 * Returns the bit value of the given bit position of the given int value.
+	 * 
+	 * @param value The value to read the bit from.
+	 * @param bit   bit position in range 0 (least significant) to 31 (most)
+	 * @return 0 if the bit position contains 0, and 1 otherwise.
+	 */
 	public static int bitValue(int value, int bit) {
 		return 1 & (value >> bit);
 	}
 
 	/**
-	  *  Returns the bit value of the given bit position of the given long value.
-	  *   @param value The value to read the bit from.
-	  *   @param bit bit position in range 0 (least significant) to 63 (most)
-	  *   @return 0 if the bit position contains 0, and 1 otherwise.
-	  */
-
+	 * Returns the bit value of the given bit position of the given long value.
+	 * 
+	 * @param value The value to read the bit from.
+	 * @param bit   bit position in range 0 (least significant) to 63 (most)
+	 * @return 0 if the bit position contains 0, and 1 otherwise.
+	 */
 	public static int bitValue(long value, int bit) {
 
 		return (int) (1L & (value >> bit));
 	}
 
 	/**
-	*  Sets the specified bit of the specified value to 1, and returns the result.
-	*   @param value The value in which the bit is to be set.
-	*   @param bit bit position in range 0 (least significant) to 31 (most)
-	*   @return value possibly modified with given bit set to 1.
-	*/
-
+	 * Sets the specified bit of the specified value to 1, and returns the result.
+	 * 
+	 * @param value The value in which the bit is to be set.
+	 * @param bit   bit position in range 0 (least significant) to 31 (most)
+	 * @return value possibly modified with given bit set to 1.
+	 */
 	public static int setBit(int value, int bit) {
 		return value | (1 << bit);
 	}
 
 	/**
-	*  Sets the specified bit of the specified value to 0, and returns the result.
-	*   @param value The value in which the bit is to be set.
-	*   @param bit bit position in range 0 (least significant) to 31 (most)
-	*   @return value possibly modified with given bit set to 0.
-	*/
-
+	 * Sets the specified bit of the specified value to 0, and returns the result.
+	 * 
+	 * @param value The value in which the bit is to be set.
+	 * @param bit   bit position in range 0 (least significant) to 31 (most)
+	 * @return value possibly modified with given bit set to 0.
+	 */
 	public static int clearBit(int value, int bit) {
 		return value & ~(1 << bit);
 	}
@@ -546,25 +547,25 @@ public class Binary {
 	// setByte and getByte added by DPS on 12 July 2006
 
 	/**
-	*  Sets the specified byte of the specified value to the low order 8 bits of 
-	*  specified replacement value, and returns the result.
-	*   @param value The value in which the byte is to be set.
-	*   @param bite byte position in range 0 (least significant) to 3 (most)
-	*   @param replace value to place into that byte position - use low order 8 bits
-	*   @return value modified value.
-	*/
-
+	 * Sets the specified byte of the specified value to the low order 8 bits of
+	 * specified replacement value, and returns the result.
+	 * 
+	 * @param value   The value in which the byte is to be set.
+	 * @param bite    byte position in range 0 (least significant) to 3 (most)
+	 * @param replace value to place into that byte position - use low order 8 bits
+	 * @return value modified value.
+	 */
 	public static int setByte(int value, int bite, int replace) {
 		return value & ~(0xFF << (bite << 3)) | ((replace & 0xFF) << (bite << 3));
 	}
 
 	/**
-	*  Gets the specified byte of the specified value.
-	*   @param value The value in which the byte is to be retrieved.
-	*   @param bite byte position in range 0 (least significant) to 3 (most)
-	*   @return zero-extended byte value in low order byte.
-	*/
-
+	 * Gets the specified byte of the specified value.
+	 * 
+	 * @param value The value in which the byte is to be retrieved.
+	 * @param bite  byte position in range 0 (least significant) to 3 (most)
+	 * @return zero-extended byte value in low order byte.
+	 */
 	public static int getByte(int value, int bite) {
 		return value << ((3 - bite) << 3) >>> 24;
 	}
@@ -601,11 +602,12 @@ public class Binary {
 			}
 
 			if ((v.charAt(0) == '-') && // sign is optional but if present can only be -
-					(v.charAt(1) == '0') && (Character.toUpperCase(v.charAt(1)) == 'X'))
+					(v.charAt(1) == '0') && (Character.toUpperCase(v.charAt(1)) == 'X')) {
 				return true; // Form is Sign 0x.... and the entire string is parseable as a number
-
-			else if ((v.charAt(0) == '0') && (Character.toUpperCase(v.charAt(1)) == 'X'))
+			}
+			else if ((v.charAt(0) == '0') && (Character.toUpperCase(v.charAt(1)) == 'X')) {
 				return true; // Form is 0x.... and the entire string is parseable as a number
+			}
 
 		}
 		catch (StringIndexOutOfBoundsException e) {
@@ -617,30 +619,31 @@ public class Binary {
 
 	// KENV 1/4/05
 	/**
-	* Parsing method to see if a string represents an octal number.
-	*  As per http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Integer.html#decode(java.lang.String),
-	*  a string represents an octal number if the string is in the forms:
-	*      Signopt 0 OctalDigits
-	*
-	* @param v String containing numeric digits (could be decimal, octal, or hex)
-	*
-	* @return Returns <code>true</code> if string represents an octal number, else returns <code>false</code>.
-	*/
+	 * Parsing method to see if a string represents an octal number.
+	 *  As per http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Integer.html#decode(java.lang.String),
+	 *  a string represents an octal number if the string is in the forms:
+	 *      Signopt 0 OctalDigits
+	 *
+	 * @param v String containing numeric digits (could be decimal, octal, or hex)
+	 *
+	 * @return Returns <code>true</code> if string represents an octal number, else returns <code>false</code>.
+	 */
 	public static boolean isOctal(String v) {
 		// Don't mistake "0" or a string that starts "0x" for an octal string
 		try {
 			// we don't care what value Binary.stringToInt(v) returns, just whether it threw exception
 			Binary.stringToInt(v);
 
-			if (isHex(v))
+			if (isHex(v)) {
 				return false; // String starts with "0" but continues "0x", so not octal
-
+			}
 			if ((v.charAt(0) == '-') && // sign is optional but if present can only be -
-					(v.charAt(1) == '0') && (v.length() > 1)) // Has to have more digits than the leading zero
+					(v.charAt(1) == '0') && (v.length() > 1)) {// Has to have more digits than the leading zero
 				return true; // Form is Sign 0.... and the entire string is parseable as a number
-
-			else if ((v.charAt(0) == '0') && (v.length() > 1)) // Has to have more digits than the leading zero
+			}
+			else if ((v.charAt(0) == '0') && (v.length() > 1)) {// Has to have more digits than the leading zero
 				return true; // Form is 0.... and the entire string is parseable as a number
+			}
 
 		}
 		catch (StringIndexOutOfBoundsException | NumberFormatException e) {
