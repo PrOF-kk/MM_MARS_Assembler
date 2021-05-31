@@ -64,6 +64,7 @@ public class HelpHelpAction extends GuiAction {
 	/**
 	 * Displays tabs with categories of information
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		JTabbedPane tabbedPane = new JTabbedPane();
 		tabbedPane.addTab("MIPS", createMipsHelpInfoPanel());
@@ -376,8 +377,9 @@ public class HelpHelpAction extends GuiAction {
 
 		public void hyperlinkUpdate(HyperlinkEvent e) {
 			
-			if (e.getEventType() != HyperlinkEvent.EventType.ACTIVATED)
+			if (e.getEventType() != HyperlinkEvent.EventType.ACTIVATED) {
 				return;
+			}
 			
 			JEditorPane pane = (JEditorPane) e.getSource();
 			if (e instanceof HTMLFrameHyperlinkEvent) {
@@ -393,27 +395,25 @@ public class HelpHelpAction extends GuiAction {
 				try {
 					webpagePane = new JEditorPane(e.getURL());
 				}
-				catch (Throwable t) {
+				catch (IOException ioe) {
 					webpagePane = new JEditorPane("text/html", cannotDisplayMessage);
 				}
-				webpagePane.addHyperlinkListener(new HyperlinkListener() {
-					public void hyperlinkUpdate(HyperlinkEvent e) {
-						if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-							JEditorPane pane = (JEditorPane) e.getSource();
-							if (e instanceof HTMLFrameHyperlinkEvent) {
-								HTMLFrameHyperlinkEvent evt = (HTMLFrameHyperlinkEvent) e;
-								HTMLDocument doc = (HTMLDocument) pane.getDocument();
-								doc.processHTMLFrameHyperlinkEvent(evt);
+				webpagePane.addHyperlinkListener(e1 -> {
+					if (e1.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+						JEditorPane pane1 = (JEditorPane) e1.getSource();
+						if (e1 instanceof HTMLFrameHyperlinkEvent) {
+							HTMLFrameHyperlinkEvent evt = (HTMLFrameHyperlinkEvent) e1;
+							HTMLDocument doc = (HTMLDocument) pane1.getDocument();
+							doc.processHTMLFrameHyperlinkEvent(evt);
+						}
+						else {
+							try {
+								pane1.setPage(e1.getURL());
 							}
-							else {
-								try {
-									pane.setPage(e.getURL());
-								}
-								catch (Throwable t) {
-									pane.setText(cannotDisplayMessage);
-								}
-								webpageURL.setText(e.getURL().toString());
+							catch (IOException ioe) {
+								pane1.setText(cannotDisplayMessage);
 							}
+							webpageURL.setText(e1.getURL().toString());
 						}
 					}
 				});
@@ -434,11 +434,9 @@ public class HelpHelpAction extends GuiAction {
 				webpageDisplay.add(URLPanel, BorderLayout.NORTH);
 				webpageDisplay.add(webpageScrollPane);
 				JButton closeButton = new JButton("Close");
-				closeButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						webpageDisplay.setVisible(false);
-						webpageDisplay.dispose();
-					}
+				closeButton.addActionListener(e1 -> {
+					webpageDisplay.setVisible(false);
+					webpageDisplay.dispose();
 				});
 				JPanel closePanel = new JPanel();
 				closePanel.setLayout(new BoxLayout(closePanel, BoxLayout.LINE_AXIS));
