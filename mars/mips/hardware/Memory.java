@@ -1147,10 +1147,7 @@ public class Memory extends Observable {
 	 */
 	@Override
 	public void deleteObserver(Observer obs) {
-		Iterator<MemoryObservable> it = observables.iterator();
-		while (it.hasNext()) {
-			it.next().deleteObserver(obs);
-		}
+		observables.forEach(mo -> mo.deleteObserver(obs));
 	}
 
 	/**
@@ -1235,10 +1232,7 @@ public class Memory extends Observable {
 	// want ability to observe.
 	private void notifyAnyObservers(int type, int address, int length, int value) {
 		if ((Globals.program != null || Globals.getGui() == null) && !this.observables.isEmpty()) {
-			Iterator<MemoryObservable> it = this.observables.iterator();
-			MemoryObservable mo;
-			while (it.hasNext()) {
-				mo = it.next();
+			for (MemoryObservable mo : this.observables) {
 				if (mo.match(address)) {
 					mo.notifyObserver(new MemoryAccessNotice(type, address, length, value));
 				}
