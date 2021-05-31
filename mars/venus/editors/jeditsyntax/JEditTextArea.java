@@ -60,8 +60,8 @@ public class JEditTextArea extends JComponent
 	 * them left of the horizontal scroll bar. In jEdit, the status
 	 * bar is added this way.
 	 */
-	public static String LEFT_OF_SCROLLBAR = "los";
-	public static Color POPUP_HELP_TEXT_COLOR = Color.BLACK;  // DPS 11-July-2014
+	public static final String LEFT_OF_SCROLLBAR = "los";
+	public static final Color POPUP_HELP_TEXT_COLOR = Color.BLACK;  // DPS 11-July-2014
 
 	// Number of text lines moved for each click of the vertical scrollbar buttons.
 	private static final int VERTICAL_SCROLLBAR_UNIT_INCREMENT_IN_LINES = 1;
@@ -1632,8 +1632,11 @@ public class JEditTextArea extends JComponent
 	 */
 	public int clampToDocument(int location) {
 		int len = getDocumentLength();
-		// if loc < 0 return 0, if loc > len return len, else return loc
-		return (location < 0 ? 0 : (location > len ? len : location));
+
+		if (location < 0) {
+			return 0;
+		}
+		return location > len ? len : location;
 	}
 	
 	/**
@@ -1645,13 +1648,18 @@ public class JEditTextArea extends JComponent
 	public int clampToLine(int location, int line) {
 		int lineStart = getLineStartOffset(line);
 		int lineEnd = getLineEndOffset(line);
-		return (location < lineStart ? lineStart : (location > lineEnd ? lineEnd : location));
+		
+		if (location < lineStart) {
+			return lineStart;
+		}
+		return location > lineEnd ? lineEnd : location;
 	}
 
 	/**
 	 * Called by the AWT when this component is removed from it's parent.
 	 * This stops clears the currently focused component.
 	 */
+	@Override
 	public void removeNotify()
 	{
 		super.removeNotify();
@@ -1664,10 +1672,12 @@ public class JEditTextArea extends JComponent
 	 * This is slightly faster than using a KeyListener
 	 * because some Swing overhead is avoided.
 	 */
+	@Override
 	public void processKeyEvent(KeyEvent evt)
 	{ 
-		if(inputHandler == null)
+		if(inputHandler == null) {
 			return;
+		}
 		switch(evt.getID())
 		{
 			case KeyEvent.KEY_TYPED:
@@ -1686,9 +1696,9 @@ public class JEditTextArea extends JComponent
 	}
 
 	// protected members
-	protected static String CENTER = "center";
-	protected static String RIGHT = "right";
-	protected static String BOTTOM = "bottom";
+	protected static final String CENTER = "center";
+	protected static final String RIGHT = "right";
+	protected static final String BOTTOM = "bottom";
 
 	protected static JEditTextArea focusedComponent;
 	protected static Timer caretTimer;
@@ -1962,21 +1972,20 @@ public class JEditTextArea extends JComponent
 			// If this is not done, mousePressed events accumulate
 			// and the result is that scrolling doesn't stop after
 			// the mouse is released
-			SwingUtilities.invokeLater(
-					new Runnable() {
-						public void run()
-						{
-							if(evt.getAdjustable() == vertical)
-								setFirstLine(vertical.getValue());
-							else
-								setHorizontalOffset(-horizontal.getValue());
-						}
-					});
+			SwingUtilities.invokeLater(() -> {
+				if(evt.getAdjustable() == vertical) {
+					setFirstLine(vertical.getValue());
+				}
+				else {
+					setHorizontalOffset(-horizontal.getValue());
+				}
+			});
 		}
 	}
 
 	class ComponentHandler extends ComponentAdapter
 	{
+		@Override
 		public void componentResized(ComponentEvent evt)
 		{  
 			recalculateVisibleLines();
@@ -2112,6 +2121,7 @@ public class JEditTextArea extends JComponent
 
 	class MouseHandler extends MouseAdapter
 	{
+		@Override
 		public void mousePressed(MouseEvent evt)
 		{
 			requestFocus();
@@ -2255,16 +2265,19 @@ public class JEditTextArea extends JComponent
 			this.end = end;
 		}
 
+		@Override
 		public boolean isSignificant()
 		{
 			return false;
 		}
 
+		@Override
 		public String getPresentationName()
 		{
 			return "caret move";
 		}
 
+		@Override
 		public void undo() throws CannotUndoException
 		{
 			super.undo();
@@ -2272,6 +2285,7 @@ public class JEditTextArea extends JComponent
 			select(start,end);
 		}
 
+		@Override
 		public void redo() throws CannotRedoException
 		{
 			super.redo();
@@ -2279,6 +2293,7 @@ public class JEditTextArea extends JComponent
 			select(start,end);
 		}
 
+		@Override
 		public boolean addEdit(UndoableEdit edit)
 		{
 			if(edit instanceof CaretUndo)
@@ -2550,8 +2565,8 @@ public class JEditTextArea extends JComponent
 	private void checkPopupMenu(KeyEvent evt) {
 		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE || evt.getKeyCode() == KeyEvent.VK_DELETE)
 			applySyntaxSensitiveHelp();
-		if ((evt.getKeyCode() == KeyEvent.VK_ENTER || evt.getKeyCode() == KeyEvent.VK_ESCAPE) && popupMenu != null
-				&& popupMenu.isVisible())
+		if ((evt.getKeyCode() == KeyEvent.VK_ENTER || evt.getKeyCode() == KeyEvent.VK_ESCAPE)
+				&& popupMenu != null && popupMenu.isVisible())
 			popupMenu.setVisible(false);
 	}
 
@@ -2566,13 +2581,15 @@ public class JEditTextArea extends JComponent
 				&& popupMenu.isVisible() && popupMenu.getComponentCount() > 0) {
 			
 			MenuElement[] path = MenuSelectionManager.defaultManager().getSelectedPath();
-			if (path.length < 1 || !(path[path.length - 1] instanceof AbstractButton))
+			if (path.length < 1 || !(path[path.length - 1] instanceof AbstractButton)) {
 				return false;
+			}
 			AbstractButton item = (AbstractButton) path[path.length - 1].getComponent();
 			if (item.isEnabled()) {
 				int index = popupMenu.getComponentIndex(item);
-				if (index < 0)
+				if (index < 0) {
 					return false;
+				}
 				if (evt.getKeyCode() == KeyEvent.VK_UP) {
 					index = (index == 0) ? popupMenu.getComponentCount() - 1 : index - 1;
 				}
@@ -2585,7 +2602,7 @@ public class JEditTextArea extends JComponent
 				// The solution, as shown here, is to use invokeLater.
 				final MenuElement[] newPath = new MenuElement[2];
 				newPath[0] = path[0];
-				newPath[1] = (MenuElement) popupMenu.getComponentAtIndex(index);
+				newPath[1] = (MenuElement) popupMenu.getComponent(index);
 				SwingUtilities.invokeLater(() -> MenuSelectionManager.defaultManager().setSelectedPath(newPath));
 				return true;
 			}
