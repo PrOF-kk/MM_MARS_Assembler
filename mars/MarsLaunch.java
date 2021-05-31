@@ -170,8 +170,9 @@ public class MarsLaunch {
 
 	private void dumpSegments() {
 
-		if (dumpTriples == null)
+		if (dumpTriples == null) {
 			return;
+		}
 
 		for (int i = 0; i < dumpTriples.size(); i++) {
 			String[] triple = dumpTriples.get(i);
@@ -287,8 +288,9 @@ public class MarsLaunch {
 					argsOK = false;
 				}
 				else {
-					if (dumpTriples == null)
+					if (dumpTriples == null) {
 						dumpTriples = new ArrayList<>();
+					}
 					dumpTriples.add(new String[] { args[++i], args[++i], args[++i] });
 					//simulate = false;
 				}
@@ -545,14 +547,17 @@ public class MarsLaunch {
 				public void update(Observable o, Object obj) {
 					if (obj instanceof AccessNotice) {
 						AccessNotice notice = (AccessNotice) obj;
-						if (!notice.accessIsFromMIPS())
+						if (!notice.accessIsFromMIPS()) {
 							return;
-						if (notice.getAccessType() != AccessNotice.READ)
+						}
+						if (notice.getAccessType() != AccessNotice.READ) {
 							return;
+						}
 						MemoryAccessNotice m = (MemoryAccessNotice) notice;
 						int a = m.getAddress();
-						if (a == lastAddress)
+						if (a == lastAddress) {
 							return;
+						}
 						lastAddress = a;
 						instructionCount++;
 					}
@@ -588,8 +593,9 @@ public class MarsLaunch {
 			String reg = regIter.next();
 			if (RegisterFile.getUserRegister(reg) != null) {
 				// integer register
-				if (verbose)
+				if (verbose) {
 					out.print(reg + "\t");
+				}
 				value = RegisterFile.getUserRegister(reg).getValue();
 				out.println(formatIntForDisplay(value));
 			}
@@ -682,8 +688,9 @@ public class MarsLaunch {
 			}
 			int valuesDisplayed = 0;
 			for (int addr = addressStart; addr <= addressEnd; addr += Memory.WORD_LENGTH_BYTES) {
-				if (addr < 0 && addressEnd > 0)
+				if (addr < 0 && addressEnd > 0) {
 					break; // happens only if addressEnd is 0x7ffffffc
+				}
 				if (valuesDisplayed % MEMORY_WORDS_PER_LINE == 0) {
 					out.print((valuesDisplayed > 0) ? "\n" : "");
 					if (verbose) {
