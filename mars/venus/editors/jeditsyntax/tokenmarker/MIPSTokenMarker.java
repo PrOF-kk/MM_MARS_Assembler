@@ -435,9 +435,7 @@ public class MIPSTokenMarker extends TokenMarker {
 		}
 		else {
 			if (!exact) {
-				Iterator<String> mnemonicList = mnemonics.iterator();
-				while (mnemonicList.hasNext()) {
-					String mnemonic = mnemonicList.next();
+				for (String mnemonic : mnemonics) {
 					String info = insts.get(mnemonic);
 					results.add(new PopupHelpItem(tokenText, mnemonic, info, exact));
 				}
