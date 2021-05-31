@@ -5,6 +5,7 @@ import mars.assembler.*;
 import mars.mips.instructions.*;
 import java.util.*;
 import java.io.*;
+import java.net.URL;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -122,15 +123,8 @@ public class HelpHelpAction extends GuiAction {
 		JScrollPane helpScrollPane;
 		JEditorPane helpDisplay;
 		try {
-			InputStream is = this.getClass().getResourceAsStream(Globals.helpPath + filename);
-			BufferedReader in = new BufferedReader(new InputStreamReader(is));
-			String line;
-			StringBuilder text = new StringBuilder();
-			while ((line = in.readLine()) != null) {
-				text.append(line + "\n");
-			}
-			in.close();
-			helpDisplay = new JEditorPane("text/html", text.toString());
+			URL helpUrl = this.getClass().getResource(Globals.helpPath + filename);
+			helpDisplay = new JEditorPane(helpUrl);
 			helpDisplay.setEditable(false);
 			helpDisplay.setCaretPosition(0); // assure top of document displayed
 			helpScrollPane = new JScrollPane(helpDisplay, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -292,11 +286,8 @@ public class HelpHelpAction extends GuiAction {
 	/////////////////////////////////////////////////////////////////////////////
 	private JScrollPane createMipsDirectivesHelpPane() {
 		Vector<String> exampleList = new Vector<>();
-		String blanks = "            "; // 12 blanks
-		Directives direct;
-		Iterator<Directives> it = Directives.getDirectiveList().iterator();
-		while (it.hasNext()) {
-			direct = it.next();
+		final String blanks = "            "; // 12 blanks
+		for (Directives direct : Directives.getDirectiveList()) {
 			exampleList.add(
 					direct.toString() + blanks.substring(0, Math.max(0, blanks.length() - direct.toString().length()))
 							+ direct.getDescription());
@@ -313,11 +304,9 @@ public class HelpHelpAction extends GuiAction {
 	private JScrollPane createMipsInstructionHelpPane(String instructionClassName) {
 		ArrayList<Instruction> instructionList = Globals.instructionSet.getInstructionList();
 		Vector<String> exampleList = new Vector<>(instructionList.size());
-		Iterator<Instruction> it = instructionList.iterator();
-		Instruction instr;
-		String blanks = "                        "; // 24 blanks
-		while (it.hasNext()) {
-			instr = it.next();
+
+		final String blanks = "                        "; // 24 blanks
+		for (Instruction instr : instructionList) {
 			try {
 				if (Class.forName(instructionClassName).isInstance(instr)) {
 					exampleList.add(instr.getExampleFormat()
