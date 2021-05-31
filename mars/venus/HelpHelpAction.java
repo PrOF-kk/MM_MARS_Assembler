@@ -125,7 +125,7 @@ public class HelpHelpAction extends GuiAction {
 			InputStream is = this.getClass().getResourceAsStream(Globals.helpPath + filename);
 			BufferedReader in = new BufferedReader(new InputStreamReader(is));
 			String line;
-			StringBuffer text = new StringBuffer();
+			StringBuilder text = new StringBuilder();
 			while ((line = in.readLine()) != null) {
 				text.append(line + "\n");
 			}
@@ -156,7 +156,7 @@ public class HelpHelpAction extends GuiAction {
 			InputStream is = this.getClass().getResourceAsStream("/MARSlicense.txt");
 			BufferedReader in = new BufferedReader(new InputStreamReader(is));
 			String line;
-			StringBuffer text = new StringBuffer("<pre>");
+			StringBuilder text = new StringBuilder("<pre>");
 			while ((line = in.readLine()) != null) {
 				text.append(line + "\n");
 			}
