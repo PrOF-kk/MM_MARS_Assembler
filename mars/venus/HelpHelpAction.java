@@ -147,16 +147,8 @@ public class HelpHelpAction extends GuiAction {
 		JScrollPane marsCopyrightScrollPane;
 		JEditorPane marsCopyrightDisplay;
 		try {
-			InputStream is = this.getClass().getResourceAsStream("/MARSlicense.txt");
-			BufferedReader in = new BufferedReader(new InputStreamReader(is));
-			String line;
-			StringBuilder text = new StringBuilder("<pre>");
-			while ((line = in.readLine()) != null) {
-				text.append(line + "\n");
-			}
-			in.close();
-			text.append("</pre>");
-			marsCopyrightDisplay = new JEditorPane("text/html", text.toString());
+			URL licenseUrl = this.getClass().getResource("/MARSlicense.txt");
+			marsCopyrightDisplay = new JEditorPane(licenseUrl);
 			marsCopyrightDisplay.setEditable(false);
 			marsCopyrightDisplay.setCaretPosition(0); // assure top of document displayed
 			marsCopyrightScrollPane = new JScrollPane(marsCopyrightDisplay, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
