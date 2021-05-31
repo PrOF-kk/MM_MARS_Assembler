@@ -54,17 +54,16 @@ import mars.mips.hardware.MemoryAccessNotice;
  * @author Ingo Kofler {@literal <ingo.kofler@itec.uni-klu.ac.at>}
  *
  */
-// @SuppressWarnings("serial")
 public class InstructionStatistics extends AbstractMarsToolAndApplication {
 
 	/** name of the tool */
-	private static String NAME    = "Instruction Statistics";
+	private static final String NAME    = "Instruction Statistics";
 
 	/** version and author information of the tool */
-	private static String VERSION = "Version 1.0 (Ingo Kofler)";
+	private static final String VERSION = "Version 1.0 (Ingo Kofler)";
 
 	/** heading of the tool */
-	private static String HEADING = "";
+	private static final String HEADING = "";
 
 
 
@@ -93,20 +92,20 @@ public class InstructionStatistics extends AbstractMarsToolAndApplication {
 	private JTextField m_tfTotalCounter;
 
 	/** array of text field - one for each instruction category */    
-	private JTextField m_tfCounters[];
+	private JTextField[] m_tfCounters;
 
 	/** array of progress pars - one for each instruction category */
-	private JProgressBar m_pbCounters[];
+	private JProgressBar[] m_pbCounters;
 
 
 	/** counter for the total number of instructions processed */
 	private int m_totalCounter = 0;
 
 	/** array of counter variables - one for each instruction category */
-	private int m_counters[] = new int[MAX_CATEGORY];     
+	private int[] m_counters = new int[MAX_CATEGORY];     
 
 	/** names of the instruction categories as array */
-	private String m_categoryLabels[] = { "ALU", "Jump", "Branch", "Memory", "Other" };
+	private String[] m_categoryLabels = { "ALU", "Jump", "Branch", "Memory", "Other" };
 
 
 	// From Felipe Lessa's instruction counter.  Prevent double-counting of instructions 
@@ -203,6 +202,7 @@ public class InstructionStatistics extends AbstractMarsToolAndApplication {
 	 * registers the tool as observer for the text segment of the MIPS program
 	 * 
 	 */
+	@Override
 	protected void addAsObserver() { 
 		addAsObserver(Memory.textBaseAddress, Memory.textLimitAddress);
 	}
@@ -271,6 +271,7 @@ public class InstructionStatistics extends AbstractMarsToolAndApplication {
 	 * @param resource the observed resource
 	 * @param notice signals the type of access (memory, register etc.)
 	 */
+	@Override
 	protected void processMIPSUpdate(Observable resource, AccessNotice notice) {
 
 		if (!notice.accessIsFromMIPS()) 
@@ -314,6 +315,7 @@ public class InstructionStatistics extends AbstractMarsToolAndApplication {
 	 * performs initialization tasks of the counters before the GUI is created.
 	 * 
 	 */
+	@Override
 	protected void initializePreGUI() {
 		m_totalCounter = 0; 
 		lastAddress = -1; // from Felipe Lessa's instruction counter tool
@@ -326,6 +328,7 @@ public class InstructionStatistics extends AbstractMarsToolAndApplication {
 	 * resets the counter values of the tool and updates the display.
 	 * 
 	 */
+	@Override
 	protected void reset() {
 		m_totalCounter = 0; 
 		lastAddress = -1; // from Felipe Lessa's instruction counter tool
@@ -339,6 +342,7 @@ public class InstructionStatistics extends AbstractMarsToolAndApplication {
 	 * updates the text fields and progress bars according to the current counter values.
 	 * 
 	 */
+	@Override
 	protected void updateDisplay() {
 		m_tfTotalCounter.setText(String.valueOf(m_totalCounter));
 
