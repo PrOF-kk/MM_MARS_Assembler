@@ -46,6 +46,7 @@ public class EditUndoAction extends GuiAction {
 	 * Adapted from TextComponentDemo.java in the Java Tutorial
 	 * "Text Component Features"
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		EditPane editPane = mainUI.getMainPane().getEditPane();
 		if (editPane != null) {

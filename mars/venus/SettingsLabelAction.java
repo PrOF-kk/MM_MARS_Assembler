@@ -43,6 +43,7 @@ public class SettingsLabelAction extends GuiAction {
 		super(name, icon, descrip, mnemonic, accel, gui);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		boolean visibility = ((JCheckBoxMenuItem) e.getSource()).isSelected();
 		Globals.getGui().getMainPane().getExecutePane().setLabelWindowVisibility(visibility);

@@ -43,6 +43,7 @@ public class SettingsStartAtMainAction extends GuiAction {
 		super(name, icon, descrip, mnemonic, accel, gui);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		Globals.getSettings().setBooleanSetting(Settings.START_AT_MAIN,
 				((JCheckBoxMenuItem) e.getSource()).isSelected());

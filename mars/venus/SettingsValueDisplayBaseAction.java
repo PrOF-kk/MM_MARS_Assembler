@@ -43,6 +43,7 @@ public class SettingsValueDisplayBaseAction extends GuiAction {
 		super(name, icon, descrip, mnemonic, accel, gui);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		boolean isHex = ((JCheckBoxMenuItem) e.getSource()).isSelected();
 		Globals.getGui().getMainPane().getExecutePane().getValueDisplayBaseChooser().setSelected(isHex);

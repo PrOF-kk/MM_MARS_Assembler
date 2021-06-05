@@ -41,6 +41,7 @@ public class EditCutAction extends GuiAction {
 		super(name, icon, descrip, mnemonic, accel, gui);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		mainUI.getMainPane().getEditPane().cutText();
 	}

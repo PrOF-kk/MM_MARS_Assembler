@@ -52,6 +52,7 @@ public class RunGoAction extends GuiAction  {
 	/**
 	 * Action to take when GO is selected -- run the MIPS program!
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		name = this.getValue(Action.NAME).toString();
 		executePane = mainUI.getMainPane().getExecutePane();

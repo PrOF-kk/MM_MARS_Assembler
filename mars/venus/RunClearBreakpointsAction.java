@@ -53,6 +53,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	 /**
 		  *  When this option is selected, tell text segment window to clear breakpoints in its table model.
 		  */
+       @Override
        public void actionPerformed(ActionEvent e) {
          Globals.getGui().getMainPane().getExecutePane().getTextSegmentWindow().clearAllBreakpoints();
 		}

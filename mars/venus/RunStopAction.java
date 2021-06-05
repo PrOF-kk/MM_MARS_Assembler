@@ -42,6 +42,7 @@ public class RunStopAction extends GuiAction {
 		super(name, icon, descrip, mnemonic, accel, gui);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		Simulator.getInstance().stopExecution(this);
 		// RunGoAction's "stopped" method will take care of the cleanup.

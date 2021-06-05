@@ -43,6 +43,7 @@ public class SettingsPopupInputAction extends GuiAction {
 		super(name, icon, descrip, mnemonic, accel, gui);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		boolean usePopup = ((JCheckBoxMenuItem) e.getSource()).isSelected();
 		Globals.getSettings().setBooleanSetting(Settings.POPUP_SYSCALL_INPUT, usePopup);

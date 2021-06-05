@@ -45,6 +45,7 @@ public class SettingsSelfModifyingCodeAction extends GuiAction {
 		super(name, icon, descrip, mnemonic, accel, gui);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		Globals.getSettings().setBooleanSetting(Settings.SELF_MODIFYING_CODE_ENABLED,
 				((JCheckBoxMenuItem) e.getSource()).isSelected());

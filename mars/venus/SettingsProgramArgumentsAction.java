@@ -44,6 +44,7 @@ public class SettingsProgramArgumentsAction extends GuiAction {
 		super(name, icon, descrip, mnemonic, accel, gui);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		boolean selected = ((JCheckBoxMenuItem) e.getSource()).isSelected();
 		Globals.getSettings().setBooleanSetting(Settings.PROGRAM_ARGUMENTS, selected);

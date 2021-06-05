@@ -40,6 +40,7 @@ public class HelpAboutAction extends GuiAction {
 		super(name, icon, descrip, mnemonic, accel, gui);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		JOptionPane.showMessageDialog(mainUI,
 				"MARS - Mips Assembler and Runtime Simulator\n"

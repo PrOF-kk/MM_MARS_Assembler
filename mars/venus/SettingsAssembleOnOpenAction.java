@@ -43,6 +43,7 @@ public class SettingsAssembleOnOpenAction extends GuiAction {
 		super(name, icon, descrip, mnemonic, accel, gui);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		Globals.getSettings().setBooleanSetting(Settings.ASSEMBLE_ON_OPEN_ENABLED,
 				(((JCheckBoxMenuItem) e.getSource()).isSelected()));

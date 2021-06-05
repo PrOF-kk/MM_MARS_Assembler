@@ -51,6 +51,7 @@ public class SettingsDelayedBranchingAction extends GuiAction {
 		super(name, icon, descrip, mnemonic, accel, gui);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		Globals.getSettings().setBooleanSetting(Settings.DELAYED_BRANCHING_ENABLED,
 				(((JCheckBoxMenuItem) e.getSource()).isSelected()));

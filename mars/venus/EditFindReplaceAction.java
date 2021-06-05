@@ -48,6 +48,7 @@ public class EditFindReplaceAction extends GuiAction {
 		super(name, icon, descrip, mnemonic, accel, gui);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		findReplaceDialog = new FindReplaceDialog(Globals.getGui(), DIALOG_TITLE, false);
 		findReplaceDialog.setVisible(true);
@@ -85,6 +86,7 @@ public class EditFindReplaceAction extends GuiAction {
 			this.setContentPane(buildDialogPanel());
 			this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 			this.addWindowListener(new WindowAdapter() {
+				@Override
 				public void windowClosing(WindowEvent we) {
 					performClose();
 				}
