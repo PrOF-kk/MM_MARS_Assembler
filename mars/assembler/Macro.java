@@ -61,8 +61,8 @@ public class Macro {
 		program = null;
 		fromLine = toLine = 0;
 		origFromLine = origToLine = 0;
-		args = new ArrayList<String>();
-		labels = new ArrayList<String>();
+		args = new ArrayList<>();
+		labels = new ArrayList<>();
 	}
 
 	public String getName() {
@@ -165,8 +165,9 @@ public class Macro {
 					}
 				}
 				String substitute = token.getValue();
-				if (repl != -1)
+				if (repl != -1) {
 					substitute = args.get(repl + 1).toString();
+				}
 				else {
 					errors.add(new ErrorMessage(program, token.getSourceLine(), token.getStartPos(),
 							"Unknown macro parameter"));
