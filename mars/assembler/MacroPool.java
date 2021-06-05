@@ -67,9 +67,9 @@ public class MacroPool {
 	 */
 	public MacroPool(MIPSprogram mipsProgram) {
 		this.program = mipsProgram;
-		macroList = new ArrayList<Macro>();
-		callStack = new ArrayList<Integer>();
-		callStackOrigLines = new ArrayList<Integer>();
+		macroList = new ArrayList<>();
+		callStack = new ArrayList<>();
+		callStackOrigLines = new ArrayList<>();
 		current = null;
 		counter = 0;
 	}
@@ -126,8 +126,9 @@ public class MacroPool {
 					//&& macro.getToLine() < callerLine
 					// condition removed; doesn't work nicely in conjunction with .include
 					// and does not seem necessary. DPS 8-MAR-2013
-					)
+					) {
 				ret = macro;
+			}
 		}
 		return ret;
 	}
@@ -138,9 +139,11 @@ public class MacroPool {
 	 *         now, not concerning arguments count.
 	 */
 	public boolean matchesAnyMacroName(String value) {
-		for (Macro macro : macroList)
-			if (macro.getName().equals(value))
+		for (Macro macro : macroList) {
+			if (macro.getName().equals(value)) {
 				return true;
+			}
+		}
 		return false;
 	}
 
@@ -189,12 +192,13 @@ public class MacroPool {
 	}
 
 	public String getExpansionHistory() {
-		String ret = "";
+		StringBuilder ret = new StringBuilder(callStackOrigLines.size());
 		for (int i = 0; i < callStackOrigLines.size(); i++) {
-			if (i > 0)
-				ret += "->";
-			ret += callStackOrigLines.get(i).toString();
+			if (i > 0) {
+				ret.append("->");
+			}
+			ret.append(callStackOrigLines.get(i).toString());
 		}
-		return ret;
+		return ret.toString();
 	}
 }
