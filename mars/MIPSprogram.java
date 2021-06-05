@@ -223,7 +223,6 @@ public class MIPSprogram {
 			errors.add(new ErrorMessage((MIPSprogram) null, 0, 0, e.toString()));
 			throw new ProcessingException(errors);
 		}
-		return;
 	}
 
 	/**
@@ -237,7 +236,6 @@ public class MIPSprogram {
 		this.tokenizer = new Tokenizer();
 		this.tokenList = tokenizer.tokenize(this);
 		this.localSymbolTable = new SymbolTable(this.filename); // prepare for assembly
-		return;
 	}
 
 	/**
@@ -276,7 +274,7 @@ public class MIPSprogram {
 			preparee.tokenize();
 			// I want "this" MIPSprogram to be the first in the list...except for exception
 			// handler
-			if (preparee == this && MIPSprogramsToAssemble.size() > 0) {
+			if (preparee == this && !MIPSprogramsToAssemble.isEmpty()) {
 				MIPSprogramsToAssemble.add(leadFilePosition, preparee);
 			}
 			else {
@@ -398,8 +396,7 @@ public class MIPSprogram {
 	public boolean simulateStepAtPC(AbstractAction a) throws ProcessingException {
 		steppedExecution = true;
 		Simulator sim = Simulator.getInstance();
-		boolean done = sim.simulate(this, RegisterFile.getProgramCounter(), 1, null, a);
-		return done;
+		return sim.simulate(this, RegisterFile.getProgramCounter(), 1, null, a);
 	}
 
 	/**
