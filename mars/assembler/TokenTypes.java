@@ -1,4 +1,5 @@
 package mars.assembler;
+
 import mars.*;
 import mars.util.*;
 import mars.mips.hardware.*;
@@ -32,42 +33,42 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /**
- * Constants to identify the types of tokens found in MIPS programs.  If Java had
+ * Constants to identify the types of tokens found in MIPS programs. If Java had
  * enumerated types, that's how these would probably be implemented.
  * 
  * @author Pete Sanderson
  * @version August 2003
- **/
-
+ */
 public final class TokenTypes {
 
 	public static final String TOKEN_DELIMITERS = "\t ,()";
-	public static final TokenTypes COMMENT       = new TokenTypes("COMMENT");
-	public static final TokenTypes DIRECTIVE     = new TokenTypes("DIRECTIVE");
-	public static final TokenTypes OPERATOR      = new TokenTypes("OPERATOR");
-	public static final TokenTypes DELIMITER     = new TokenTypes("DELIMITER");
-	/** note: REGISTER_NAME is token of form $zero whereas REGISTER_NUMBER is token
-	 *       of form $0.  The former is part of extended assembler, and latter is part
-	 *       of basic assembler.  
-	 **/
-	public static final TokenTypes REGISTER_NAME = new TokenTypes("REGISTER_NAME"); // mnemonic
-	public static final TokenTypes REGISTER_NUMBER = new TokenTypes("REGISTER_NUMBER");
-	public static final TokenTypes FP_REGISTER_NAME = new TokenTypes("FP_REGISTER_NAME");		
-	public static final TokenTypes IDENTIFIER    = new TokenTypes("IDENTIFIER");
-	public static final TokenTypes LEFT_PAREN    = new TokenTypes("LEFT_PAREN");
-	public static final TokenTypes RIGHT_PAREN   = new TokenTypes("RIGHT_PAREN");
-	//public static final TokenTypes INTEGER       = new TokenTypes("INTEGER");
-	public static final TokenTypes INTEGER_5     = new TokenTypes("INTEGER_5");
-	public static final TokenTypes INTEGER_16    = new TokenTypes("INTEGER_16");
-	public static final TokenTypes INTEGER_16U    = new TokenTypes("INTEGER_16U");
-	public static final TokenTypes INTEGER_32    = new TokenTypes("INTEGER_32");
-	public static final TokenTypes REAL_NUMBER   = new TokenTypes("REAL_NUMBER");
-	public static final TokenTypes QUOTED_STRING = new TokenTypes("QUOTED_STRING");
-	public static final TokenTypes PLUS          = new TokenTypes("PLUS");
-	public static final TokenTypes MINUS         = new TokenTypes("MINUS");
-	public static final TokenTypes COLON         = new TokenTypes("COLON");
-	public static final TokenTypes ERROR         = new TokenTypes("ERROR");
-	public static final TokenTypes MACRO_PARAMETER = new TokenTypes("MACRO_PARAMETER");
+	public static final TokenTypes COMMENT   = new TokenTypes("COMMENT");
+	public static final TokenTypes DIRECTIVE = new TokenTypes("DIRECTIVE");
+	public static final TokenTypes OPERATOR  = new TokenTypes("OPERATOR");
+	public static final TokenTypes DELIMITER = new TokenTypes("DELIMITER");
+	/**
+	 * Note: REGISTER_NAME is token of form $zero whereas REGISTER_NUMBER is token
+	 * of form $0. The former is part of extended assembler, and latter is part of
+	 * basic assembler.
+	 */
+	public static final TokenTypes REGISTER_NAME    = new TokenTypes("REGISTER_NAME"); // mnemonic
+	public static final TokenTypes REGISTER_NUMBER  = new TokenTypes("REGISTER_NUMBER");
+	public static final TokenTypes FP_REGISTER_NAME = new TokenTypes("FP_REGISTER_NAME");
+	public static final TokenTypes IDENTIFIER       = new TokenTypes("IDENTIFIER");
+	public static final TokenTypes LEFT_PAREN       = new TokenTypes("LEFT_PAREN");
+	public static final TokenTypes RIGHT_PAREN      = new TokenTypes("RIGHT_PAREN");
+	//public static final TokenTypes INTEGER          = new TokenTypes("INTEGER");
+	public static final TokenTypes INTEGER_5        = new TokenTypes("INTEGER_5");
+	public static final TokenTypes INTEGER_16       = new TokenTypes("INTEGER_16");
+	public static final TokenTypes INTEGER_16U      = new TokenTypes("INTEGER_16U");
+	public static final TokenTypes INTEGER_32       = new TokenTypes("INTEGER_32");
+	public static final TokenTypes REAL_NUMBER      = new TokenTypes("REAL_NUMBER");
+	public static final TokenTypes QUOTED_STRING    = new TokenTypes("QUOTED_STRING");
+	public static final TokenTypes PLUS             = new TokenTypes("PLUS");
+	public static final TokenTypes MINUS            = new TokenTypes("MINUS");
+	public static final TokenTypes COLON            = new TokenTypes("COLON");
+	public static final TokenTypes ERROR            = new TokenTypes("ERROR");
+	public static final TokenTypes MACRO_PARAMETER  = new TokenTypes("MACRO_PARAMETER");
 
 	private String descriptor;
 
@@ -84,7 +85,7 @@ public final class TokenTypes {
 	 * Produces String equivalent of this token type, which is its name.
 	 * 
 	 * @return String containing descriptive name for token type.
-	 **/
+	 */
 	public String toString() {
 		return descriptor;
 	}
@@ -92,18 +93,17 @@ public final class TokenTypes {
 	/**
 	 * Classifies the given token into one of the MIPS types.
 	 * 
-	 * @param value String containing candidate language element, extracted from MIPS program.
+	 * @param value String containing candidate language element, extracted from
+	 *              MIPS program.
 	 * 
-	 * @return Returns the corresponding TokenTypes object if the parameter matches a
-	 * defined MIPS token type, else returns <code>null</code>.
-	 **/
-
-	public static TokenTypes matchTokenType(String value)
-	{
+	 * @return Returns the corresponding TokenTypes object if the parameter matches
+	 *         a defined MIPS token type, else returns <code>null</code>.
+	 */
+	public static TokenTypes matchTokenType(String value) {
 
 		TokenTypes type = null;
 		// If it starts with single quote ('), it is a mal-formed character literal
-		// because a well-formed character literal was converted to string-ified 
+		// because a well-formed character literal was converted to string-ified
 		// integer before getting here...
 		if (value.charAt(0) == '\'')
 			return TokenTypes.ERROR;
@@ -112,33 +112,34 @@ public final class TokenTypes {
 		if (value.charAt(0) == '#')
 			return TokenTypes.COMMENT;
 
-		// See if it is one of the simple tokens 
+		// See if it is one of the simple tokens
 		if (value.length() == 1) {
 			switch (value.charAt(0)) {
-				case '(' : 
+				case '(' :
 					return TokenTypes.LEFT_PAREN;
-				case ')' : 
+				case ')' :
 					return TokenTypes.RIGHT_PAREN;
-				case ':' : 
+				case ':' :
 					return TokenTypes.COLON;
-				case '+' : 
+				case '+' :
 					return TokenTypes.PLUS;
-				case '-' : 
+				case '-' :
 					return TokenTypes.MINUS;
 			}
 		}
 
-		// See if it is a macro parameter  
+		// See if it is a macro parameter
 		if (Macro.tokenIsMacroParameter(value, false))
 			return TokenTypes.MACRO_PARAMETER;
 
 		// See if it is a register
 		Register reg = RegisterFile.getUserRegister(value);
-		if (reg != null) 
-			if (reg.getName().equals(value)) 
+		if (reg != null) {
+			if (reg.getName().equals(value))
 				return TokenTypes.REGISTER_NAME;
 			else
 				return TokenTypes.REGISTER_NUMBER;
+		}
 
 		// See if it is a floating point register
 
@@ -152,7 +153,7 @@ public final class TokenTypes {
 		// others limited to 5 bits unsigned (shift amounts) others 32 bits.
 		try {
 
-			int i = Binary.stringToInt(value);   // KENV 1/6/05
+			int i = Binary.stringToInt(value); // KENV 1/6/05
 
 			/***************************************************************************
 			 *  MODIFICATION AND COMMENT, DPS 3-July-2008
@@ -160,8 +161,8 @@ public final class TokenTypes {
 			 * The modifications of January 2005 documented below are being rescinded.
 			 * All hexadecimal immediate values are considered 32 bits in length and
 			 * their classification as INTEGER_5, INTEGER_16, INTEGER_16U (new)
-			 * or INTEGER_32 depends on their 32 bit value.  So 0xFFFF will be
-			 * equivalent to 0x0000FFFF instead of 0xFFFFFFFF.  This change, along with
+			 * or INTEGER_32 depends on their 32 bit value. So 0xFFFF will be
+			 * equivalent to 0x0000FFFF instead of 0xFFFFFFFF. This change, along with
 			 * the introduction of INTEGER_16U (adopted from Greg Gibeling of Berkeley),
 			 * required extensive changes to instruction templates especially for
 			 * pseudo-instructions.
@@ -174,10 +175,10 @@ public final class TokenTypes {
 			 *  // operands as signed values in the range -32768 to 32767. So 0xffff will represent
 			 *  // -1, not 65535 (bit 15 as sign bit), 0x8000 will represent -32768 not 32768.
 			 *  // NOTE: 32-bit hexadecimal immediate operands whose values fall into this range
-			 *  // will be likewise affected, but they are used only in pseudo-instructions.  The
+			 *  // will be likewise affected, but they are used only in pseudo-instructions. The
 			 *  // code in ExtendedInstruction.java to split this number into upper 16 bits for "lui" 
 			 *  // and lower 16 bits for "ori" works with the original source code token, so it is 
-			 *  // not affected by this tweak.  32-bit immediates in data segment directives
+			 *  // not affected by this tweak. 32-bit immediates in data segment directives
 			 *  // are also processed elsewhere so are not affected either.
 			 *  ////////////////////////////////////////////////////////////////////////////////
 			 *  
@@ -194,30 +195,28 @@ public final class TokenTypes {
 			 *  
 			 **************************  END DPS 3-July-2008 COMMENTS *******************************/
 			// shift operands must be in range 0-31
-			if (i>=0 && i<=31) {
+			if (i >= 0 && i <= 31) {
 				return TokenTypes.INTEGER_5;
 			}
-			if (i>=DataTypes.MIN_UHALF_VALUE && i<=DataTypes.MAX_UHALF_VALUE) {
+			if (i >= DataTypes.MIN_UHALF_VALUE && i <= DataTypes.MAX_UHALF_VALUE) {
 				return TokenTypes.INTEGER_16U;
 			}
-			if (i>=DataTypes.MIN_HALF_VALUE && i<=DataTypes.MAX_HALF_VALUE) {
+			if (i >= DataTypes.MIN_HALF_VALUE && i <= DataTypes.MAX_HALF_VALUE) {
 				return TokenTypes.INTEGER_16;
-			}			  
-			return TokenTypes.INTEGER_32;  // default when no other type is applicable
+			}
+			return TokenTypes.INTEGER_32; // default when no other type is applicable
 		}
-		catch(NumberFormatException e)
-		{
+		catch (NumberFormatException e) {
 			// NO ACTION -- exception suppressed
 		}
 
-		// See if it is a real (fixed or floating point) number.  Note that parseDouble()
+		// See if it is a real (fixed or floating point) number. Note that parseDouble()
 		// accepts integer values but if it were an integer literal we wouldn't get this far.
 		try {
 			Double.parseDouble(value);
 			return TokenTypes.REAL_NUMBER;
 		}
-		catch (NumberFormatException e)
-		{
+		catch (NumberFormatException e) {
 			// NO ACTION -- exception suppressed
 		}
 
@@ -234,11 +233,11 @@ public final class TokenTypes {
 		if (value.charAt(0) == '"')
 			return TokenTypes.QUOTED_STRING;
 
-		// Test for identifier goes last because I have defined tokens for various 
+		// Test for identifier goes last because I have defined tokens for various
 		// MIPS constructs (such as operators and directives) that also could fit
 		// the lexical specifications of an identifier, and those need to be
 		// recognized first.
-		if (isValidIdentifier(value))            
+		if (isValidIdentifier(value))
 			return TokenTypes.IDENTIFIER;
 
 		// Matches no MIPS language token.
@@ -246,47 +245,53 @@ public final class TokenTypes {
 	}
 
 	/**
+	 * Lets you know if given TokenType is for integers (INTGER_5, INTEGER_16,
+	 * INTEGER_32).
 	 *
-	 *  Lets you know if given tokentype is for integers (INTGER_5, INTEGER_16, INTEGER_32).
-	 *
-	 *  @param type the TokenType of interest
-	 *  @return true if type is an integer type, false otherwise.
-	 **/
+	 * @param type the TokenType of interest
+	 * @return true if type is an integer type, false otherwise.
+	 */
 	public static boolean isIntegerTokenType(TokenTypes type) {
-		return type == TokenTypes.INTEGER_5 || type == TokenTypes.INTEGER_16 ||
-				type == TokenTypes.INTEGER_16U || type == TokenTypes.INTEGER_32;
+		return type == TokenTypes.INTEGER_5 || type == TokenTypes.INTEGER_16
+				|| type == TokenTypes.INTEGER_16U || type == TokenTypes.INTEGER_32;
 	}
-
 
 	/**
 	 *
-	 *  Lets you know if given tokentype is for floating point numbers (REAL_NUMBER).
+	 * Lets you know if given TokenType is for floating point numbers (REAL_NUMBER).
 	 *
-	 *  @param type the TokenType of interest
-	 *  @return true if type is an floating point type, false otherwise.
-	 **/   
+	 * @param type the TokenType of interest
+	 * @return true if type is an floating point type, false otherwise.
+	 */
 	public static boolean isFloatingTokenType(TokenTypes type) {
 		return type == TokenTypes.REAL_NUMBER;
-	}	
+	}
 
-
-	// COD2, A-51:  "Identifiers are a sequence of alphanumeric characters,
-	//               underbars (_), and dots (.) that do not begin with a number."
-	// Ideally this would be in a separate Identifier class but I did not see an immediate
-	// need beyond this method (refactoring effort would probably identify other uses 
-	// related to symbol table).
+	// COD2, A-51: "Identifiers are a sequence of alphanumeric characters,
+	//             underbars (_), and dots (.) that do not begin with a number."
+	// Ideally this would be in a separate Identifier class but I did not see an
+	// immediate need beyond this method (refactoring effort would probably identify
+	// other uses related to symbol table).
 	//
-	// DPS 14-Jul-2008: added '$' as valid symbol.  Permits labels to include $.
-	//                  MIPS-target GCC will produce labels that start with $. 
+	// DPS 14-Jul-2008: added '$' as valid symbol. Permits labels to include $.
+	// MIPS-target GCC will produce labels that start with $.
 	public static boolean isValidIdentifier(String value) {
-		boolean result = 
-				(Character.isLetter(value.charAt(0)) || value.charAt(0)=='_' || value.charAt(0)=='.' || value.charAt(0)=='$');
+		
+		boolean result = (Character.isLetter(value.charAt(0))
+				|| value.charAt(0) == '_'
+				|| value.charAt(0) == '.'
+				|| value.charAt(0) == '$');
+		
 		int index = 1;
 		while (result && index < value.length()) {
-			if (!(Character.isLetterOrDigit(value.charAt(index)) || value.charAt(index)=='_' || value.charAt(index)=='.' || value.charAt(index)=='$'))
+			if (!(Character.isLetterOrDigit(value.charAt(index))
+					|| value.charAt(index) == '_'
+					|| value.charAt(index) == '.'
+					|| value.charAt(index) == '$')) {
 				result = false;
+			}
 			index++;
-		}	
+		}
 		return result;
 	}
 
