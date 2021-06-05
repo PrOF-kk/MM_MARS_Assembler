@@ -2331,7 +2331,7 @@ public class JEditTextArea extends JComponent
 		for (int i = 0; i < matches.size(); i++) {
 			PopupHelpItem match = matches.get(i);
 			result += ((i == 0) ? "" : "<br>") + "<code>"
-					+ match.getExamplePaddedToLength(length).replaceAll(" ", "&nbsp;") + "</code>"
+					+ match.getExamplePaddedToLength(length).replace(" ", "&nbsp;") + "</code>"
 					+ match.getDescription();
 		}
 		return result + "</html>";
@@ -2458,7 +2458,7 @@ public class JEditTextArea extends JComponent
 				PopupHelpItem item = helpItems.get(i);
 				JMenuItem menuItem = new JMenuItem(
 						"<html><code>"
-								+ item.getExamplePaddedToLength(length).replaceAll(" ", "&nbsp;") + "</code>"
+								+ item.getExamplePaddedToLength(length).replace(" ", "&nbsp;") + "</code>"
 								+ item.getDescription() + "</html>");
 				if (item.getExact()) {
 					// The instruction name is completed so the role of the popup changes
