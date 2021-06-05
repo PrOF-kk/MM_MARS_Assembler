@@ -259,8 +259,7 @@ public class ProgramStatement {
 				}
 				this.operands[this.numOperands++] = address;
 			}
-			else if (tokenType == TokenTypes.INTEGER_5 || tokenType == TokenTypes.INTEGER_16
-					|| tokenType == TokenTypes.INTEGER_16U || tokenType == TokenTypes.INTEGER_32) {
+			else if (TokenTypes.isIntegerTokenType(tokenType)) {
 
 				int tempNumeric = Binary.stringToInt(tokenValue);
 
