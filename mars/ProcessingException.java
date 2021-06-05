@@ -38,17 +38,16 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * 
  * @author Pete Sanderson
  * @version August 2003
- **/
-
+ */
 public class ProcessingException extends Exception {
-	private ErrorList errs;
+	private final ErrorList errs;
 
 	/**
 	 * Constructor for ProcessingException.
 	 * 
 	 * @param e An ErrorList which is an ArrayList of ErrorMessage objects. Each
 	 *          ErrorMessage represents one processing error.
-	 **/
+	 */
 	public ProcessingException(ErrorList e) {
 		errs = e;
 	}
@@ -60,7 +59,7 @@ public class ProcessingException extends Exception {
 	 *            ErrorMessage represents one processing error.
 	 * @param aee AddressErrorException object containing specialized error message,
 	 *            cause, address
-	 **/
+	 */
 	public ProcessingException(ErrorList e, AddressErrorException aee) {
 		errs = e;
 		Exceptions.setRegisters(aee.getType(), aee.getAddress());
@@ -71,7 +70,7 @@ public class ProcessingException extends Exception {
 	 * 
 	 * @param ps a ProgramStatement of statement causing runtime exception
 	 * @param m  a String containing specialized error message
-	 **/
+	 */
 	public ProcessingException(ProgramStatement ps, String m) {
 		errs = new ErrorList();
 		errs.add(new ErrorMessage(ps, "Runtime exception at "
@@ -89,7 +88,7 @@ public class ProcessingException extends Exception {
 	 * @param ps    a ProgramStatement of statement causing runtime exception
 	 * @param m     a String containing specialized error message
 	 * @param cause exception cause (see Exceptions class for list)
-	 **/
+	 */
 	public ProcessingException(ProgramStatement ps, String m, int cause) {
 		this(ps, m);
 		Exceptions.setRegisters(cause);
@@ -101,8 +100,7 @@ public class ProcessingException extends Exception {
 	 * @param ps  a ProgramStatement of statement causing runtime exception
 	 * @param aee AddressErrorException object containing specialized error message,
 	 *            cause, address
-	 **/
-
+	 */
 	public ProcessingException(ProgramStatement ps, AddressErrorException aee) {
 		this(ps, aee.getMessage());
 		Exceptions.setRegisters(aee.getType(), aee.getAddress());
@@ -113,7 +111,7 @@ public class ProcessingException extends Exception {
 	 * 
 	 * No parameter and thus no error list. Use this for normal MIPS program
 	 * termination (e.g. syscall 10 for exit).
-	 **/
+	 */
 	public ProcessingException() {
 		errs = null;
 	}
@@ -124,8 +122,7 @@ public class ProcessingException extends Exception {
 	 * @return Returns ErrorList of error messages.
 	 * @see ErrorList
 	 * @see ErrorMessage
-	 **/
-
+	 */
 	public ErrorList errors() {
 		return errs;
 	}
