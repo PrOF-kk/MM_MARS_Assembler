@@ -42,7 +42,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * Top level container for Venus GUI.
  * 
  * @author Sanderson and Team JSpim
- **/
+ */
 
 /*
  * Heavily modified by Pete Sanderson, July 2004, to incorporate JSPIMMenu and
@@ -63,8 +63,6 @@ public class VenusUI extends JFrame {
 	JSplitPane splitter, horizonSplitter;
 	JPanel north;
 
-	private int frameState; // see windowActivated() and windowDeactivated()
-							// TODO no such methods, safe to remove?
 	private static int menuState = FileStatus.NO_FILE;
 
 	// TODO PLEASE PUT THESE TWO (& THEIR METHODS) SOMEWHERE THEY BELONG, NOT HERE
@@ -115,7 +113,7 @@ public class VenusUI extends JFrame {
 	 * Constructor for the Class. Sets up a window object for the UI
 	 * 
 	 * @param s Name of the window to be created.
-	 **/
+	 */
 
 	public VenusUI(String s) {
 		super(s);
@@ -220,6 +218,7 @@ public class VenusUI extends JFrame {
 		// This is invoked when opening the app. It will set the app to
 		// appear at full screen size.
 		this.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowOpened(WindowEvent e) {
 				mainUI.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			}
@@ -228,6 +227,7 @@ public class VenusUI extends JFrame {
 		// This is invoked when exiting the app through the X icon. It will in turn
 		// check for unsaved edits before exiting.
 		this.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent e) {
 				if (mainUI.editor.closeAll()) {
 					System.exit(0);
@@ -279,7 +279,7 @@ public class VenusUI extends JFrame {
 			fileSaveAsAction = new FileSaveAsAction("Save as...",
 					new ImageIcon(tk.getImage(cs.getResource(colibre24 + "saveas.png"))),
 					"Save current file with different name", KeyEvent.VK_A,
-					KeyStroke.getKeyStroke(KeyEvent.VK_S, tk.getMenuShortcutKeyMask() | Event.SHIFT_MASK),
+					KeyStroke.getKeyStroke(KeyEvent.VK_S, tk.getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK),
 					mainUI);
 			fileSaveAllAction = new FileSaveAllAction("Save All", null, "Save all open files",
 					KeyEvent.VK_V, null, mainUI);
@@ -603,8 +603,9 @@ public class VenusUI extends JFrame {
 		menuBar.add(run);
 		menuBar.add(settings);
 		JMenu toolMenu = new ToolLoader().buildToolsMenu();
-		if (toolMenu != null)
+		if (toolMenu != null) {
 			menuBar.add(toolMenu);
+		}
 		menuBar.add(help);
 
 		// experiment with popup menu for settings. 3 Aug 2006 PS
@@ -657,7 +658,7 @@ public class VenusUI extends JFrame {
 		toolBar.add(Open);
 		toolBar.add(Save);
 		toolBar.add(SaveAs);
-		if (new mars.mips.dump.DumpFormatLoader().loadDumpFormats().size() > 0) {
+		if (!(new mars.mips.dump.DumpFormatLoader().loadDumpFormats().isEmpty())) {
 			toolBar.add(DumpMemory);
 		}
 		toolBar.add(Print);
@@ -993,8 +994,7 @@ public class VenusUI extends JFrame {
 	 * DPS 23 July 2008
 	 * 
 	 * @return current menu state.
-	 **/
-
+	 */
 	public static int getMenuState() {
 		return menuState;
 	}
@@ -1003,8 +1003,7 @@ public class VenusUI extends JFrame {
 	 * To set whether the register values are reset.
 	 * 
 	 * @param b Boolean true if the register values have been reset.
-	 **/
-
+	 */
 	public static void setReset(boolean b) {
 		reset = b;
 	}
@@ -1013,8 +1012,7 @@ public class VenusUI extends JFrame {
 	 * To set whether MIPS program execution has started.
 	 * 
 	 * @param b true if the MIPS program execution has started.
-	 **/
-
+	 */
 	public static void setStarted(boolean b) {
 		started = b;
 	}
@@ -1023,8 +1021,7 @@ public class VenusUI extends JFrame {
 	 * To find out whether the register values are reset.
 	 * 
 	 * @return Boolean true if the register values have been reset.
-	 **/
-
+	 */
 	public static boolean getReset() {
 		return reset;
 	}
@@ -1033,7 +1030,7 @@ public class VenusUI extends JFrame {
 	 * To find out whether MIPS program is currently executing.
 	 * 
 	 * @return true if MIPS program is currently executing.
-	 **/
+	 */
 	public static boolean getStarted() {
 		return started;
 	}
@@ -1042,8 +1039,7 @@ public class VenusUI extends JFrame {
 	 * Get reference to Editor object associated with this GUI.
 	 * 
 	 * @return Editor for the GUI.
-	 **/
-
+	 */
 	public Editor getEditor() {
 		return editor;
 	}
@@ -1052,8 +1048,7 @@ public class VenusUI extends JFrame {
 	 * Get reference to messages pane associated with this GUI.
 	 * 
 	 * @return MessagesPane object associated with the GUI.
-	 **/
-
+	 */
 	public MainPane getMainPane() {
 		return mainPane;
 	}
@@ -1062,8 +1057,7 @@ public class VenusUI extends JFrame {
 	 * Get reference to messages pane associated with this GUI.
 	 * 
 	 * @return MessagesPane object associated with the GUI.
-	 **/
-
+	 */
 	public MessagesPane getMessagesPane() {
 		return messagesPane;
 	}
@@ -1072,8 +1066,7 @@ public class VenusUI extends JFrame {
 	 * Get reference to registers pane associated with this GUI.
 	 * 
 	 * @return RegistersPane object associated with the GUI.
-	 **/
-
+	 */
 	public RegistersPane getRegistersPane() {
 		return registersPane;
 	}
@@ -1083,8 +1076,7 @@ public class VenusUI extends JFrame {
 	 * values.
 	 * 
 	 * @return the menu item
-	 **/
-
+	 */
 	public JCheckBoxMenuItem getValueDisplayBaseMenuItem() {
 		return settingsValueDisplayBase;
 	}
@@ -1094,8 +1086,7 @@ public class VenusUI extends JFrame {
 	 * values.
 	 * 
 	 * @return the menu item
-	 **/
-
+	 */
 	public JCheckBoxMenuItem getAddressDisplayBaseMenuItem() {
 		return settingsAddressDisplayBase;
 	}
