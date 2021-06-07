@@ -38,8 +38,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * @author Pete Sanderson 
  * @version December 2007
  */
-
-
 public class BinaryDumpFormat extends AbstractDumpFormat {
 
 	/**
@@ -63,21 +61,21 @@ public class BinaryDumpFormat extends AbstractDumpFormat {
 	 *  @throws AddressErrorException if firstAddress is invalid or not on a word boundary.
 	 *  @throws IOException if error occurs during file output.
 	 */
-	public void dumpMemoryRange(File file, int firstAddress, int lastAddress) 
+	public void dumpMemoryRange(File file, int firstAddress, int lastAddress)
 			throws AddressErrorException, IOException {
-		PrintStream out = new PrintStream(new FileOutputStream(file));
-		try {
+
+		try (PrintStream out = new PrintStream(new FileOutputStream(file))) {
+
 			for (int address = firstAddress; address <= lastAddress; address += Memory.WORD_LENGTH_BYTES) {
 				Integer temp = Globals.memory.getRawWordOrNull(address);
-				if (temp == null) 
+				if (temp == null) {
 					break;
+				}
 				int word = temp.intValue();
-				for (int i = 0; i < 4; i++) 
+				for (int i = 0; i < 4; i++) {
 					out.write((word >>> (i << 3)) & 0xFF);
+				}
 			}
-		} 
-		finally { 
-			out.close(); 
 		}
 	}
 
