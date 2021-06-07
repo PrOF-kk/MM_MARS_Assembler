@@ -37,15 +37,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * @author Pete Sanderson 
  * @version December 2007
  */
-
-
 public abstract class AbstractDumpFormat implements DumpFormat {
 
 	private String name, commandDescriptor, description,  extension;
 
 	/**
-	 *  Typical constructor.  Note you cannot creates objects from this
+	 *  Typical constructor. Note that you cannot create instances of this
 	 *  class but subclass constructor can call this one.
+	 *  
 	 *  @param name Brief descriptive name to be displayed in selection list.
 	 *  @param commandDescriptor One-word descriptive name to be used by MARS command mode parser and user.
 	 *  Any spaces in this string will be removed.
@@ -53,17 +52,16 @@ public abstract class AbstractDumpFormat implements DumpFormat {
 	 *   display in file save dialog or to be used as tool tip.
 	 *  @param extension Standard file extension for this format.  Null if none.
 	 */
-	public AbstractDumpFormat(String name, String commandDescriptor, 
-			String description, String extension) {
+	protected AbstractDumpFormat(String name, String commandDescriptor, String description, String extension) {
 		this.name = name;
-		this.commandDescriptor = (commandDescriptor==null) ? null : commandDescriptor.replaceAll(" ","");
+		this.commandDescriptor = (commandDescriptor == null) ? null : commandDescriptor.replace(" ", "");
 		this.description = description;
 		this.extension = extension;
 	}
 
-
 	/**
 	 *  Get the file extension associated with this format.
+	 *  
 	 *  @return String containing file extension -- without the leading "." -- or
 	 *  null if there is no standard extension.
 	 */
@@ -73,7 +71,8 @@ public abstract class AbstractDumpFormat implements DumpFormat {
 
 	/**
 	 *  Get a short description of the format, suitable for displaying along with
-	 *  the extension, in the file save dialog, or as a tool tip.
+	 *  the extension in the file save dialog, or as a tool tip.
+	 *  
 	 *  @return String containing short description to go with the extension
 	 *  or for use as tool tip.  Possibly null.
 	 */
@@ -83,8 +82,8 @@ public abstract class AbstractDumpFormat implements DumpFormat {
 
 	/**
 	 * String representing this object.
+	 * 
 	 * @return Name given for this object.
-	 *
 	 */
 	public String toString() {
 		return name;
@@ -94,7 +93,6 @@ public abstract class AbstractDumpFormat implements DumpFormat {
 	 * One-word description of format to be used by MARS command mode parser
 	 * and user in conjunction with the "dump" option.
 	 * @return One-word String describing the format.
-	 *
 	 */
 	public String getCommandDescriptor() {
 		return commandDescriptor;
