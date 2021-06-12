@@ -5,8 +5,6 @@ import mars.venus.editors.MARSTextEditingArea;
 import mars.venus.EditPane;
 import mars.*;
 import java.awt.*;
-import java.util.Iterator;
-
 import javax.swing.event.*;
 import javax.swing.undo.*;
 import javax.swing.*;
@@ -58,17 +56,15 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
 		getInputHandler().addKeyBinding("C+7", e -> toggleComment());
 	}
 
+	@Override
 	public void setFont(Font f) {
 		getPainter().setFont(f);
 	}
 
+	@Override
 	public Font getFont() {
 		return getPainter().getFont();
 	}
-
-// 		public void repaint() {		 getPainter().repaint();		 }
-// 		 public Dimension getSize() { return painter.getSize(); }
-// 		 public void setSize(Dimension d) { painter.setSize(d);}
 
 	/**
 	 * Use for highlighting the line currently being edited.
@@ -167,8 +163,9 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
 		this.setEnabled(editable);
 		// this.getCaret().setVisible(editable);
 		this.setCaretPosition(0);
-		if (editable)
+		if (editable) {
 			this.requestFocusInWindow();
+		}
 	}
 
 	/**
@@ -224,9 +221,10 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
 	 * @version May 2021
 	 */
 	public void toggleComment() {
-		if (!editable)
+		if (!editable) {
 			return;
-		
+		}
+
 		int lineSkip = -1;
 		
 		// Handle corner case where selection ends on a new line
@@ -413,12 +411,11 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
 	 *         matching occurrence is found. Returns TEXT_NOT_FOUND if the text is
 	 *         not matched. Returns TEXT_REPLACED_NOT_FOUND_NEXT if replacement is
 	 *         successful but there are no additional matches. Returns
-	 *         TEXT_REPLACED_FOUND_NEXT if reaplacement is successful and there is
+	 *         TEXT_REPLACED_FOUND_NEXT if replacement is successful and there is
 	 *         at least one additional match.
 	 */
 	public int doReplace(String find, String replace, boolean caseSensitive) {
 		int nextPosn = 0;
-		int posn;
 		// Will perform a "find" and return, unless positioned at the end of
 		// a selected "find" result.
 		if (find == null || !find.equals(sourceCode.getSelectedText())
