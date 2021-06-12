@@ -729,8 +729,8 @@ public abstract class InputHandler extends KeyAdapter
 				textArea.getToolkit().beep();
 				return;
 			}
-
-			textArea.setSelectedText("\n");
+			// AutoIndent feature added DPS 31-Dec-2010
+			textArea.setSelectedText("\n" + textArea.getAutoIndent());
 		}
 	}
 
