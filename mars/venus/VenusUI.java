@@ -460,7 +460,7 @@ public class VenusUI extends JFrame {
 		fileSaveAs = new JMenuItem(fileSaveAsAction);
 		fileSaveAs.setIcon(new ImageIcon(tk.getImage(cs.getResource(colibre16 + "saveas.png"))));
 		fileSaveAll = new JMenuItem(fileSaveAllAction);
-		fileSaveAll.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "MyBlank16.gif"))));
+		fileSaveAll.setIcon(new ImageIcon(tk.getImage(cs.getResource(colibre16 + "saveall.png"))));
 		fileDumpMemory = new JMenuItem(fileDumpMemoryAction);
 		fileDumpMemory.setIcon(new ImageIcon(tk.getImage(cs.getResource(colibre16 + "exportto.png"))));
 		filePrint = new JMenuItem(filePrintAction);
