@@ -593,7 +593,7 @@ public class VenusUI extends JFrame {
 		helpHelp = new JMenuItem(helpHelpAction);
 		helpHelp.setIcon(new ImageIcon(tk.getImage(cs.getResource(colibre16 + "helpindex.png"))));
 		helpAbout = new JMenuItem(helpAboutAction);
-		helpAbout.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "MyBlank16.gif"))));
+		helpAbout.setIcon(new ImageIcon(tk.getImage(cs.getResource(colibre16 + "tip_small.png"))));
 		help.add(helpHelp);
 		help.addSeparator();
 		help.add(helpAbout);
