@@ -5,6 +5,7 @@ import mars.assembler.*;
 import mars.mips.instructions.*;
 import java.util.*;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.awt.*;
 import java.awt.event.*;
@@ -347,87 +348,22 @@ public class HelpHelpAction extends GuiAction {
 
 	/**
 	 * Determines MARS response on user click on hyperlink in displayed help page.
-	 * The response will be to pop up a simple dialog with the page contents. It
-	 * will not display URL, no navigation, nothing. Just display the page and
-	 * provide a Close button.
+	 * The response will be to open the user's browser to the clicked link
 	 */
 	private class HelpHyperlinkListener implements HyperlinkListener {
-		JDialog webpageDisplay;
-		JTextField webpageURL;
-		private static final String cannotDisplayMessage = "<html><title></title><body><strong>Unable to display requested document.</strong></body></html>";
-
+		
 		public void hyperlinkUpdate(HyperlinkEvent e) {
 			
-			if (e.getEventType() != HyperlinkEvent.EventType.ACTIVATED) {
-				return;
-			}
-			
-			JEditorPane pane = (JEditorPane) e.getSource();
-			if (e instanceof HTMLFrameHyperlinkEvent) {
-				HTMLFrameHyperlinkEvent evt = (HTMLFrameHyperlinkEvent) e;
-				HTMLDocument doc = (HTMLDocument) pane.getDocument();
-				doc.processHTMLFrameHyperlinkEvent(evt);
-			}
-			else {
-				webpageDisplay = new JDialog(mainUI, "Primitive HTML Viewer");
-				webpageDisplay.setLayout(new BorderLayout());
-				webpageDisplay.setLocation(mainUI.getSize().width / 6, mainUI.getSize().height / 6);
-				JEditorPane webpagePane;
+			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED
+					&& Desktop.isDesktopSupported()
+					&& Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				try {
-					webpagePane = new JEditorPane(e.getURL());
+					Desktop.getDesktop().browse(e.getURL().toURI());
 				}
-				catch (IOException ioe) {
-					webpagePane = new JEditorPane("text/html", cannotDisplayMessage);
+				catch (IOException | URISyntaxException e1) {
+					// Unlikely, print the error and move on
+					e1.printStackTrace();
 				}
-				webpagePane.addHyperlinkListener(e1 -> {
-					if (e1.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-						JEditorPane pane1 = (JEditorPane) e1.getSource();
-						if (e1 instanceof HTMLFrameHyperlinkEvent) {
-							HTMLFrameHyperlinkEvent evt = (HTMLFrameHyperlinkEvent) e1;
-							HTMLDocument doc = (HTMLDocument) pane1.getDocument();
-							doc.processHTMLFrameHyperlinkEvent(evt);
-						}
-						else {
-							try {
-								pane1.setPage(e1.getURL());
-							}
-							catch (IOException ioe) {
-								pane1.setText(cannotDisplayMessage);
-							}
-							webpageURL.setText(e1.getURL().toString());
-						}
-					}
-				});
-				webpagePane.setPreferredSize(new Dimension(
-						mainUI.getSize().width * 2 / 3,
-						mainUI.getSize().height * 2 / 3));
-				webpagePane.setEditable(false);
-				webpagePane.setCaretPosition(0);
-				JScrollPane webpageScrollPane = new JScrollPane(webpagePane,
-						JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-						JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-				webpageURL = new JTextField(e.getURL().toString(), 50);
-				webpageURL.setEditable(false);
-				webpageURL.setBackground(Color.WHITE);
-				JPanel URLPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 4));
-				URLPanel.add(new JLabel("URL: "));
-				URLPanel.add(webpageURL);
-				webpageDisplay.add(URLPanel, BorderLayout.NORTH);
-				webpageDisplay.add(webpageScrollPane);
-				JButton closeButton = new JButton("Close");
-				closeButton.addActionListener(e1 -> {
-					webpageDisplay.setVisible(false);
-					webpageDisplay.dispose();
-				});
-				JPanel closePanel = new JPanel();
-				closePanel.setLayout(new BoxLayout(closePanel, BoxLayout.LINE_AXIS));
-				closePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 5));
-				closePanel.add(Box.createHorizontalGlue());
-				closePanel.add(closeButton);
-				closePanel.add(Box.createHorizontalGlue());
-				webpageDisplay.add(closePanel, BorderLayout.SOUTH);
-				webpageDisplay.pack();
-				webpageDisplay.setVisible(true);
 			}
 		}
 	}
