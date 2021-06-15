@@ -712,11 +712,14 @@ public class EditTabbedPane extends JTabbedPane {
 		// enough is enough. The limit will be one alternative filter at a time.
 		// DPS... 9 July 2008
 		private void setChoosableFileFilters() {
+			
 			// See if a new filter has been added to the master list. If so,
 			// regenerate the fileChooser list from the master list.
 			if (fileFilterCount < fileFilterList.size()
 					|| fileFilterList.size() != fileChooser.getChoosableFileFilters().length) {
+				
 				fileFilterCount = fileFilterList.size();
+				
 				// First, "deactivate" the listener, because our addChoosableFileFilter
 				// calls would otherwise activate it! We want it to be triggered only
 				// by MARS user action.
@@ -725,12 +728,17 @@ public class EditTabbedPane extends JTabbedPane {
 					fileChooser.removePropertyChangeListener(listenForUserAddedFileFilter);
 					activeListener = true; // we'll note this, for re-activation later
 				}
+				
 				// clear out the list and populate from our own ArrayList.
-				// Last one added becomes the default.
 				fileChooser.resetChoosableFileFilters();
 				for (int i = 0; i < fileFilterList.size(); i++) {
 					fileChooser.addChoosableFileFilter(fileFilterList.get(i));
 				}
+				
+				// Set last file filter as the active one. Java probably did this
+				// automatically some time ago, but not anymore.
+				fileChooser.setFileFilter(fileFilterList.get(fileFilterList.size() - 1));
+				
 				// Restore listener.
 				if (activeListener) {
 					fileChooser.addPropertyChangeListener(listenForUserAddedFileFilter);
