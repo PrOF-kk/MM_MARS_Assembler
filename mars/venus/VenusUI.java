@@ -376,7 +376,7 @@ public class VenusUI extends JFrame {
 					"Addresses displayed in hexadecimal", null,
 					"Toggle between hexadecimal and decimal display of memory addresses", null, null, mainUI);
 			settingsExtendedAction = new SettingsExtendedAction("Permit extended (pseudo) instructions and formats",
-					null, "If set, MIPS extended (pseudo) instructions are formats are permitted.", null, null, mainUI);
+					null, "If set, MIPS extended (pseudo) instructions and formats are permitted.", null, null, mainUI);
 			settingsAssembleOnOpenAction = new SettingsAssembleOnOpenAction("Assemble file upon opening", null,
 					"If set, a file will be automatically assembled as soon as it is opened.  File Open dialog will show most recently opened file.",
 					null, null, mainUI);
