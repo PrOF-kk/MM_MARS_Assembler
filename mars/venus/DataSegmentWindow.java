@@ -514,12 +514,12 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 		int valueBase = getValueDisplayFormat();
 		int addressBase = Globals.getGui().getMainPane().getExecutePane().getAddressDisplayBase();
 		int address = firstAddr;
-		TableModel dataModel = dataTable.getModel();
+		DataTableModel dataModel = (DataTableModel) dataTable.getModel();
 		for (int row = 0; row < NUMBER_OF_ROWS; row++) {
-			((DataTableModel) dataModel).setDisplayAndModelValueAt(NumberDisplayBaseChooser.formatUnsignedInteger(address, addressBase), row, ADDRESS_COLUMN);
+			dataModel.setDisplayAndModelValueAt(NumberDisplayBaseChooser.formatUnsignedInteger(address, addressBase), row, ADDRESS_COLUMN);
 			for (int column = 1; column < NUMBER_OF_COLUMNS; column++) {
 				try {
-					((DataTableModel) dataModel).setDisplayAndModelValueAt(NumberDisplayBaseChooser.formatNumber(Globals.memory.getWordNoNotify(address), valueBase), row, column);
+					dataModel.setDisplayAndModelValueAt(NumberDisplayBaseChooser.formatNumber(Globals.memory.getWordNoNotify(address), valueBase), row, column);
 				}
 				catch (AddressErrorException aee) {
 					// Bit of a hack here. Memory will throw an exception if you try to read directly from text segment when the
@@ -539,7 +539,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 							}
 							Globals.getSettings().setBooleanSettingNonPersistent(Settings.SELF_MODIFYING_CODE_ENABLED, false);
 						}
-						((DataTableModel) dataModel).setDisplayAndModelValueAt(NumberDisplayBaseChooser.formatNumber(displayValue, valueBase), row, column);
+						dataModel.setDisplayAndModelValueAt(NumberDisplayBaseChooser.formatNumber(displayValue, valueBase), row, column);
 					}
 					// Bug Fix: the following line of code disappeared during the release 4.4 mods, but is essential to
 					// display values of 0 for valid MIPS addresses that are outside the MARS simulated address space. Such
@@ -547,7 +547,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 					// With 4.4, I added the above IF statement to work with the text segment but inadvertently removed this line!
 					// Now it becomes the "else" part, executed when not in text segment. DPS 8-July-2014.
 					else {
-						((DataTableModel) dataModel).setDisplayAndModelValueAt(NumberDisplayBaseChooser.formatNumber(0, valueBase), row, column);
+						dataModel.setDisplayAndModelValueAt(NumberDisplayBaseChooser.formatNumber(0, valueBase), row, column);
 					}
 				}
 				address += BYTES_PER_VALUE;
@@ -612,10 +612,10 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 	 */
 	public void resetValues() {
 		int valueBase = Globals.getGui().getMainPane().getExecutePane().getValueDisplayBase();
-		TableModel dataModel = dataTable.getModel();
+		DataTableModel dataModel = (DataTableModel) dataTable.getModel();
 		for (int row = 0; row < NUMBER_OF_ROWS; row++) {
 			for (int column = 1; column < NUMBER_OF_COLUMNS; column++) {
-				((DataTableModel) dataModel).setDisplayAndModelValueAt(NumberDisplayBaseChooser.formatNumber(0, valueBase), row, column);
+				dataModel.setDisplayAndModelValueAt(NumberDisplayBaseChooser.formatNumber(0, valueBase), row, column);
 			}
 		}
 		disableAllButtons();
