@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+	I, the copyright holder of this work, release this work into the public domain. This applies worldwide.
+	In some countries this may not be legally possible; if so:
+	I grant anyone the right to use this work for any purpose, without any conditions, unless such conditions are required by law.
+-->
+<head>
+	<title>ASCII Table</title>
+	<link rel="stylesheet" href="globalstyle.css">
+	
+	<style type="text/css">
+		
+		/* Note that since JEditorPane uses an outdated version of HTML,
+		most of these styles won't work in MARS, but they will in a browser */
+
+		/* Dex and Hex columns should be right-aligned */
+		td:first-child, td:nth-child(2),
+		td:nth-child(4), td:nth-child(5),
+		td:nth-child(7), td:nth-child(8),
+		td:nth-child(10), td:nth-child(11) {
+			text-align: right;
+			padding-right: 1ch;
+			padding-left: 1ch;
+		}
+
+		/* Command characters should be left-aligned */
+		td:nth-child(3) {
+			padding-left: 1ch;
+		}
+
+		/* Printable characters should be centered */
+		td:nth-child(6),
+		td:nth-child(9), td:nth-child(12) {
+			text-align: center;
+		}
+		
+		table {
+			font-family: 'Courier New', Courier, monospace;
+			vertical-align: middle;
+			margin: auto;
+			width: 100%;
+		}
+		
+	</style>
+</head>
+<body>
+	<h2 class="text-center">ASCII Table</h2>
+	<h4 class="text-center">Non-printable characters will be shown in MARS as '.'</h4>
+	<table>
+		<thead>
+			<tr>
+				<th>Dec</th>
+				<th>Hex</th>
+				<th>Character</th>
+				
+				<th>Dec</th>
+				<th>Hex</th>
+				<th>Char</th>
+				
+				<th>Dec</th>
+				<th>Hex</th>
+				<th>Char</th>
+				
+				<th>Dec</th>
+				<th>Hex</th>
+				<th>Character</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>0</td>
+				<td>0</td>
+				<td>NUL (Null)</td>
+			
+				<td>32</td>
+				<td>20</td>
+				<td>Space</td>
+			
+				<td>64</td>
+				<td>40</td>
+				<td>@</td>
+			
+				<td>96</td>
+				<td>60</td>
+				<td>`</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>1</td>
+				<td>SOH (Start of Heading)</td>
+			
+				<td>33</td>
+				<td>21</td>
+				<td>!</td>
+			
+				<td>65</td>
+				<td>41</td>
+				<td>A</td>
+			
+				<td>97</td>
+				<td>61</td>
+				<td>a</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>2</td>
+				<td>SOT (Start of Text)</td>
+			
+				<td>34</td>
+				<td>22</td>
+				<td>&quot;</td>
+			
+				<td>66</td>
+				<td>42</td>
+				<td>B</td>
+			
+				<td>98</td>
+				<td>62</td>
+				<td>b</td>
+			</tr>
+			<tr>
+				<td>3</td>
+				<td>3</td>
+				<td>ETX (End of Text)</td>
+			
+				<td>35</td>
+				<td>23</td>
+				<td>#</td>
+			
+				<td>67</td>
+				<td>43</td>
+				<td>C</td>
+			
+				<td>99</td>
+				<td>63</td>
+				<td>c</td>
+			</tr>
+			<tr>
+				<td>4</td>
+				<td>4</td>
+				<td>EOT (End of Transmission)</td>
+			
+				<td>36</td>
+				<td>24</td>
+				<td>$</td>
+			
+				<td>68</td>
+				<td>44</td>
+				<td>D</td>
+			
+				<td>100</td>
+				<td>64</td>
+				<td>d</td>
+			</tr>
+			<tr>
+				<td>5</td>
+				<td>5</td>
+				<td>ENQ (Enquiry)</td>
+			
+				<td>37</td>
+				<td>25</td>
+				<td>%</td>
+			
+				<td>69</td>
+				<td>45</td>
+				<td>E</td>
+			
+				<td>101</td>
+				<td>65</td>
+				<td>e</td>
+			</tr>
+			<tr>
+				<td>6</td>
+				<td>6</td>
+				<td>ACK (Acknowledgment)</td>
+			
+				<td>38</td>
+				<td>26</td>
+				<td>&amp;</td>
+			
+				<td>70</td>
+				<td>46</td>
+				<td>F</td>
+			
+				<td>102</td>
+				<td>66</td>
+				<td>f</td>
+			</tr>
+			<tr>
+				<td>7</td>
+				<td>7</td>
+				<td>BEL (Bell)</td>
+			
+				<td>39</td>
+				<td>27</td>
+				<td>&#x27;</td>
+			
+				<td>71</td>
+				<td>47</td>
+				<td>G</td>
+			
+				<td>103</td>
+				<td>67</td>
+				<td>g</td>
+			</tr>
+			<tr>
+				<td>8</td>
+				<td>8</td>
+				<td>BS&nbsp; (Backspace)</td>
+			
+				<td>40</td>
+				<td>28</td>
+				<td>(</td>
+			
+				<td>72</td>
+				<td>48</td>
+				<td>H</td>
+			
+				<td>104</td>
+				<td>68</td>
+				<td>h</td>
+			</tr>
+			<tr>
+				<td>9</td>
+				<td>9</td>
+				<td>HT&nbsp; (Horizontal Tab)</td>
+			
+				<td>41</td>
+				<td>29</td>
+				<td>)</td>
+			
+				<td>73</td>
+				<td>49</td>
+				<td>I</td>
+			
+				<td>105</td>
+				<td>69</td>
+				<td>i</td>
+			</tr>
+			<tr>
+				<td>10</td>
+				<td>a</td>
+				<td>LF&nbsp; (Line Feed)</td>
+			
+				<td>42</td>
+				<td>2a</td>
+				<td>*</td>
+			
+				<td>74</td>
+				<td>4a</td>
+				<td>J</td>
+			
+				<td>106</td>
+				<td>6a</td>
+				<td>j</td>
+			</tr>
+			<tr>
+				<td>11</td>
+				<td>b</td>
+				<td>VT&nbsp; (Vertical Tab)</td>
+			
+				<td>43</td>
+				<td>2b</td>
+				<td>+</td>
+			
+				<td>75</td>
+				<td>4b</td>
+				<td>K</td>
+			
+				<td>107</td>
+				<td>6b</td>
+				<td>k</td>
+			</tr>
+			<tr>
+				<td>12</td>
+				<td>c</td>
+				<td>FF&nbsp; (Form Feed)</td>
+			
+				<td>44</td>
+				<td>2c</td>
+				<td>,</td>
+			
+				<td>76</td>
+				<td>4c</td>
+				<td>L</td>
+			
+				<td>108</td>
+				<td>6c</td>
+				<td>l</td>
+			</tr>
+			<tr>
+				<td>13</td>
+				<td>d</td>
+				<td>CR&nbsp; (Carriage Return)</td>
+			
+				<td>45</td>
+				<td>2d</td>
+				<td>-</td>
+			
+				<td>77</td>
+				<td>4d</td>
+				<td>M</td>
+			
+				<td>109</td>
+				<td>6d</td>
+				<td>m</td>
+			</tr>
+			<tr>
+				<td>14</td>
+				<td>e</td>
+				<td>SO&nbsp; (Shift Out)</td>
+			
+				<td>46</td>
+				<td>2e</td>
+				<td>.</td>
+			
+				<td>78</td>
+				<td>4e</td>
+				<td>N</td>
+			
+				<td>110</td>
+				<td>6e</td>
+				<td>n</td>
+			</tr>
+			<tr>
+				<td>15</td>
+				<td>f</td>
+				<td>SI&nbsp; (Shift In)</td>
+			
+				<td>47</td>
+				<td>2f</td>
+				<td>/</td>
+			
+				<td>79</td>
+				<td>4f</td>
+				<td>O</td>
+			
+				<td>111</td>
+				<td>6f</td>
+				<td>o</td>
+			</tr>
+			<tr>
+				<td>16</td>
+				<td>10</td>
+				<td>DLE (Data Link Escape)</td>
+			
+				<td>48</td>
+				<td>30</td>
+				<td>0</td>
+			
+				<td>80</td>
+				<td>50</td>
+				<td>P</td>
+			
+				<td>112</td>
+				<td>70</td>
+				<td>p</td>
+			</tr>
+			<tr>
+				<td>17</td>
+				<td>11</td>
+				<td>DC1 (Device Control 1)</td>
+			
+				<td>49</td>
+				<td>31</td>
+				<td>1</td>
+			
+				<td>81</td>
+				<td>51</td>
+				<td>Q</td>
+			
+				<td>113</td>
+				<td>71</td>
+				<td>q</td>
+			</tr>
+			<tr>
+				<td>18</td>
+				<td>12</td>
+				<td>DC1 (Device Control 2)</td>
+			
+				<td>50</td>
+				<td>32</td>
+				<td>2</td>
+			
+				<td>82</td>
+				<td>52</td>
+				<td>R</td>
+			
+				<td>114</td>
+				<td>72</td>
+				<td>r</td>
+			</tr>
+			<tr>
+				<td>19</td>
+				<td>13</td>
+				<td>DC1 (Device Control 3)</td>
+			
+				<td>51</td>
+				<td>33</td>
+				<td>3</td>
+			
+				<td>83</td>
+				<td>53</td>
+				<td>S</td>
+			
+				<td>115</td>
+				<td>73</td>
+				<td>s</td>
+			</tr>
+			<tr>
+				<td>20</td>
+				<td>14</td>
+				<td>DC1 (Device Control 4)</td>
+			
+				<td>52</td>
+				<td>34</td>
+				<td>4</td>
+			
+				<td>84</td>
+				<td>54</td>
+				<td>T</td>
+			
+				<td>116</td>
+				<td>74</td>
+				<td>t</td>
+			</tr>
+			<tr>
+				<td>21</td>
+				<td>15</td>
+				<td>NAK (Negative Acknowledgment)</td>
+			
+				<td>53</td>
+				<td>35</td>
+				<td>5</td>
+			
+				<td>85</td>
+				<td>55</td>
+				<td>U</td>
+			
+				<td>117</td>
+				<td>75</td>
+				<td>u</td>
+			</tr>
+			<tr>
+				<td>22</td>
+				<td>16</td>
+				<td>SYN (Synchronous Idle)</td>
+			
+				<td>54</td>
+				<td>36</td>
+				<td>6</td>
+			
+				<td>86</td>
+				<td>56</td>
+				<td>V</td>
+			
+				<td>118</td>
+				<td>76</td>
+				<td>v</td>
+			</tr>
+			<tr>
+				<td>23</td>
+				<td>17</td>
+				<td>ETB (End of Transmission Block)</td>
+			
+				<td>55</td>
+				<td>37</td>
+				<td>7</td>
+			
+				<td>87</td>
+				<td>57</td>
+				<td>W</td>
+			
+				<td>119</td>
+				<td>77</td>
+				<td>w</td>
+			</tr>
+			<tr>
+				<td>24</td>
+				<td>18</td>
+				<td>CAN (Cancel)</td>
+			
+				<td>56</td>
+				<td>38</td>
+				<td>8</td>
+			
+				<td>88</td>
+				<td>58</td>
+				<td>X</td>
+			
+				<td>120</td>
+				<td>78</td>
+				<td>x</td>
+			</tr>
+			<tr>
+				<td>25</td>
+				<td>19</td>
+				<td>EM&nbsp; (End of Medium)</td>
+			
+				<td>57</td>
+				<td>39</td>
+				<td>9</td>
+			
+				<td>89</td>
+				<td>59</td>
+				<td>Y</td>
+			
+				<td>121</td>
+				<td>79</td>
+				<td>y</td>
+			</tr>
+			<tr>
+				<td>26</td>
+				<td>1a</td>
+				<td>SUB (Substitute)</td>
+			
+				<td>58</td>
+				<td>3a</td>
+				<td>:</td>
+			
+				<td>90</td>
+				<td>5a</td>
+				<td>Z</td>
+			
+				<td>122</td>
+				<td>7a</td>
+				<td>z</td>
+			</tr>
+			<tr>
+				<td>27</td>
+				<td>1b</td>
+				<td>ESC (Escape)</td>
+			
+				<td>59</td>
+				<td>3b</td>
+				<td>;</td>
+			
+				<td>91</td>
+				<td>5b</td>
+				<td>[</td>
+			
+				<td>123</td>
+				<td>7b</td>
+				<td>{</td>
+			</tr>
+			<tr>
+				<td>28</td>
+				<td>1c</td>
+				<td>FS&nbsp; (File Separator)</td>
+			
+				<td>60</td>
+				<td>3c</td>
+				<td>&lt;</td>
+			
+				<td>92</td>
+				<td>5c</td>
+				<td>\</td>
+			
+				<td>124</td>
+				<td>7c</td>
+				<td>|</td>
+			</tr>
+			<tr>
+				<td>29</td>
+				<td>1d</td>
+				<td>GS&nbsp;  (Group Separator)</td>
+			
+				<td>61</td>
+				<td>3d</td>
+				<td>=</td>
+			
+				<td>93</td>
+				<td>5d</td>
+				<td>]</td>
+			
+				<td>125</td>
+				<td>7d</td>
+				<td>}</td>
+			</tr>
+			<tr>
+				<td>30</td>
+				<td>1e</td>
+				<td>RS&nbsp; (Record Separator)</td>
+			
+				<td>62</td>
+				<td>3e</td>
+				<td>&gt;</td>
+			
+				<td>94</td>
+				<td>5e</td>
+				<td>^</td>
+			
+				<td>126</td>
+				<td>7e</td>
+				<td>~</td>
+			</tr>
+			<tr>
+				<td>31</td>
+				<td>1f</td>
+				<td>US&nbsp; (Unit Separator)</td>
+			
+				<td>63</td>
+				<td>3f</td>
+				<td>?</td>
+			
+				<td>95</td>
+				<td>5f</td>
+				<td>_</td>
+			
+				<td>127</td>
+				<td>7f</td>
+				<td>DEL (Delete)</td>
+			</tr>				
+		</tbody>
+	</table>
+</body>
+</html>

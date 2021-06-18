@@ -75,6 +75,8 @@ public class HelpHelpAction extends GuiAction {
 		tabbedPane.addTab("Bugs/Comments", createHTMLHelpPanel("BugReportingHelp.html"));
 		tabbedPane.addTab("Acknowledgements", createHTMLHelpPanel("Acknowledgements.html"));
 		tabbedPane.addTab("Instruction Set Song", createHTMLHelpPanel("MIPSInstructionSetSong.html"));
+		tabbedPane.addTab("ASCII Table", createHTMLHelpPanel("ASCIITable.html"));
+		
 		// Create non-modal dialog. Based on java.sun.com "How to Make Dialogs", DialogDemo.java
 		final JDialog dialog = new JDialog(mainUI, "MARS " + Globals.version + " Help");
 		// assure the dialog goes away if user clicks the X
@@ -100,6 +102,7 @@ public class HelpHelpAction extends GuiAction {
 		closePanel.add(Box.createHorizontalGlue());
 		closePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 5));
 		*/
+		
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
 		contentPane.add(tabbedPane);
@@ -249,6 +252,7 @@ public class HelpHelpAction extends GuiAction {
 		JScrollPane operandsScrollPane = new JScrollPane(helpRemarksLabel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		mipsHelpInfo.add(operandsScrollPane, BorderLayout.NORTH);
+		
 		// Below the label is a tabbed pane with categories of MIPS help
 		JTabbedPane tabbedPane = new JTabbedPane();
 		tabbedPane.addTab("Basic Instructions",
@@ -259,6 +263,7 @@ public class HelpHelpAction extends GuiAction {
 		tabbedPane.addTab("Syscalls", createHTMLHelpPanel("SyscallHelp.html"));
 		tabbedPane.addTab("Exceptions", createHTMLHelpPanel("ExceptionsHelp.html"));
 		tabbedPane.addTab("Macros", createHTMLHelpPanel("MacrosHelp.html"));
+		
 		operandsScrollPane.setPreferredSize(new Dimension(
 				(int) this.getSize().getWidth(),
 				(int) (this.getSize().getHeight() * .2)));
