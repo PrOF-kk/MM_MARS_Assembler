@@ -63,10 +63,12 @@ public class JEditTextArea extends JComponent
 	public static final String LEFT_OF_SCROLLBAR = "los";
 	public static final Color POPUP_HELP_TEXT_COLOR = Color.BLACK;  // DPS 11-July-2014
 
-	// Number of text lines moved for each click of the vertical scrollbar buttons.
+	/** Number of text lines moved for each click of the vertical scrollbar buttons. */
 	private static final int VERTICAL_SCROLLBAR_UNIT_INCREMENT_IN_LINES = 1;
-	// Number of text lines moved for each "notch" of the mouse wheel scroller.
+	/** Number of vertical text lines moved for each "notch" of the mouse wheel. */
 	private static final int LINES_PER_MOUSE_WHEEL_NOTCH = 3;
+	/** Number of horizontal text chars moved for each "notch" of the mouse wheel. */
+	private static final int CHARS_PER_MOUSE_WHEEL_NOTCH = 3;
 
 	/**
 	 * Creates a new JEditTextArea with the default settings.
@@ -109,8 +111,10 @@ public class JEditTextArea extends JComponent
 		lineNumbersPlusPainter.add(lineNumberScroller, BorderLayout.WEST);
 		setLayout(new ScrollLayout());
 		add(CENTER, lineNumbersPlusPainter); //was: painter
-		add(RIGHT,vertical = new JScrollBar(JScrollBar.VERTICAL));
-		add(BOTTOM,horizontal = new JScrollBar(JScrollBar.HORIZONTAL));
+		vertical = new JScrollBar(JScrollBar.VERTICAL);
+		horizontal = new JScrollBar(JScrollBar.HORIZONTAL);
+		add(RIGHT, vertical);
+		add(BOTTOM, horizontal);
 
 
 		// Add some event listeners
@@ -2107,14 +2111,23 @@ public class JEditTextArea extends JComponent
 	// scrollability of the text in its viewport. 
 	class MouseWheelHandler implements MouseWheelListener
 	{
-		public void mouseWheelMoved(MouseWheelEvent e) { 
-			int maxMotion = Math.abs(e.getWheelRotation()) * LINES_PER_MOUSE_WHEEL_NOTCH;
-			if (e.getWheelRotation() < 0) { 
-				setFirstLine( getFirstLine() - Math.min(maxMotion, getFirstLine()) ); 
-			} 
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			
+			if (!e.isShiftDown()) {
+				// Vertical scroll
+				int maxMotion = Math.abs(e.getWheelRotation()) * LINES_PER_MOUSE_WHEEL_NOTCH;
+				if (e.getWheelRotation() < 0) {
+					setFirstLine(getFirstLine() - Math.min(maxMotion, getFirstLine()));
+				}
+				else {
+					setFirstLine(getFirstLine() + (Math.min(maxMotion, Math.max(0, getLineCount() - (getFirstLine() + visibleLines)))));
+				}
+			}
 			else {
-				setFirstLine( getFirstLine() + (Math.min(maxMotion, Math.max(0,getLineCount()-(getFirstLine()+visibleLines)))));
-			} 
+				// Horizontal scroll
+				int offset = -e.getWheelRotation() * painter.getFontMetrics().charWidth('w') * CHARS_PER_MOUSE_WHEEL_NOTCH;
+				setHorizontalOffset(Math.min(horizontalOffset + offset, 0));
+			}
 		}
 	}
 
