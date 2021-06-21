@@ -648,9 +648,11 @@ public class VenusUI extends JFrame {
 		
 		JButton[] btns = { New, Open, Save, SaveAs, DumpMemory, Print,
 				Undo, Redo, Cut, Copy, Paste, FindReplace, SelectAll,
-				Run, Assemble, Step, Backstep, Reset, Stop, Pause, Help};
+				Run, Assemble, Step, Backstep, Reset, Stop, Pause, Help
+		};
 		for (JButton b : btns) {
 			b.setText("");
+			// Try to force a more consistent "squareness" for buttons
 			b.putClientProperty(FlatClientProperties.SQUARE_SIZE, true);
 		}
 		
