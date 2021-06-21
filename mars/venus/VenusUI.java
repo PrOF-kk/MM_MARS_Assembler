@@ -618,9 +618,9 @@ public class VenusUI extends JFrame {
 	 * build the toolbar and connect items to action objects (which serve as action
 	 * listeners shared between toolbar icon and corresponding menu item).
 	 */
-
 	JToolBar setUpToolBar() {
 		JToolBar toolBar = new JToolBar();
+		toolBar.setFloatable(false);
 
 		New = new JButton(fileNewAction);
 		Open = new JButton(fileOpenAction);
