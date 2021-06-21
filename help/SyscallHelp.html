@@ -81,20 +81,23 @@ other: plain message (no icon displayed)
   <tr><td>MessageDialogString</td>          <td align="center">59</td>   <td>$a0 = address of null-terminated string that is an information-type message to user<br>$a1 = address of null-terminated string to display after the first string</td>  <td>N/A</td></tr>
 </table>
 <br>
-<b>NOTES: Services numbered 30 and higher are not provided by SPIM</b>
-<br><b>Service 8</b> - Follows semantics of UNIX 'fgets'.  For specified length n, string can be no longer than n-1. If less than that, adds newline to end.  In either case, then pads with null byte. If n = 1, input is ignored and null byte placed at buffer address. If n &lt; 1, input is ignored and nothing is written to the buffer.
-<br><b>Service 11</b> - Prints ASCII character corresponding to contents of low-order byte.
-<br><b>Service 13</b> - MARS implements three flag values: 0 for read-only, 1 for write-only with create, and 9 for write-only with create and append.  It ignores mode.  The returned file descriptor will be negative if the operation failed.  The underlying file I/O
+<b>NOTES:</b>
+<ul>
+<li><b>Services numbered 30 and higher are not provided by SPIM</b></li>
+<li><b>Service 8</b> - Follows semantics of UNIX 'fgets'.  For specified length n, string can be no longer than n-1. If less than that, adds newline to end.  In either case, then pads with null byte. If n = 1, input is ignored and null byte placed at buffer address. If n &lt; 1, input is ignored and nothing is written to the buffer.</li>
+<li><b>Service 11</b> - Prints ASCII character corresponding to contents of low-order byte.</li>
+<li><b>Service 13</b> - MARS implements three flag values: 0 for read-only, 1 for write-only with create, and 9 for write-only with create and append.  It ignores mode.  The returned file descriptor will be negative if the operation failed.  The underlying file I/O
 implementation uses <code>java.io.FileInputStream.read()</code> to read and <code>java.io.FileOutputStream.write()</code> to write.  MARS maintains file descriptors internally and allocates them starting with 3.  File descriptors 0, 1 and 2 are
-always open for: reading from standard input, writing to standard output, and writing to standard error, respectively (new in release 4.3).
-<br><b>Services 13,14,15</b> - In MARS 3.7, the result register was changed to $v0 for SPIM compatibility.  It was previously $a0 as erroneously printed
-in Appendix B of <i>Computer Organization and Design,</i>.
-<br><b>Service 17</b> - If the MIPS program is run under control of the MARS graphical interface (GUI), the exit code in $a0 is ignored.
-<br><b>Service 30</b> - System time comes from <code>java.util.Date.getTime()</code> as milliseconds since 1 January 1970.
-<br><b>Services 31,33</b> - Simulate MIDI output through sound card.  Details below.
-<br><b>Services 40-44</b> use underlying Java pseudorandom number generators provided by the <code>java.util.Random</code> class.  Each stream (identified
+always open for: reading from standard input, writing to standard output, and writing to standard error, respectively (new in release 4.3).</li>
+<li><b>Services 13,14,15</b> - In MARS 3.7, the result register was changed to $v0 for SPIM compatibility.  It was previously $a0 as erroneously printed
+in Appendix B of <i>Computer Organization and Design,</i>.</li>
+<li><b>Service 17</b> - If the MIPS program is run under control of the MARS graphical interface (GUI), the exit code in $a0 is ignored.</li>
+<li><b>Service 30</b> - System time comes from <code>java.util.Date.getTime()</code> as milliseconds since 1 January 1970.</li>
+<li><b>Services 31,33</b> - Simulate MIDI output through sound card.  Details below.</li>
+<li><b>Services 40-44</b> use underlying Java pseudorandom number generators provided by the <code>java.util.Random</code> class.  Each stream (identified
 by $a0 contents) is modeled by a different <code>Random</code> object.  There are no default seed values, so use the Set Seed service (40) if 
-replicated random sequences are desired.
+replicated random sequences are desired.</li>
+</ul>
 
 
 
