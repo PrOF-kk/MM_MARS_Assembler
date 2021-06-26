@@ -45,7 +45,7 @@ public class HelpAboutAction extends GuiAction {
 		JOptionPane.showMessageDialog(mainUI,
 				"MARS - Mips Assembler and Runtime Simulator\n"
 				+ "Version " + Globals.version + "\n"
-				+ "Copyright " + Globals.copyrightYears + Globals.copyrightHolders + "\n\n"
+				+ "Copyright " + Globals.copyrightYears + " " + Globals.copyrightHolders + "\n\n"
 				+ "Mars image courtesy of NASA/JPL.\n\n"
 				+ "Toolbar and menu icons are from the Colibre icon pack\n\n"
 				+ "Tool and additional icons are from:\n"
