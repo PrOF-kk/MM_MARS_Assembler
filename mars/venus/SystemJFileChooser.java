@@ -19,7 +19,7 @@ public class SystemJFileChooser {
 	private static LookAndFeel laf = UIManager.getLookAndFeel();
 	
 	/**
-	 * @link {@link JFileChooser#JFileChooser()}
+	 * See {@link JFileChooser#JFileChooser()}
 	 */
 	public static JFileChooser create() {
 		setSystemLaf();
@@ -29,7 +29,7 @@ public class SystemJFileChooser {
 	}
 
 	/**
-	 * @link {@link JFileChooser#JFileChooser(String)}
+	 * See {@link JFileChooser#JFileChooser(String)}
 	 */
 	public static JFileChooser create(String currentDirectoryPath) {
 		setSystemLaf();
@@ -39,7 +39,7 @@ public class SystemJFileChooser {
 	}
 
 	/**
-	 * @link {@link JFileChooser#JFileChooser(File)}
+	 * See {@link JFileChooser#JFileChooser(File)}
 	 */
 	public static JFileChooser create(File currentDirectory) {
 		setSystemLaf();
@@ -49,7 +49,7 @@ public class SystemJFileChooser {
 	}
 
 	/**
-	 * @link {@link JFileChooser#JFileChooser(FileSystemView)}
+	 * See {@link JFileChooser#JFileChooser(FileSystemView)}
 	 */
 	public static JFileChooser create(FileSystemView fsv) {
 		setSystemLaf();
@@ -59,7 +59,7 @@ public class SystemJFileChooser {
 	}
 
 	/**
-	 * @link {@link JFileChooser#JFileChooser(File, FileSystemView)}
+	 * See {@link JFileChooser#JFileChooser(File, FileSystemView)}
 	 */
 	public static JFileChooser create(File currentDirectory, FileSystemView fsv) {
 		setSystemLaf();
@@ -69,7 +69,7 @@ public class SystemJFileChooser {
 	}
 
 	/**
-	 * @link {@link JFileChooser#JFileChooser(String, FileSystemView)}
+	 * See {@link JFileChooser#JFileChooser(String, FileSystemView)}
 	 */
 	public static JFileChooser create(String currentDirectoryPath, FileSystemView fsv) {
 		setSystemLaf();
