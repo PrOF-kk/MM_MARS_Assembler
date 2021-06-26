@@ -128,7 +128,9 @@ class Magnifier extends JFrame implements ComponentListener {
 		
 		magnifierImage = new MagnifierImage(this);
 		view = new JScrollPane(magnifierImage);
-		view.setSize(200, 150); 
+		view.setSize(200, 150);
+		view.getVerticalScrollBar().setUnitIncrement(16);
+		view.getHorizontalScrollBar().setUnitIncrement(16);
 
 		capture = new JButton("Capture");
 		capture.setToolTipText(CAPTURE_TOOLTIP_TEXT);
