@@ -362,15 +362,15 @@ public class EditTabbedPane extends JTabbedPane {
 				// If a new file (mipsN.asm), default to current save directory.
 				// DPS 13-July-2011
 				if (editPane.isNew()) {
-					saveDialog = new JFileChooser(editor.getCurrentSaveDirectory());
+					saveDialog = SystemJFileChooser.create(editor.getCurrentSaveDirectory());
 				}
 				else {
 					File f = new File(editPane.getPathname());
 					if (f.getParent() != null) {
-						saveDialog = new JFileChooser(f.getParent());
+						saveDialog = SystemJFileChooser.create(f.getParent());
 					}
 					else {
-						saveDialog = new JFileChooser(editor.getCurrentSaveDirectory());
+						saveDialog = SystemJFileChooser.create(editor.getCurrentSaveDirectory());
 					}
 				}
 				String paneFile = editPane.getFilename();
@@ -566,7 +566,7 @@ public class EditTabbedPane extends JTabbedPane {
 		public FileOpener(Editor theEditor) {
 			this.mostRecentlyOpenedFile = null;
 			this.theEditor = theEditor;
-			this.fileChooser = new JFileChooser();
+			this.fileChooser = SystemJFileChooser.create();
 			this.listenForUserAddedFileFilter = new ChoosableFileFilterChangeListener();
 			this.fileChooser.addPropertyChangeListener(this.listenForUserAddedFileFilter);
 

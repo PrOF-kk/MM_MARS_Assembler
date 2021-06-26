@@ -198,7 +198,7 @@ public class FileDumpMemoryAction extends GuiAction {
 		JFileChooser saveDialog = null;
 		boolean operationOK = false;
 
-		saveDialog = new JFileChooser(mainUI.getEditor().getCurrentSaveDirectory());
+		saveDialog = SystemJFileChooser.create(mainUI.getEditor().getCurrentSaveDirectory());
 		saveDialog.setDialogTitle(TITLE);
 		while (!operationOK) {
 			int decision = saveDialog.showSaveDialog(mainUI);

@@ -9,6 +9,7 @@ import java.util.*;
 import java.io.*;
 import mars.*;
 import mars.util.*;
+import mars.venus.SystemJFileChooser;
 import mars.mips.hardware.*;
 
 /*
@@ -317,7 +318,7 @@ public abstract class AbstractMarsToolAndApplication extends JFrame implements M
 		openFileButton = new JButton("Open MIPS program...");
 		openFileButton.setToolTipText("Select MIPS program file to assemble and run");
 		openFileButton.addActionListener(e -> {
-			JFileChooser fileChooser = new JFileChooser();
+			JFileChooser fileChooser = SystemJFileChooser.create();
 			JCheckBox multiFileAssembleChoose = new JCheckBox("Assemble all in selected file's directory",multiFileAssemble);
 			multiFileAssembleChoose.setToolTipText("If checked, selected file will be assembled first and all other assembly files in directory will be assembled also.");
 			fileChooser.setAccessory(multiFileAssembleChoose);
