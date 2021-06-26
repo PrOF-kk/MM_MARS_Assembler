@@ -255,7 +255,19 @@ class Magnifier extends JFrame implements ComponentListener {
 	 */
 	BufferedImage captureScreenSection(Rectangle section) {
 		// Hide Frame so that it does not appear in the screen capture.
-		setVisible (false);
+		setVisible(false);
+		try {
+			/*
+			 * Wait for system animations to complete...
+			 * This is not ideal as depending on the OS system animations might be
+			 * longer or shorter. However for now there doesn't seem to be
+			 * a better way
+			 */
+			Thread.sleep(150);
+		}
+		catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
 		// For some reason, the graphic extent vacated by the above call
 		// is not redrawn before the screen capture unless I explicitly
 		// force it to be redrawn by telling the Mars GUI to update.
