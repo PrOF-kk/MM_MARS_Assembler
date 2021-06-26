@@ -84,7 +84,7 @@ public class MIPSTokenMaker extends AbstractTokenMaker implements TokenMaker {
 	 * Returns a list of tokens representing the given text.
 	 *
 	 * @param text           The text to break into tokens.
-	 * @param startTokenType The token with which to start tokenizing.
+	 * @param initialTokenType The token with which to start tokenizing.
 	 * @param startOffset    The offset at which the line of tokens begins.
 	 * @return A linked list of tokens representing <code>text</code>.
 	 */
