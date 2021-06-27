@@ -17,7 +17,7 @@ You can download the latest release [here][6]
  - In order to run or compile MM MARS, **Java SE 8 (or later) is required**
 
 ## MM (More Modern) version notes 
- - As the original source is updated, the documentation might get outdated. Please let me know, or open a pull request.
+ - You can find the complete list of changes and fixes [here](Changelog.md)
 
 ## How to run MARS
  - **Option A**: Double-click the .jar file.
