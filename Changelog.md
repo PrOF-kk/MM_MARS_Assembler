@@ -9,6 +9,7 @@
 * Added support for <kbd>Shift</kbd> + <kbd>Scrollwheel</kbd> for **horizontal scrolling**
 * Added an **ASCII Table** to the Help panel
 * Fixed the file opener dialog not filtering for Assembly files by default
+* MARS now always tries to use the system's file chooser because the default Java one is not very user-friendly
 * Added an alternate work-in-progress alternative Editor based on **[RSyntaxTextArea](https://github.com/bobbylight/RSyntaxTextArea)**. It currently does not support user-defined syntax highlighting colors
 * Screen Magnifier: Fix magnifier sometimes capturing itself instead of MARS window
 * Rebuilt the documentation using the current doclet
