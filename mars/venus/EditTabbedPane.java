@@ -379,6 +379,7 @@ public class EditTabbedPane extends JTabbedPane {
 					saveDialog.setSelectedFile(new File(paneFile));
 				// end of 13-July-2011 code.
 				saveDialog.setDialogTitle("Save As");
+				saveDialog.setFileFilter(FilenameFinder.getFileFilter(Globals.fileExtensions, "Assembler Files", true));
 
 				int decision = saveDialog.showSaveDialog(mainUI);
 				if (decision != JFileChooser.APPROVE_OPTION) {
