@@ -317,6 +317,7 @@ public class EditTabbedPane extends JTabbedPane {
 					"Save Operation Failed", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
+		editor.setCurrentSaveDirectory(theFile.getParent());
 		return true;
 	}
 
