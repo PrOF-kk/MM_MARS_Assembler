@@ -42,8 +42,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * Tabbed pane for the editor. Each of its tabs represents an open file.
  * 
  * @author Sanderson
- **/
-
+ */
 public class EditTabbedPane extends JTabbedPane {
 	EditPane editTab;
 	MainPane mainPane;
@@ -51,15 +50,18 @@ public class EditTabbedPane extends JTabbedPane {
 	private VenusUI mainUI;
 	private Editor editor;
 	private FileOpener fileOpener;
+	
+	private Deque<String> closedFiles;
 
 	/**
 	 * Constructor for the EditTabbedPane class.
-	 **/
+	 */
 	public EditTabbedPane(VenusUI appFrame, Editor editor, MainPane mainPane) {
 		super();
 		this.mainUI = appFrame;
 		this.editor = editor;
 		this.fileOpener = new FileOpener(editor);
+		this.closedFiles = new ArrayDeque<>();
 		this.mainPane = mainPane;
 		this.editor.setEditTabbedPane(this);
 		this.addChangeListener(e -> {
@@ -184,6 +186,48 @@ public class EditTabbedPane extends JTabbedPane {
 	public boolean openFile(File file) {
 		return fileOpener.openFile(file);
 	}
+	
+	/**
+	 * Opens the last closed file, if it exists
+	 * 
+	 * @return true if the file was opened, false otherwise
+	 */
+	public boolean openLastClosedFile() {
+		while (!closedFiles.isEmpty()) {
+			File lastOpenedFile = new File(closedFiles.pop());
+			if (lastOpenedFile.exists()) {
+				return this.openFile(lastOpenedFile);
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Pushes the file to a deque (stack) so it can be reopened if needed.
+	 * The file is not pushed if it {@link EditPane#isNew()}
+	 * 
+	 * @param pane the pane containing the file to be pushed
+	 */
+	private void pushClosedFile(EditPane pane) {
+		if (pane.isNew()) {
+			return;
+		}
+		
+		String pathName = pane.getPathname();
+		if (closedFiles.contains(pathName)) {
+			closedFiles.remove(pathName);
+		}
+		closedFiles.push(pathName);
+	}
+	
+	/**
+	 * Returns whether there are previously closed files saved for reopening
+	 * 
+	 * @return
+	 */
+	public boolean lastClosedFilesPresent() {
+		return !closedFiles.isEmpty();
+	}
 
 	/**
 	 * Carries out all necessary operations to implement the Close operation from
@@ -196,6 +240,7 @@ public class EditTabbedPane extends JTabbedPane {
 		EditPane editPane = getCurrentEditTab();
 		if (editPane != null) {
 			if (editsSavedOrAbandoned()) {
+				this.pushClosedFile(editPane);
 				this.remove(editPane);
 				mainPane.getExecutePane().clearPane();
 				mainPane.setSelectedComponent(this);
@@ -240,6 +285,7 @@ public class EditTabbedPane extends JTabbedPane {
 							setSelectedComponent(tabs[i]);
 							boolean saved = saveCurrentFile();
 							if (saved) {
+								this.pushClosedFile(tabs[i]);
 								this.remove(tabs[i]);
 							}
 							else {
@@ -247,12 +293,14 @@ public class EditTabbedPane extends JTabbedPane {
 							}
 						}
 						else {
+							this.pushClosedFile(tabs[i]);
 							this.remove(tabs[i]);
 						}
 					}
 					return removedAll;
 				case JOptionPane.NO_OPTION:
 					for (int i = 0; i < tabCount; i++) {
+						this.pushClosedFile(tabs[i]);
 						this.remove(tabs[i]);
 					}
 					return true;
@@ -264,6 +312,7 @@ public class EditTabbedPane extends JTabbedPane {
 		}
 		else {
 			for (int i = 0; i < tabCount; i++) {
+				this.pushClosedFile(tabs[i]);
 				this.remove(tabs[i]);
 			}
 		}

@@ -72,7 +72,7 @@ public class VenusUI extends JFrame {
 
 	// components of the menubar
 	private JMenu file, run, window, help, edit, settings;
-	private JMenuItem fileNew, fileOpen, fileClose, fileCloseAll, fileSave,
+	private JMenuItem fileNew, fileOpen, fileOpenLastClosed, fileClose, fileCloseAll, fileSave,
 			fileSaveAs, fileSaveAll, fileDumpMemory, filePrint, fileExit;
 	private JMenuItem editUndo, editRedo, editCut, editCopy, editPaste, editFindReplace, editSelectAll;
 	private JMenuItem runGo, runStep, runBackstep, runReset, runAssemble, runStop,
@@ -94,7 +94,7 @@ public class VenusUI extends JFrame {
 	// created then shared between a menu item and its corresponding toolbar button.
 	// This is a very cool technique because it relates the button and menu item so closely
 
-	private Action fileNewAction, fileOpenAction, fileCloseAction, fileCloseAllAction, fileSaveAction;
+	private Action fileNewAction, fileOpenAction, fileOpenLastClosedAction, fileCloseAction, fileCloseAllAction, fileSaveAction;
 	private Action fileSaveAsAction, fileSaveAllAction, fileDumpMemoryAction, filePrintAction, fileExitAction;
 	EditUndoAction editUndoAction;
 	EditRedoAction editRedoAction;
@@ -263,6 +263,10 @@ public class VenusUI extends JFrame {
 					new ImageIcon(tk.getImage(cs.getResource(colibre32 + "open.png"))),
 					"Open a file for editing", KeyEvent.VK_O,
 					KeyStroke.getKeyStroke(KeyEvent.VK_O, tk.getMenuShortcutKeyMask()),
+					mainUI);
+			fileOpenLastClosedAction = new FileOpenLastClosedAction("Restore Closed File", null,
+					"Restore the last closed file", KeyEvent.VK_T,
+					KeyStroke.getKeyStroke(KeyEvent.VK_T, tk.getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK),
 					mainUI);
 			fileCloseAction = new FileCloseAction("Close", null,
 					"Close the current file", KeyEvent.VK_C,
@@ -451,6 +455,8 @@ public class VenusUI extends JFrame {
 		fileNew.setIcon(new ImageIcon(tk.getImage(cs.getResource(colibre16 + "newdoc.png"))));
 		fileOpen = new JMenuItem(fileOpenAction);
 		fileOpen.setIcon(new ImageIcon(tk.getImage(cs.getResource(colibre16 + "open.png"))));
+		fileOpenLastClosed = new JMenuItem(fileOpenLastClosedAction);
+		fileOpenLastClosed.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "MyBlank16.gif"))));
 		fileClose = new JMenuItem(fileCloseAction);
 		fileClose.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "MyBlank16.gif"))));
 		fileCloseAll = new JMenuItem(fileCloseAllAction);
@@ -469,6 +475,7 @@ public class VenusUI extends JFrame {
 		fileExit.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "MyBlank16.gif"))));
 		file.add(fileNew);
 		file.add(fileOpen);
+		file.add(fileOpenLastClosed);
 		file.add(fileClose);
 		file.add(fileCloseAll);
 		file.addSeparator();
@@ -735,6 +742,7 @@ public class VenusUI extends JFrame {
 	void setMenuStateInitial() {
 		fileNewAction.setEnabled(true);
 		fileOpenAction.setEnabled(true);
+		fileOpenLastClosedAction.setEnabled(false);
 		fileCloseAction.setEnabled(false);
 		fileCloseAllAction.setEnabled(false);
 		fileSaveAction.setEnabled(false);
@@ -776,6 +784,7 @@ public class VenusUI extends JFrame {
 		/* Note: undo and redo are handled separately by the undo manager */
 		fileNewAction.setEnabled(true);
 		fileOpenAction.setEnabled(true);
+		fileOpenLastClosedAction.setEnabled(mainPane.editTabbedPane.lastClosedFilesPresent());
 		fileCloseAction.setEnabled(true);
 		fileCloseAllAction.setEnabled(true);
 		fileSaveAction.setEnabled(true);
@@ -814,6 +823,7 @@ public class VenusUI extends JFrame {
 		/* Note: undo and redo are handled separately by the undo manager */
 		fileNewAction.setEnabled(true);
 		fileOpenAction.setEnabled(true);
+		fileOpenLastClosedAction.setEnabled(mainPane.editTabbedPane.lastClosedFilesPresent());
 		fileCloseAction.setEnabled(true);
 		fileCloseAllAction.setEnabled(true);
 		fileSaveAction.setEnabled(true);
@@ -851,6 +861,7 @@ public class VenusUI extends JFrame {
 		/* Note: undo and redo are handled separately by the undo manager */
 		fileNewAction.setEnabled(true);
 		fileOpenAction.setEnabled(true);
+		fileOpenLastClosedAction.setEnabled(mainPane.editTabbedPane.lastClosedFilesPresent());
 		fileCloseAction.setEnabled(true);
 		fileCloseAllAction.setEnabled(true);
 		fileSaveAction.setEnabled(true);
@@ -888,6 +899,7 @@ public class VenusUI extends JFrame {
 		/* Note: undo and redo are handled separately by the undo manager */
 		fileNewAction.setEnabled(true);
 		fileOpenAction.setEnabled(true);
+		fileOpenLastClosedAction.setEnabled(mainPane.editTabbedPane.lastClosedFilesPresent());
 		fileCloseAction.setEnabled(true);
 		fileCloseAllAction.setEnabled(true);
 		fileSaveAction.setEnabled(true);
@@ -925,6 +937,7 @@ public class VenusUI extends JFrame {
 		/* Note: undo and redo are handled separately by the undo manager */
 		fileNewAction.setEnabled(false);
 		fileOpenAction.setEnabled(false);
+		fileOpenLastClosedAction.setEnabled(false);
 		fileCloseAction.setEnabled(false);
 		fileCloseAllAction.setEnabled(false);
 		fileSaveAction.setEnabled(false);
@@ -961,6 +974,7 @@ public class VenusUI extends JFrame {
 		/* Note: undo and redo are handled separately by the undo manager */
 		fileNewAction.setEnabled(true);
 		fileOpenAction.setEnabled(true);
+		fileOpenLastClosedAction.setEnabled(mainPane.editTabbedPane.lastClosedFilesPresent());
 		fileCloseAction.setEnabled(true);
 		fileCloseAllAction.setEnabled(true);
 		fileSaveAction.setEnabled(true);
