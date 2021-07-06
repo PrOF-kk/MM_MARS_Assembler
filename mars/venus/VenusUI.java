@@ -273,8 +273,9 @@ public class VenusUI extends JFrame {
 					KeyStroke.getKeyStroke(KeyEvent.VK_W, tk.getMenuShortcutKeyMask()),
 					mainUI);
 			fileCloseAllAction = new FileCloseAllAction("Close All", null,
-					"Close all open files",
-					KeyEvent.VK_L, null, mainUI);
+					"Close all open files", KeyEvent.VK_L,
+					KeyStroke.getKeyStroke(KeyEvent.VK_W, tk.getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK),
+					mainUI);
 			fileSaveAction = new FileSaveAction("Save",
 					new ImageIcon(tk.getImage(cs.getResource(colibre32 + "save.png"))),
 					"Save the current file", KeyEvent.VK_S,
