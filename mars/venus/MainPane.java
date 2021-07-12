@@ -4,10 +4,9 @@ import mars.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
-import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 /*
-Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
+Copyright (c) 2003-2006, Pete Sanderson and Kenneth Vollmar
 
 Developed by Pete Sanderson (psanderson@otterbein.edu)
 and Kenneth Vollmar (kenvollmar@missouristate.edu)
@@ -49,31 +48,22 @@ public class MainPane extends JTabbedPane {
 
 	/**
 	 * Constructor for the MainPane class.
-	 **/
-
+	 */
 	public MainPane(VenusUI appFrame, Editor editor, RegistersWindow regs,
 			Coprocessor1Window cop1Regs, Coprocessor0Window cop0Regs) {
 		super();
 		this.mainUI = appFrame;
-		this.setTabPlacement(JTabbedPane.TOP); // LEFT);
-		if (this.getUI() instanceof BasicTabbedPaneUI) {
-			BasicTabbedPaneUI ui = (BasicTabbedPaneUI) this.getUI();
-		}
+		this.setTabPlacement(JTabbedPane.TOP);
+
 		editTabbedPane = new EditTabbedPane(appFrame, editor, this);
 		executeTab = new ExecutePane(appFrame, regs, cop1Regs, cop0Regs);
-		String editTabTitle = "Edit"; // "<html><center>&nbsp;<br>E<br>d<br>i<br>t<br>&nbsp;</center></html>";
-		String executeTabTitle = "Execute"; // "<html><center>&nbsp;<br>E<br>x<br>e<br>c<br>u<br>t<br>e<br>&nbsp;</center></html>";
+		String editTabTitle = "Edit";
+		String executeTabTitle = "Execute";
 		Icon editTabIcon = null;// new ImageIcon(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource(Globals.imagesPath+"Edit_tab.jpg")));
 		Icon executeTabIcon = null;// new ImageIcon(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource(Globals.imagesPath+"Execute_tab.jpg")));
 
 		this.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		this.addTab(editTabTitle, editTabIcon, editTabbedPane);
-
-		// this.addTab("<html><center>&nbsp;<br>P<br>r<br>o<br>j<br>&nbsp;<br>1<br&nbsp;</center></html>", null, new JTabbedPane());
-		// this.addTab("<html><center>&nbsp;<br>P<br>r<br>o<br>j<br>&nbsp;<br>2<br&nbsp;</center></html>", null, new JTabbedPane());
-		// this.addTab("<html><center>&nbsp;<br>P<br>r<br>o<br>j<br>&nbsp;<br>3<br&nbsp;</center></html>", null, new JTabbedPane());
-		// this.addTab("<html><center>&nbsp;<br>P<br>r<br>o<br>j<br>&nbsp;<br>4<br&nbsp;</center></html>", null, new JTabbedPane());
-
 		this.addTab(executeTabTitle, executeTabIcon, executeTab);
 
 		this.setToolTipTextAt(0, "Text editor for composing MIPS programs.");
