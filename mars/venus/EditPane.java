@@ -290,14 +290,14 @@ public class EditPane extends JPanel implements Observer {
 	}
 
 	/**
-	 * Delegates to corresponding FileStatus method
+	 * Delegates to {@link FileStatus#getFilename()}
 	 */
 	public String getFilename() {
 		return this.fileStatus.getFilename();
 	}
 
 	/**
-	 * Delegates to corresponding FileStatus method
+	 * Delegates to {@link FileStatus#getPathname()}
 	 */
 	public String getPathname() {
 		return this.fileStatus.getPathname();
@@ -311,29 +311,28 @@ public class EditPane extends JPanel implements Observer {
 	}
 
 	/**
-	 * Delegates to corresponding FileStatus method
+	 * Delegates to {@link FileStatus#hasUnsavedEdits()}
 	 */
 	public boolean hasUnsavedEdits() {
 		return this.fileStatus.hasUnsavedEdits();
 	}
 
 	/**
-	 * Delegates to corresponding FileStatus method
+	 * Delegates to {@link FileStatus#isNew()}
 	 */
 	public boolean isNew() {
 		return this.fileStatus.isNew();
 	}
 
 	/**
-	 * Delegates to text area's requestFocusInWindow method.
+	 * Delegates to text area's {@link #requestFocusInWindow()}
 	 */
-
 	public void tellEditingComponentToRequestFocusInWindow() {
 		this.sourceCode.requestFocusInWindow();
 	}
 
 	/**
-	 * Delegates to corresponding FileStatus method
+	 * Delegates to {@link FileStatus#updateStaticFileStatus()}
 	 */
 	public void updateStaticFileStatus() {
 		fileStatus.updateStaticFileStatus();
