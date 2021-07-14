@@ -56,13 +56,9 @@ public class EditPane extends JPanel implements Observer {
 
 	private MARSTextEditingArea sourceCode;
 	private VenusUI mainUI;
-	private String currentDirectoryPath;
 	private JLabel caretPositionLabel;
 	private JCheckBox showLineNumbers;
 	private JLabel lineNumbers;
-	private static int count = 0;
-	private boolean isCompoundEdit = false;
-	private CompoundEdit compoundEdit;
 	private FileStatus fileStatus;
 
 	/**
@@ -71,8 +67,6 @@ public class EditPane extends JPanel implements Observer {
 	public EditPane(VenusUI appFrame) {
 		super(new BorderLayout());
 		this.mainUI = appFrame;
-		// user.dir, user's current working directory, is guaranteed to have a value
-		currentDirectoryPath = System.getProperty("user.dir");
 		// We want to be notified of editor font changes! See update() below.
 		Globals.getSettings().addObserver(this);
 		this.fileStatus = new FileStatus();
