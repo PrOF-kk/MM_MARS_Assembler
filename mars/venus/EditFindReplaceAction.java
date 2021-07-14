@@ -38,7 +38,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * Action for the Edit -> Find/Replace menu item
  */
 public class EditFindReplaceAction extends GuiAction {
-	FindReplaceDialog findReplaceDialog;
+	FindReplaceDialog findReplaceDialog = null;
 
 	public EditFindReplaceAction(String name, Icon icon, String descrip,
 			Integer mnemonic, KeyStroke accel, VenusUI gui) {
@@ -47,7 +47,10 @@ public class EditFindReplaceAction extends GuiAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		findReplaceDialog = new FindReplaceDialog();
+		if (findReplaceDialog == null) {
+			// Lazy instantiation, pseudo-singleton
+			findReplaceDialog = new FindReplaceDialog();
+		}
 		findReplaceDialog.updateInputText();
 		findReplaceDialog.setVisible(true);
 	}
