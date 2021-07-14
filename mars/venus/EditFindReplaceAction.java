@@ -111,31 +111,34 @@ public class EditFindReplaceAction extends GuiAction {
 		 * Constructs the top part of the dialog, containing the two input text fields.
 		 */
 		private Component buildInputPanel() {
+			JPanel inputPanel = new JPanel();
+			Box columns = Box.createHorizontalBox();
 			
+			JPanel labelsPanel = new JPanel(new GridLayout(2, 1, 5, 5));
+			labelsPanel.add(new JLabel("Find what:"));
+			labelsPanel.add(new JLabel("Replace with:"));
+			
+			JPanel fieldsPanel = new JPanel(new GridLayout(2, 1, 5, 5));
+			
+			// Set input field to selected text, if something is selected.
+			// Else set it to last searched string
 			findInputField = new JTextField(30);
-			// Prioritize selected text
 			String selection = mainUI.getMainPane().getEditPane().getTextArea().getSelectedText(); 
 			if (selection != null) {
 				findInputField.setText(selection);
-				findInputField.selectAll();
 			}
-			else if (searchString.length() > 0) {
+			else if (!searchString.isEmpty()) {
 				findInputField.setText(searchString);
-				findInputField.selectAll();
 			}
+			findInputField.selectAll();
 			// Perform find on Enter
 			findInputField.addActionListener(e -> performFind());
 			
 			replaceInputField = new JTextField(30);
-			JPanel inputPanel = new JPanel();
-			JPanel labelsPanel = new JPanel(new GridLayout(2, 1, 5, 5));
-			JPanel fieldsPanel = new JPanel(new GridLayout(2, 1, 5, 5));
-			labelsPanel.add(new JLabel("Find what:"));
-			labelsPanel.add(new JLabel("Replace with:"));
+			
 			fieldsPanel.add(findInputField);
 			fieldsPanel.add(replaceInputField);
 
-			Box columns = Box.createHorizontalBox();
 			columns.add(labelsPanel);
 			columns.add(Box.createHorizontalStrut(6));
 			columns.add(fieldsPanel);
