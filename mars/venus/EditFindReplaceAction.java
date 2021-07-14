@@ -38,9 +38,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * Action for the Edit -> Find/Replace menu item
  */
 public class EditFindReplaceAction extends GuiAction {
-	private static String searchString = "";
-	private static boolean caseSensitivity = false;
-	private static final String DIALOG_TITLE = "Find and Replace";
 	JDialog findReplaceDialog;
 
 	public EditFindReplaceAction(String name, Icon icon, String descrip,
@@ -50,7 +47,7 @@ public class EditFindReplaceAction extends GuiAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		findReplaceDialog = new FindReplaceDialog(Globals.getGui(), DIALOG_TITLE, false);
+		findReplaceDialog = new FindReplaceDialog();
 		findReplaceDialog.setVisible(true);
 	}
 
@@ -65,9 +62,14 @@ public class EditFindReplaceAction extends GuiAction {
 		JRadioButton linearFromStart, circularFromCursor;
 		private JLabel resultsLabel;
 		
+		private String searchString = "";
+		private boolean caseSensitivity = false;
+		
 		private final Color darkRed = Color.RED.darker();
 		private final Color darkGreen = Color.GREEN.darker();
 
+		private static final String DIALOG_TITLE = "Find and Replace";
+		
 		public static final String FIND_TOOL_TIP_TEXT = "Find next occurrence of given text; wraps around at end";
 		public static final String REPLACE_TOOL_TIP_TEXT = "Replace current occurrence of text then find next";
 		public static final String REPLACE_ALL_TOOL_TIP_TEXT = "Replace all occurrences of text";
@@ -81,7 +83,7 @@ public class EditFindReplaceAction extends GuiAction {
 		public static final String RESULTS_TEXT_REPLACED_ALL = "Replaced";
 		public static final String RESULTS_NO_TEXT_TO_FIND = "No text to find";
 
-		public FindReplaceDialog(Frame owner, String title, boolean modality) {
+		private FindReplaceDialog(Frame owner, String title, boolean modality) {
 			super(owner, title, modality);
 			this.setContentPane(buildDialogPanel());
 			this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
@@ -93,6 +95,10 @@ public class EditFindReplaceAction extends GuiAction {
 			});
 			this.pack();
 			this.setLocationRelativeTo(owner);
+		}
+		
+		public FindReplaceDialog() {
+			this(Globals.getGui(), DIALOG_TITLE, false);
 		}
 
 		/**
