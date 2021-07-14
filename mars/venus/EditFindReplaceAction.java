@@ -38,7 +38,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * Action for the Edit -> Find/Replace menu item
  */
 public class EditFindReplaceAction extends GuiAction {
-	JDialog findReplaceDialog;
+	FindReplaceDialog findReplaceDialog;
 
 	public EditFindReplaceAction(String name, Icon icon, String descrip,
 			Integer mnemonic, KeyStroke accel, VenusUI gui) {
@@ -48,6 +48,7 @@ public class EditFindReplaceAction extends GuiAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		findReplaceDialog = new FindReplaceDialog();
+		findReplaceDialog.updateInputText();
 		findReplaceDialog.setVisible(true);
 	}
 
@@ -126,17 +127,7 @@ public class EditFindReplaceAction extends GuiAction {
 			
 			JPanel fieldsPanel = new JPanel(new GridLayout(2, 1, 5, 5));
 			
-			// Set input field to selected text, if something is selected.
-			// Else set it to last searched string
 			findInputField = new JTextField(30);
-			String selection = mainUI.getMainPane().getEditPane().getTextArea().getSelectedText(); 
-			if (selection != null) {
-				findInputField.setText(selection);
-			}
-			else if (!searchString.isEmpty()) {
-				findInputField.setText(searchString);
-			}
-			findInputField.selectAll();
 			// Perform find on Enter
 			findInputField.addActionListener(e -> performFind());
 			
@@ -212,6 +203,21 @@ public class EditFindReplaceAction extends GuiAction {
 			controlPanel.add(closeButton);
 			controlPanel.add(Box.createHorizontalGlue());
 			return controlPanel;
+		}
+		
+		/**
+		 * Sets input field to selected text, if something is selected.
+		 * Else sets it to last searched string
+		 */
+		public void updateInputText() {
+			String selection = mainUI.getMainPane().getEditPane().getTextArea().getSelectedText(); 
+			if (selection != null) {
+				findInputField.setText(selection);
+			}
+			else if (!searchString.isEmpty()) {
+				findInputField.setText(searchString);
+			}
+			findInputField.selectAll();
 		}
 
 		////////////////////////////////////////////////////////////////////////
