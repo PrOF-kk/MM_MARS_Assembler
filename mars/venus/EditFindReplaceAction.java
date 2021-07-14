@@ -95,7 +95,9 @@ public class EditFindReplaceAction extends GuiAction {
 			this.setLocationRelativeTo(owner);
 		}
 
-		// Constructs the dialog's main panel.
+		/**
+		 * Constructs the dialog's main panel.
+		 */
 		private JPanel buildDialogPanel() {
 			JPanel dialogPanel = new JPanel(new BorderLayout());
 			dialogPanel.setBorder(new javax.swing.border.EmptyBorder(10, 10, 10, 10));
@@ -105,7 +107,9 @@ public class EditFindReplaceAction extends GuiAction {
 			return dialogPanel;
 		}
 
-		// Top part of the dialog, to contain the two input text fields.
+		/**
+		 * Constructs the top part of the dialog, containing the two input text fields.
+		 */
 		private Component buildInputPanel() {
 			
 			findInputField = new JTextField(30);
@@ -139,28 +143,36 @@ public class EditFindReplaceAction extends GuiAction {
 			return inputPanel;
 		}
 
-		// Center part of the dialog, which contains the check box
-		// for case sensitivity along with a label to display the
-		// outcome of each operation.
+		/**
+		 * Constructs the center part of the dialog, which contains the
+		 * check box for case sensitivity along with a label to display
+		 * the outcome of each operation.
+		 */	
 		private Component buildOptionsPanel() {
 			Box optionsPanel = Box.createHorizontalBox();
-			caseSensitiveCheckBox = new JCheckBox("Case Sensitive", caseSensitivity);
+			
 			JPanel casePanel = new JPanel(new GridLayout(2, 1));
+			caseSensitiveCheckBox = new JCheckBox("Case Sensitive", caseSensitivity);
 			casePanel.add(caseSensitiveCheckBox);
 			casePanel.setMaximumSize(casePanel.getPreferredSize());
-			optionsPanel.add(casePanel);
-			optionsPanel.add(Box.createHorizontalStrut(5));
+			
 			JPanel resultsPanel = new JPanel(new GridLayout(1, 1));
 			resultsPanel.setBorder(BorderFactory.createTitledBorder("Outcome"));
 			resultsLabel = new JLabel("");
 			resultsLabel.setForeground(darkRed);
 			resultsLabel.setToolTipText(RESULTS_TOOL_TIP_TEXT);
 			resultsPanel.add(resultsLabel);
+			
+			optionsPanel.add(casePanel);
+			optionsPanel.add(Box.createHorizontalStrut(5));
 			optionsPanel.add(resultsPanel);
 			return optionsPanel;
 		}
 
-		// Row of control buttons to be placed along the button of the dialog
+		/**
+		 * Constructs the row of control buttons to be placed along the bottom
+		 * of the dialog
+		 */
 		private Component buildControlPanel() {
 			Box controlPanel = Box.createHorizontalBox();
 			controlPanel.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
