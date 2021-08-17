@@ -31,7 +31,7 @@ You can download the latest release [here][6]
  - **GNU/Linux** and **Mac**: execute the "CreateMarsJar.sh" to generate an executable. If you can't due to permissions, execute "**chmod +x CreateMarsJar.sh**" (Thanks to @aesptux for testing the Mac version).
 
 ## License
-MARS annd MM Mars are under the [MIT License][2]. Check the [LICENSE][3] file. Copyright held by the original developers.
+MARS and MM Mars are under the [MIT License][2]. Check the [LICENSE][3] file. Copyright held by the original developers.
 
   [1]: http://courses.missouristate.edu/KenVollmar/MARS/index.htm
   [2]: https://choosealicense.com/licenses/mit/
